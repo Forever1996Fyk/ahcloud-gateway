@@ -1,8 +1,0 @@
-com/ahcloud/gateway/server/domain/ApiRequestBody.class
-com/ahcloud/gateway/server/infrastructure/security/AuthorizationManager.class
-com/ahcloud/gateway/server/infrastructure/filter/AuthGlobalFilter.class
-com/ahcloud/gateway/server/application/constant/GatewayConstants.class
-com/ahcloud/gateway/server/domain/ApiRequestBody$ApiRequestBodyBuilder.class
-com/ahcloud/gateway/server/application/manager/GatewayManager.class
-com/ahcloud/gateway/server/GatewayApplication.class
-com/ahcloud/gateway/server/infrastructure/security/OAuth2ResourceServerConfiguration.class
