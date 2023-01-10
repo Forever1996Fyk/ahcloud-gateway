@@ -35,8 +35,10 @@
         <mysql.version>8.0.13</mysql.version>
         <druid.version>1.2.8</druid.version>
         <nacos.version>0.2.9</nacos.version>
+        <servlet.api.version>4.0.1</servlet.api.version>
 
         <ahcloud.common.version>1.0.0-SNAPSHOT</ahcloud.common.version>
+        <ahcloud.uaa.version>1.0.0-SNAPSHOT</ahcloud.uaa.version>
     </properties>
 
     <dependencyManagement>
@@ -92,11 +94,21 @@
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
             </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet.api.version}</version>
+            </dependency>
             <!-- database end -->
             <dependency>
                 <groupId>com.ahcloud.common</groupId>
                 <artifactId>common-utils</artifactId>
                 <version>${ahcloud.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ahcloud.uaa</groupId>
+                <artifactId>uaa-resource-spring-boot-starter</artifactId>
+                <version>${ahcloud.uaa.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

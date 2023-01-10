@@ -22,6 +22,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.ahcloud.common</groupId>
@@ -38,6 +44,18 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-loadbalancer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ahcloud.uaa</groupId>
+            <artifactId>uaa-resource-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ahcloud.kernel</groupId>
+            <artifactId>kernel-core</artifactId>
         </dependency>
     </dependencies>
 
