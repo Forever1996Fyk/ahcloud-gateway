@@ -1,0 +1,8 @@
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/infrastructure/security/OAuth2ResourceServerConfiguration.java
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/domain/ApiRequestBody.java
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/infrastructure/filter/AuthGlobalFilter.java
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/infrastructure/security/AuthorizationManager.java
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/application/manager/GatewayManager.java
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/infrastructure/utils/CodeGeneratorUtil.java
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/GatewayApplication.java
+/Users/fanyukai/Desktop/develop/Idea Proejct/personal/ah-cloud/ahcloud-gateway/gateway-server/src/main/java/com/ahcloud/gateway/server/application/constant/GatewayConstants.java
