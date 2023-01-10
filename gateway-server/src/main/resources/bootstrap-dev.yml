@@ -1,9 +1,9 @@
 spring:
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8850
+      server-addr: ahcloud-nacos.middleware:8848
       config:
-        namespace: fd1bd37a-6284-42ae-a452-02001704e6ad
+        namespace: 1904be9a-9fb3-4f8f-9258-1c5a09bf773f
         max-retry: 10
         refresh-enabled: true
         username: LTAI5tQYb6LvUrix4x4xKo4X
@@ -12,6 +12,6 @@ spring:
         file-extension: yaml
       discovery:
         enabled: true
-        server-addr: 127.0.0.1:8850
-        namespace: fd1bd37a-6284-42ae-a452-02001704e6ad
+        server-addr: ahcloud-nacos.middleware:8848
+        namespace: 1904be9a-9fb3-4f8f-9258-1c5a09bf773f
         group: dev
