@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ahcloud-gateway
+  name: ahcloud-gateway
+  namespace: ahcloud   #一定要写名称空间
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ahcloud-gateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: service-cart
+    spec:
+      imagePullSecrets:
+        - name: aliyun-docker-hub  #提前在项目下配置访问阿里云的账号密码
+      containers:
+        - image: $REGISTRY/$DOCKERHUB_NAMESPACE/gateway-server:$BRANCH:SNAPSHOT-$BUILD_NUMBER
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            timeoutSeconds: 10
+            failureThreshold: 30
+            periodSeconds: 5
+          imagePullPolicy: Always
+          env: #环境变量 docker
+            - name: CE
+              value: $ENV
+            - name: JAVA_OPTS
+              value: $JAVA_OPTS
+          name: app
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 300m
+              memory: 600Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ahcloud-gateway
+  name: ahcloud-gateway
+  namespace: ahcloud
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ahcloud-gateway
+  sessionAffinity: None
+  type: ClusterIP
