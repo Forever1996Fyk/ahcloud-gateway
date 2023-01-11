@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        app: service-cart
+        app: ahcloud-gateway
     spec:
       imagePullSecrets:
         - name: aliyun-docker-hub  #提前在项目下配置访问阿里云的账号密码
