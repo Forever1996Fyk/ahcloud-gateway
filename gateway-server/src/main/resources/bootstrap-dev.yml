@@ -1,7 +1,7 @@
 spring:
   cloud:
     nacos:
-      server-addr: ahcloud-nacos.middleware:8848
+      server-addr: ahcloud-nacos.middleware.svc.cluster.local:8848
       config:
         namespace: 1904be9a-9fb3-4f8f-9258-1c5a09bf773f
         max-retry: 10
@@ -12,6 +12,6 @@ spring:
         file-extension: yaml
       discovery:
         enabled: true
-        server-addr: ahcloud-nacos.middleware:8848
+        server-addr: ahcloud-nacos.middleware.svc.cluster.local:8848
         namespace: 1904be9a-9fb3-4f8f-9258-1c5a09bf773f
         group: dev
