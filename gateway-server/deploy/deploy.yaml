@@ -25,10 +25,19 @@ spec:
         - name: aliyun-docker-hub  #提前在项目下配置访问阿里云的账号密码
       containers:
         - image: $REGISTRY/$DOCKERHUB_NAMESPACE/gateway-server-$ENV:SNAPSHOT-$BUILD_NUMBER
-          readinessProbe:
-#            httpGet:
-#              path: /actuator/health
-#              port: 8080
+          readinessProbe: # k8s就绪探针 配合springboot-actuator
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health/readiness
+              port: 8080
+            timeoutSeconds: 10
+            failureThreshold: 30
+            periodSeconds: 5
+          livenessProbe: # k8s存活探针 配合springboot-actuator
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health/liveness
+              port: 8080
             timeoutSeconds: 10
             failureThreshold: 30
             periodSeconds: 5

@@ -55,6 +55,11 @@
             <groupId>com.ahcloud.kernel</groupId>
             <artifactId>kernel-core</artifactId>
         </dependency>
+        <!-- 引入Actuator监控依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
