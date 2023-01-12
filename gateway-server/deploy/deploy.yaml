@@ -29,7 +29,7 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8080
-            timeoutSeconds: 100
+            timeoutSeconds: 10
             failureThreshold: 30
             periodSeconds: 5
           imagePullPolicy: Always
@@ -42,10 +42,10 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-#          resources:
-#            limits:
-#              cpu: 1000m
-#              memory: 1024Mi
+          resources:
+            limits:
+              cpu: 300m
+              memory: 600Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
