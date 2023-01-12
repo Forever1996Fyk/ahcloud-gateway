@@ -2,15 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ahcloud-gateway
-  name: ahcloud-gateway
+    app: ahcloud-gateway-$ENV
+  name: ahcloud-gateway-$ENV
   namespace: ahcloud   #一定要写名称空间
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   selector:
     matchLabels:
-      app: ahcloud-gateway
+      app: ahcloud-gateway-$ENV
   strategy:
     rollingUpdate:
       maxSurge: 50%
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        app: ahcloud-gateway
+        app: ahcloud-gateway-$ENV
     spec:
       imagePullSecrets:
         - name: aliyun-docker-hub  #提前在项目下配置访问阿里云的账号密码
@@ -56,8 +56,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ahcloud-gateway
-  name: ahcloud-gateway
+    app: ahcloud-gateway-$ENV
+  name: ahcloud-gateway-$ENV
   namespace: ahcloud
 spec:
   ports:
@@ -66,6 +66,6 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: ahcloud-gateway
+    app: ahcloud-gateway-$ENV
   sessionAffinity: None
   type: ClusterIP
