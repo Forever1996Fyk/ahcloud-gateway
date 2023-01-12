@@ -7,7 +7,7 @@ ENV PARAMS="--server.port=8080"
 
 # 指定启动参数
 # 改变使用[-e 'JAVA_OPTS=-Xms512m']
-ARG DEFAULT_OPTS='-Xms512m -Xmx512m -Xss1024K -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m'
+ARG DEFAULT_OPTS='-Xms1024m -Xmx1024m -Xss1024K -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m'
 ENV JAVA_OPTS=$DEFAULT_OPTS
 
 # 默认配置sit环境
