@@ -26,7 +26,7 @@ spec:
       containers:
         - image: $REGISTRY/$DOCKERHUB_NAMESPACE/gateway-server-$ENV:SNAPSHOT-$BUILD_NUMBER
           readinessProbe:
-            httpGet:
+#            httpGet:
 #              path: /actuator/health
 #              port: 8080
             timeoutSeconds: 10
