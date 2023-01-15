@@ -23,6 +23,20 @@ spec:
     spec:
       imagePullSecrets:
         - name: aliyun-docker-hub  #提前在项目下配置访问阿里云的账号密码
+      initContainers:
+        - image: $REGISTRY/$DOCKERHUB_NAMESPACE/skywalking-agent-sidecar:8.7.0
+          name: sw-agent-sidecar
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+          args:
+            - '-c'
+            - >-
+              mkdir -p /skywalking/agent && cp -r /usr/skywalking/agent/*
+              /skywalking/agent
+          volumeMounts:
+            - name: sw-agent
+              mountPath: /skywalking/agent
       containers:
         - image: $REGISTRY/$DOCKERHUB_NAMESPACE/gateway-server-$ENV:SNAPSHOT-$BUILD_NUMBER
           readinessProbe: # k8s就绪探针 配合springboot-actuator
@@ -41,6 +55,9 @@ spec:
             timeoutSeconds: 10
             failureThreshold: 30
             periodSeconds: 5
+          volumeMounts: # 与skywalking共享volume空间
+            - name: sw-agent
+              mountPath: /usr/skywalking/agent
           imagePullPolicy: Always
           env: #环境变量 docker
             - name: CE
@@ -57,6 +74,9 @@ spec:
               memory: 600Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+      volumes:
+        - name: sw-agent
+          emptyDir: {}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 30

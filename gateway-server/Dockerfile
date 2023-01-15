@@ -1,10 +1,6 @@
 FROM openjdk:11-jdk
 LABEL maintainer=ahcloud
 
-
-#docker run -e PARAMS="--server.port 9090"
-ENV PARAMS="--server.port=8080"
-
 # 指定启动参数
 # 改变使用[-e 'JAVA_OPTS=-Xms512m']
 ARG DEFAULT_OPTS='-Xms1024m -Xmx1024m -Xss1024K -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m'
@@ -14,6 +10,9 @@ ENV JAVA_OPTS=$DEFAULT_OPTS
 # 改变使用[-e 'CE=dev']
 ARG DEAULT_CE='sit'
 ENV CE=$DEAULT_CE
+
+#docker run -e PARAMS="--server.port 8080"
+ENV PARAMS="-javaagent:/usr/skywalking/agent/skywalking-agent.jar=agent.service_name=ahcloud-gateway-$CE,collector.backend_service=skywalking.oap.middleware:11800,plugin.toolkit.log.grpc.reporter.server_host=oap.skywalking,plugin.toolkit.log.grpc.reporter.server_port=11800 --server.port=8080"
 
 RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 
