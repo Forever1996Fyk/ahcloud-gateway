@@ -17,4 +17,9 @@ public class GatewayConstants {
      * token 前缀
      */
     public final static String TOKEN_PREFIX = "Bearer";
+
+    /**
+     * app-platform
+     */
+    public final static String APP_PLATFORM = "app-platform";
 }

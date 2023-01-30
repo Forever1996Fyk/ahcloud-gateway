@@ -28,8 +28,16 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.ahcloud.gateway</groupId>
+            <artifactId>gateway-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.ahcloud.common</groupId>
             <artifactId>common-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ahcloud.common</groupId>
+            <artifactId>common-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -48,8 +56,16 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ahcloud.uaa</groupId>
-            <artifactId>uaa-resource-spring-boot-starter</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ahcloud.kernel</groupId>

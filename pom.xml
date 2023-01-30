@@ -106,24 +106,43 @@
                 <version>${ahcloud.common.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ahcloud.uaa</groupId>
-                <artifactId>uaa-resource-spring-boot-starter</artifactId>
-                <version>${ahcloud.uaa.version}</version>
+                <groupId>com.ahcloud.common</groupId>
+                <artifactId>common-core</artifactId>
+                <version>${ahcloud.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ahcloud.gateway</groupId>
+                <artifactId>gateway-client</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>releases</id>-->
+<!--            <name>Releases</name>-->
+<!--            <url>http://nexus.lovewxm.cn:32141/repository/maven-releases/</url>-->
+<!--            <uniqueVersion>true</uniqueVersion>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>snapshots</id>-->
+<!--            <name>Snapshots</name>-->
+<!--            <url>http://nexus.lovewxm.cn:32141/repository/maven-snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
 
     <distributionManagement>
         <repository>
             <id>releases</id>
             <name>Releases</name>
-            <url>http://nexus.lovewxm.cn:32141/repository/maven-releases/</url>
+            <url>https://packages.aliyun.com/maven/repository/2282959-release-FSRTjT/</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>Snapshots</name>
-            <url>http://nexus.lovewxm.cn:32141/repository/maven-snapshots/</url>
+            <url>https://packages.aliyun.com/maven/repository/2282959-snapshot-bgSgRk/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
