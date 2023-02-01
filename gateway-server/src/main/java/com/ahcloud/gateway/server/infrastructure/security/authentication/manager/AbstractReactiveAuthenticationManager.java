@@ -1,8 +1,8 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.manager;
 
 import com.ahcloud.common.utils.CollectionUtils;
-import com.ahcloud.gateway.client.AppPlatformEnum;
-import com.ahcloud.gateway.client.GatewayRetCodeEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
 import com.ahcloud.gateway.server.infrastructure.security.token.RedisTokenAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +29,7 @@ import java.util.Objects;
  **/
 @Slf4j
 public abstract class AbstractReactiveAuthenticationManager implements ReactiveAuthenticationManager {
+
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {

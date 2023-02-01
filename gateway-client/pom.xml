@@ -15,4 +15,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.ahcloud.common</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ahcloud.common</groupId>
+            <artifactId>common-core</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

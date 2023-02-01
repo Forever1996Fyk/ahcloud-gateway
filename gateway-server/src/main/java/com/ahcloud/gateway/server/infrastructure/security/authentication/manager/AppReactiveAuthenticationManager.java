@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.manager;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -20,6 +20,10 @@ import java.util.Collection;
 @Slf4j
 @Component
 public class AppReactiveAuthenticationManager extends AbstractReactiveAuthenticationManager {
+
+    public AppReactiveAuthenticationManager() {
+        super(tokenEndpointService);
+    }
 
     @Override
     protected AppPlatformEnum getAppPlatform() {

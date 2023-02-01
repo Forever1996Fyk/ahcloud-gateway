@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.exception;
 
-import com.ahcloud.gateway.client.common.ErrorCode;
+import com.ahcloud.common.enums.ErrorCode;
 import org.springframework.security.access.AccessDeniedException;
 
 /**

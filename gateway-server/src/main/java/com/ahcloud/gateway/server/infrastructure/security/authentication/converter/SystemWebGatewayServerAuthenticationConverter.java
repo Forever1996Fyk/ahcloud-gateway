@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.converter;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import com.ahcloud.gateway.server.infrastructure.security.token.RedisTokenAuthenticationToken;
 import com.ahcloud.gateway.server.infrastructure.util.ServerWebExchangeUtils;

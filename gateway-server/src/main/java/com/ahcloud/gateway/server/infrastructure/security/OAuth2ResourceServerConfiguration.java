@@ -5,25 +5,18 @@ import com.ahcloud.gateway.server.infrastructure.security.authentication.convert
 import com.ahcloud.gateway.server.infrastructure.security.authentication.converter.SystemWebGatewayServerAuthenticationConverter;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.resolver.DelegatingGatewayReactiveAuthenticationManagerResolver;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.resolver.GatewayReactiveAuthenticationManagerResolver;
-import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.AppAuthorizationManager;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.AuthorizationManager;
-import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.SystemWebAuthorizationManager;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.matcher.AppServerWebExchangeMatcher;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.matcher.SystemWebServerWebExchangeMatcher;
 import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.DelegatingReactiveAuthenticationManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManagerResolver;
-import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
-import org.springframework.security.web.server.authorization.AuthorizationContext;
-import org.springframework.security.web.server.authorization.DelegatingReactiveAuthorizationManager;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcherEntry;
 import org.springframework.web.server.ServerWebExchange;
 
 import javax.annotation.Resource;

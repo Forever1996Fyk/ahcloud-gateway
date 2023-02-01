@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.core.Authentication;

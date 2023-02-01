@@ -1,12 +1,9 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.matcher;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.converter.AppGatewayServerAuthenticationConverter;
-import com.ahcloud.gateway.server.infrastructure.security.authentication.converter.SystemWebGatewayServerAuthenticationConverter;
 import com.google.common.collect.Maps;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;

@@ -1,7 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.resolver;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import org.springframework.security.authentication.ReactiveAuthenticationManagerResolver;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;

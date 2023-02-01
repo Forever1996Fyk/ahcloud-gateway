@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access.AccessProvider;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access.AccessProviderStrategyFactory;
@@ -8,7 +8,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import reactor.core.publisher.Mono;
 

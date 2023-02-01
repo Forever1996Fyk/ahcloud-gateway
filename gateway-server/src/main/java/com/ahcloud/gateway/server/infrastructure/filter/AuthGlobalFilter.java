@@ -2,12 +2,10 @@ package com.ahcloud.gateway.server.infrastructure.filter;
 
 import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
-import com.ahcloud.gateway.server.infrastructure.config.GatewayAuthProperties;
+import com.ahcloud.gateway.server.infrastructure.config.properties.GatewayAuthProperties;
 import com.ahcloud.gateway.server.infrastructure.util.PathMatchUtils;
-import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -38,7 +36,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
      * 1、 获取当前请求地址
      * 2、判断当前地址是否需要认证权限
      *    2.1、如果需要认证
-     *         2.1.1、获取请求头的token, 如果为空则返回权限错误, 否则直接放行(接口权限的校验交给 SystemWebAuthorizationManager)
+     *         2.1.1、获取请求头的token, 如果为空则返回权限错误, 否则直接放行(接口权限的校验交给 AuthorizationManager)
      *    2.2、不需要认证
      *          2.2.1、直接放行
      * @param exchange

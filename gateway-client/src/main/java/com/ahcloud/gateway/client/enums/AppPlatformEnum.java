@@ -1,4 +1,4 @@
-package com.ahcloud.gateway.client;
+package com.ahcloud.gateway.client.enums;
 
 import java.util.Arrays;
 

@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.converter;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
-import com.ahcloud.gateway.client.GatewayRetCodeEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
 import com.ahcloud.gateway.server.infrastructure.util.ServerWebExchangeUtils;
 import com.google.common.base.Throwables;

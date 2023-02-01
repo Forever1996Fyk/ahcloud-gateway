@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.util;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.server.reactive.ServerHttpRequest;

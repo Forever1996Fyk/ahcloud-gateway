@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.core.Authentication;

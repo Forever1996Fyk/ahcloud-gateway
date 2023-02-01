@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.exception;
 
 import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.client.GatewayRetCodeEnum;
+import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.domain.response.GatewayResponseResult;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;

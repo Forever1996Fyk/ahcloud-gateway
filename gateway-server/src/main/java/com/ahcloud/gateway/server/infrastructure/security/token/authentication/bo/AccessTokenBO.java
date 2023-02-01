@@ -1,6 +1,8 @@
-package com.ahcloud.gateway.server.domain.dto;
+package com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo;
 
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * @program: ahcloud-gateway
@@ -13,8 +15,9 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccessTokenDTO {
+public class AccessTokenBO implements Serializable {
 
+    private static final long serialVersionUID = -7605728814367901450L;
     /**
      * token
      */
@@ -23,10 +26,10 @@ public class AccessTokenDTO {
     /**
      * 过期时间
      */
-    private Long expireTime;
+    private Integer expireTime;
 
     /**
      * 创建时间
      */
-    private Long issuedTime;
+    private Integer issuedTime;
 }

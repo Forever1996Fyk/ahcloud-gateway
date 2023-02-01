@@ -32,12 +32,8 @@
             <artifactId>gateway-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ahcloud.common</groupId>
-            <artifactId>common-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ahcloud.common</groupId>
-            <artifactId>common-core</artifactId>
+            <groupId>com.ahcloud.admin</groupId>
+            <artifactId>admin-dubbo</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.converter;
 
-import com.ahcloud.gateway.client.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import reactor.core.publisher.Mono;
 

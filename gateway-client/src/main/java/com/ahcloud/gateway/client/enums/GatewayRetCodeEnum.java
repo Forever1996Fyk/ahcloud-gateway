@@ -1,6 +1,7 @@
-package com.ahcloud.gateway.client;
+package com.ahcloud.gateway.client.enums;
 
-import com.ahcloud.gateway.client.common.ErrorCode;
+
+import com.ahcloud.common.enums.ErrorCode;
 
 /**
  * @program: ahcloud-gateway
@@ -32,6 +33,16 @@ public enum GatewayRetCodeEnum implements ErrorCode {
     AUTHENTICATION_USER_PRINCIPAL_ERROR(3_0_100_1001, "用户认证信息错误"),
     AUTHENTICATION_TOKEN_ERROR(3_0_100_1002, "用户认证凭证错误"),
     AUTHENTICATION_AUTHORITY_ERROR(3_0_100_1004, "用户认证权限错误"),
+
+
+    GATEWAY_USER_AUTHENTICATION_FAILED(4_0_100_1001, "用户认证失败"),
+
+    /**
+     * 授权
+     */
+    AUTHORIZATION_DISABLED(5_0_100_1001, "权限不可用"),
+    AUTHORIZATION_NOT_OWNED(5_0_100_1002, "暂无权限"),
+    AUTHORIZATION_MARK_ERROR(5_0_100_1003, "权限错误, 请联系管理员"),
 
     ;
 

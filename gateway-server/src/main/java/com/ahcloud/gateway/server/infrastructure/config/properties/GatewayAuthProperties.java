@@ -1,4 +1,4 @@
-package com.ahcloud.gateway.server.infrastructure.config;
+package com.ahcloud.gateway.server.infrastructure.config.properties;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
