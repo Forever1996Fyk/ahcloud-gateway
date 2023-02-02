@@ -3,6 +3,8 @@ package com.ahcloud.gateway.server.domain.admin.bo;
 import com.ahcloud.gateway.client.enums.AuthorityReadOrWriteEnum;
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * @program: ahcloud-gateway
  * @description:
@@ -14,8 +16,9 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminAuthorityBO {
+public class AdminAuthorityBO implements Serializable {
 
+    private static final long serialVersionUID = 4713949557305416199L;
     /**
      * 权限标识
      */

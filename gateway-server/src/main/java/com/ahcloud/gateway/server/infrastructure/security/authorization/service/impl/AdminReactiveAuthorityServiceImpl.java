@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * @program: ahcloud-gateway
@@ -29,6 +30,9 @@ public class AdminReactiveAuthorityServiceImpl implements ReactiveAuthorityServi
     @Override
     public AdminUserReactiveAuthorityBo getReactiveAuthority(Long userId, Long tenantId, String path) {
         AdminAuthorityBO authorityBO = authorityCacheService.getAdminAuthorityFromCacheByPath(path);
+        if (Objects.isNull(authorityBO)) {
+            throw new GatewayAccessDeniedException(GatewayRetCodeEnum.AUTHORIZATION_MARK_ERROR);
+        }
         return AdminUserReactiveAuthorityBo.builder()
                 .enabled(authorityBO.getEnabled())
                 .auth(authorityBO.getAuth())

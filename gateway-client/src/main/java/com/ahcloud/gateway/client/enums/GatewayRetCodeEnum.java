@@ -43,6 +43,7 @@ public enum GatewayRetCodeEnum implements ErrorCode {
     AUTHORIZATION_DISABLED(5_0_100_1001, "权限不可用"),
     AUTHORIZATION_NOT_OWNED(5_0_100_1002, "暂无权限"),
     AUTHORIZATION_MARK_ERROR(5_0_100_1003, "权限错误, 请联系管理员"),
+    AUTHORIZATION_GET_ERROR(5_0_100_1004, "获取权限失败, 请联系管理员"),
 
     ;
 
