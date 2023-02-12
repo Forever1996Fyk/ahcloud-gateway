@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ReactiveAuthorityCacheServiceImpl implements ReactiveAuthorityCacheService {
-    @Resource
+//    @Resource
     private AdminRpcService adminRpcService;
 
     private final static AntPathMatcher PATH_MATCHER = new AntPathMatcher();
@@ -65,32 +65,32 @@ public class ReactiveAuthorityCacheServiceImpl implements ReactiveAuthorityCache
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        initCache();
-        if (CollectionUtils.isEmpty(localAuthorityCache)) {
-            throw new RuntimeException("网关启动初始化权限集合缓存失败");
-        }
+//        initCache();
+//        if (CollectionUtils.isEmpty(localAuthorityCache)) {
+//            throw new RuntimeException("网关启动初始化权限集合缓存失败");
+//        }
     }
 
     private void loadAuthorities() {
-        int page = 1;
-        long count = 0;
-        AdminAuthorityQuery query = new AdminAuthorityQuery();
-        query.setPageSize(100);
-        while (true) {
-            query.setPageNo(page);
-            List<AdminAuthorityBO> authorityBOList = adminRpcService.listAdminAuthorities(query);
-            if (CollectionUtils.isEmpty(authorityBOList)) {
-                break;
-            }
-            Map<String, AdminAuthorityBO> authorityMap = CollectionUtils.convertMap(authorityBOList, AdminAuthorityBO::getPath);
-            if (CollectionUtils.isEmpty(localAuthorityCache)) {
-                localAuthorityCache = authorityMap;
-            } else {
-                localAuthorityCache.putAll(authorityMap);
-            }
-            count = count + authorityBOList.size();
-            page++;
-        }
-        log.info("网关初始化加载权限集合缓存完成, totalPageNo is {}, total is {}", page, count);
+//        int page = 1;
+//        long count = 0;
+//        AdminAuthorityQuery query = new AdminAuthorityQuery();
+//        query.setPageSize(100);
+//        while (true) {
+//            query.setPageNo(page);
+//            List<AdminAuthorityBO> authorityBOList = adminRpcService.listAdminAuthorities(query);
+//            if (CollectionUtils.isEmpty(authorityBOList)) {
+//                break;
+//            }
+//            Map<String, AdminAuthorityBO> authorityMap = CollectionUtils.convertMap(authorityBOList, AdminAuthorityBO::getPath);
+//            if (CollectionUtils.isEmpty(localAuthorityCache)) {
+//                localAuthorityCache = authorityMap;
+//            } else {
+//                localAuthorityCache.putAll(authorityMap);
+//            }
+//            count = count + authorityBOList.size();
+//            page++;
+//        }
+//        log.info("网关初始化加载权限集合缓存完成, totalPageNo is {}, total is {}", page, count);
     }
 }

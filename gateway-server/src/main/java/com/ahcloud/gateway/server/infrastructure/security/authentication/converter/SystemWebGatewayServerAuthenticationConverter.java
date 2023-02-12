@@ -22,7 +22,7 @@ public class SystemWebGatewayServerAuthenticationConverter implements GatewaySer
 
     @Override
     public Mono<Authentication> convert(ServerWebExchange exchange) {
-        String token = ServerWebExchangeUtils.getTokenFromRequest(exchange, GatewayConstants.TOKEN_HEADER);
-        return Mono.just(new RedisTokenAuthenticationToken(token,  AppPlatformEnum.SYSTEM_WEB.getValue()));
+        String token = ServerWebExchangeUtils.getTokenFromRequest(exchange, GatewayConstants.TOKEN_PREFIX);
+        return Mono.just(new RedisTokenAuthenticationToken(token,  AppPlatformEnum.SYSTEM_WEB.getValue(), AppPlatformEnum.SYSTEM_WEB));
     }
 }

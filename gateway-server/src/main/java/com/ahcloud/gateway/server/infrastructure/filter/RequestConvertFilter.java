@@ -1,13 +1,18 @@
 package com.ahcloud.gateway.server.infrastructure.filter;
 
 import com.ahcloud.common.utils.CollectionUtils;
+import com.ahcloud.common.utils.NullUtils;
+import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import com.ahcloud.gateway.server.domain.context.GatewayContext;
+import com.ahcloud.kernel.core.common.Constant;
 import com.google.common.base.Throwables;
 import io.netty.buffer.ByteBufAllocator;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.context.i18n.LocaleContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -33,6 +38,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @program: ahcloud-gateway
@@ -53,12 +59,17 @@ public class RequestConvertFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         HttpHeaders headers = request.getHeaders();
+        Object o = exchange.getAttributes().get(Constant.CTX_KEY_USER_ID.toString());
         GatewayContext context = GatewayContext.builder()
                 .path(request.getPath().pathWithinApplication().value())
                 .ipAddress(String.valueOf(request.getRemoteAddress()))
                 .headers(headers)
+                .userId(Objects.nonNull(o)?String.valueOf(o):null)
                 .build();
-        context.getFormData().addAll(request.getQueryParams());
+        MultiValueMap<String, String> formData = context.getFormData();
+        if (CollectionUtils.isNotEmpty(formData) && CollectionUtils.isNotEmpty(request.getQueryParams())) {
+            context.getFormData().addAll(request.getQueryParams());
+        }
 
         log.info("[RequestConvertFilter] HttpMethod is {}, Url is {}", request.getMethod(), request.getURI().getRawPath());
 
@@ -67,17 +78,21 @@ public class RequestConvertFilter implements GlobalFilter, Ordered {
 
         // 处理参数
         MediaType contentType = headers.getContentType();
-        long contentLength = headers.getContentLength();
-        if (contentLength > 0) {
-            if (MediaType.APPLICATION_JSON.equals(contentType)) {
-                return readBody(exchange, chain, context);
+        ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(exchange.getRequest()) {
+            @Override
+            public HttpHeaders getHeaders() {
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.putAll(super.getHeaders());
+                httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(context.getUserId()));
+                httpHeaders.set(Constant.CTX_KEY_TOKEN.toString(), NullUtils.of(headers.getFirst(GatewayConstants.TOKEN_HEADER)));
+                httpHeaders.set(Constant.CTX_KEY_CLIENT_IP.toString(), NullUtils.of(context.getIpAddress()));
+                httpHeaders.set(Constant.CTX_KEY_GW_APP_PLATFORM.toString(), NullUtils.of(headers.getFirst(GatewayConstants.APP_PLATFORM)));
+                String s = TraceContext.traceId();
+                return httpHeaders;
             }
-            if (MediaType.APPLICATION_FORM_URLENCODED.equals(contentType)) {
-                return readFormData(exchange, chain, context);
-            }
-        }
+        };
         log.info("[RequestConvertFilter] GatewayContext contentType is {}, Gateway context is set with {}", contentType, context);
-        return chain.filter(exchange);
+        return chain.filter(exchange.mutate().request(mutatedRequest).build());
     }
 
     @Override
@@ -139,6 +154,7 @@ public class RequestConvertFilter implements GlobalFilter, Ordered {
                         public HttpHeaders getHeaders() {
                             HttpHeaders httpHeaders = new HttpHeaders();
                             httpHeaders.putAll(super.getHeaders());
+                            httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), context.getUserId());
                             if (contentLength > 0) {
                                 httpHeaders.setContentLength(contentLength);
                             } else {
@@ -184,6 +200,14 @@ public class RequestConvertFilter implements GlobalFilter, Ordered {
                         @Override
                         public Flux<DataBuffer> getBody() {
                             return cachedFlux;
+                        }
+
+                        @Override
+                        public HttpHeaders getHeaders() {
+                            HttpHeaders httpHeaders = new HttpHeaders();
+                            httpHeaders.putAll(super.getHeaders());
+                            httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), context.getUserId());
+                            return httpHeaders;
                         }
                     };
                     ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();

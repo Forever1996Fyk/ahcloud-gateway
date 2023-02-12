@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8850
+      config:
+        namespace: 3c6eaeb5-5621-404a-8cdc-5af8b82bd816
+        max-retry: 10
+        refresh-enabled: true
+        username: LTAI5tQYb6LvUrix4x4xKo4X
+        password: sXW4bYUwIY9hzL1z4WS5QknY4eBapq
+        group: com.ahcloud.gateway.server
+        file-extension: yaml
+      discovery:
+        enabled: true
+        server-addr: 127.0.0.1:8850
+        namespace: 3c6eaeb5-5621-404a-8cdc-5af8b82bd816
+        group: local
+
+dubbo:
+  registry:
+    address: nacos://127.0.0.1:8850
+    group: local
+    username: LTAI5tQYb6LvUrix4x4xKo4X
+    password: sXW4bYUwIY9hzL1z4WS5QknY4eBapq
+  scan:
+    base-packages: com.ahcloud.gateway.server.api.rpc
+  config-center:
+    namespace: 3c6eaeb5-5621-404a-8cdc-5af8b82bd816

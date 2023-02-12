@@ -11,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
  **/
 public class GatewayAuthenticationException extends AuthenticationException {
 
+    private static final long serialVersionUID = 8471290523772730001L;
     private final ErrorCode errorCode;
 
     public GatewayAuthenticationException(ErrorCode errorCode, Throwable t) {
@@ -21,5 +22,9 @@ public class GatewayAuthenticationException extends AuthenticationException {
     public GatewayAuthenticationException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
+    }
+
+    public ErrorCode getErrorCode() {
+        return errorCode;
     }
 }

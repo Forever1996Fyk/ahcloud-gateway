@@ -22,7 +22,7 @@ public class AppGatewayServerAuthenticationConverter implements GatewayServerAut
 
     @Override
     public Mono<Authentication> convert(ServerWebExchange exchange) {
-        String token = ServerWebExchangeUtils.getTokenFromRequest(exchange, GatewayConstants.TOKEN_HEADER);
-        return Mono.just(new RedisTokenAuthenticationToken(token, AppPlatformEnum.APP.getValue()));
+        String token = ServerWebExchangeUtils.getTokenFromRequest(exchange, GatewayConstants.TOKEN_PREFIX);
+        return Mono.just(new RedisTokenAuthenticationToken(token, AppPlatformEnum.APP.getValue(), AppPlatformEnum.APP));
     }
 }

@@ -1,22 +1,26 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
+import com.ahcloud.common.model.KeyValue;
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
+import com.ahcloud.gateway.server.domain.context.GatewayContext;
+import com.ahcloud.gateway.server.infrastructure.exception.GatewayAccessDeniedException;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AdminOAuth2User;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.authority.bo.AdminUserReactiveAuthorityBo;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.service.ReactiveAuthorityService;
+import com.ahcloud.gateway.server.infrastructure.util.ServerWebExchangeUtils;
+import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * @program: ahcloud-gateway
@@ -32,22 +36,17 @@ public class SystemWebAccessProvider implements AccessProvider {
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext context) {
-        String path = context.getExchange().getRequest().getURI().getPath();
-        // 根据uri获取 权限标识
         return authentication
                 .filter(Authentication::isAuthenticated)
                 .cast(BearerTokenAuthentication.class)
                 .map(BearerTokenAuthentication::getPrincipal)
                 .cast(AdminOAuth2User.class)
-                .map(oAuth2User -> new AuthorizationDecision(
-                        adminReactiveAuthorityService.process(
-                                oAuth2User.getUserId(),
-                                oAuth2User.getTenantId(),
-                                path,
-                                oAuth2User.getAuthorities()
-                        )
-                ))
-                .defaultIfEmpty(new AuthorizationDecision(false));
+                .map(oAuth2User -> {
+                    // 这里如果需要可以做权限校验 不满足权限可以抛出 GatewayAccessDeniedException todo
+                    //注意，因为webflux的响应式编程 不能再采取原先的编码方式 即应该先将gatewayContext放入exchange中，否则其他地方可能取不到
+                    context.getExchange().getAttributes().put(Constant.CTX_KEY_USER_ID.toString(), oAuth2User.getUserId());
+                   return new AuthorizationDecision(true);
+                }).defaultIfEmpty(new AuthorizationDecision(false));
     }
 
     @Override

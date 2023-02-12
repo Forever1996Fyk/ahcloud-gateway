@@ -10,6 +10,7 @@ import com.ahcloud.common.enums.ErrorCode;
  **/
 public class GatewayException extends RuntimeException {
 
+    private static final long serialVersionUID = -7413290821971758672L;
     private ErrorCode errorCode;
 
     private String message;
@@ -22,6 +23,7 @@ public class GatewayException extends RuntimeException {
     public GatewayException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
+        this.message = errorCode.getMessage();
     }
 
     public ErrorCode getErrorCode() {

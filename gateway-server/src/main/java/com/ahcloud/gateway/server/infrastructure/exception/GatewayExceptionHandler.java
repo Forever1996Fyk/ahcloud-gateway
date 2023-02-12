@@ -1,5 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.exception;
 
+import com.ahcloud.common.enums.ErrorCode;
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.domain.response.GatewayResponseResult;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.Objects;
 
 /**
  * @program: ahcloud-gateway
@@ -37,26 +40,62 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         int code;
         String message;
-        if (ex instanceof  GatewayException) {
+        Object data = null;
+        log.error("exception is {}", Throwables.getStackTraceAsString(ex));
+        if (ex instanceof GatewayException) {
             GatewayException gatewayException = (GatewayException) ex;
             code = gatewayException.getErrorCode().getCode();
             message = gatewayException.getErrorCode().getMessage();
         } else if (ex instanceof ResponseStatusException) {
             code = ((ResponseStatusException) ex).getStatus().value();
             message = ex.getMessage();
+        } else if (ex instanceof BizException) {
+            BizException bizException = (BizException) ex;
+            code = bizException.getCode();
+            message = bizException.getMessage();
+            data = BizExceptionResult.of(bizException.getErrorCode());
         } else {
             code = GatewayRetCodeEnum.SYSTEM_ERROR.getCode();
             message = GatewayRetCodeEnum.SYSTEM_ERROR.getMessage();
         }
-        GatewayResponseResult result = GatewayResponseResult.ofFailed(code, message);
+        GatewayResponseResult result;
+        if (Objects.nonNull(data)) {
+            result = GatewayResponseResult.ofSuccess(data);
+        } else {
+            result = GatewayResponseResult.ofFailed(code, message);
+        }
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory bufferFactory = response.bufferFactory();
             try {
                 return bufferFactory.wrap(JsonUtils.beanToByte(result));
             } catch (Exception e) {
-                log.error("GatewayExceptionHandler[handle] exception convert to GatewayResponseResult failed, code is {}, message is {}, exception is {}", code, message, Throwables.getStackTraceAsString(e));
+                log.error("GatewayExceptionHandler[handle] exception convert to GatewayResponseResult failed,  exception is {}", Throwables.getStackTraceAsString(e));
                 return bufferFactory.wrap(new byte[0]);
             }
         }));
+    }
+
+    private static class BizExceptionResult {
+
+        private final int code;
+
+        private final String message;
+
+        private BizExceptionResult(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        public static BizExceptionResult of(ErrorCode errorCode) {
+            return new BizExceptionResult(errorCode.getCode(), errorCode.getMessage());
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 }

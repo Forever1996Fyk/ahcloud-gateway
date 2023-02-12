@@ -5,10 +5,13 @@ import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
 import com.ahcloud.gateway.server.infrastructure.security.token.RedisTokenAuthenticationToken;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,11 +41,10 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
                 .filter(RedisTokenAuthenticationToken.class::isInstance)
                 .cast(RedisTokenAuthenticationToken.class)
                 .map(RedisTokenAuthenticationToken::getTokenMark)
-                .flatMap(this::authenticate)
-                .cast(Authentication.class);
+                .flatMap(this::authenticate);
     }
 
-    private Mono<BearerTokenAuthentication> authenticate(Pair<String, String> tokenMark) {
+    private Mono<Authentication> authenticate(Pair<String, String> tokenMark) {
         /*
         校验token
             1、token是否过期(必须)
@@ -55,6 +57,14 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
             4、权限列表(可选)
             5、scope权限范围列表(一般OAuth2 单点登录时,用于判断第三方是否有权限访问)
          */
+        if (StringUtils.isBlank(tokenMark.getLeft())) {
+            return Mono.just(new AnonymousAuthenticationToken("Anonymous", new Object(), Lists.newArrayList(new GrantedAuthority() {
+                @Override
+                public String getAuthority() {
+                    return "Anonymous";
+                }
+            })));
+        }
         Triple<OAuth2AuthenticatedPrincipal, OAuth2AccessToken, Collection<? extends GrantedAuthority>> triple = checkToken(tokenMark);
         OAuth2AuthenticatedPrincipal principal = triple.getLeft();
         OAuth2AccessToken accessToken = triple.getMiddle();
@@ -70,34 +80,34 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
      * @param authorities
      */
     private void validateTokenAuthentication(OAuth2AuthenticatedPrincipal principal, OAuth2AccessToken token, Collection<? extends GrantedAuthority> authorities) {
-        validatePrincipal(principal);
         validateOAuth2Token(token);
-        validateAuthority(authorities);
+        validatePrincipal(principal);
+//        validateAuthority(authorities);
     }
 
     protected void validatePrincipal(OAuth2AuthenticatedPrincipal principal) {
         if (Objects.isNull(principal)) {
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.AUTHENTICATION_USER_PRINCIPAL_ERROR);
         }
-        if (StringUtils.isBlank(principal.getName())) {
-            throw new GatewayAuthenticationException(GatewayRetCodeEnum.AUTHENTICATION_USER_PRINCIPAL_ERROR);
-        }
+//        if (StringUtils.isBlank(principal.getName())) {
+//            throw new GatewayAuthenticationException(GatewayRetCodeEnum.AUTHENTICATION_USER_PRINCIPAL_ERROR);
+//        }
     }
 
     protected void validateOAuth2Token(OAuth2AccessToken token) {
         if (Objects.isNull(token)) {
-            throw new GatewayAuthenticationException(GatewayRetCodeEnum.AUTHENTICATION_TOKEN_ERROR);
-        }
-        Instant expiresAt = token.getExpiresAt();
-        // token生成时间
-        Instant issuedAt = token.getIssuedAt();
-        if (Objects.isNull(expiresAt) || expiresAt.isBefore(Instant.now())) {
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR);
         }
-        // 如果生成时间小于过期时间，则表示token异常
-        if (Objects.nonNull(issuedAt) && issuedAt.isBefore(expiresAt)) {
-            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);
-        }
+//        Instant expiresAt = token.getExpiresAt();
+//        // token生成时间
+//        Instant issuedAt = token.getIssuedAt();
+//        if (Objects.isNull(expiresAt) || expiresAt.isBefore(Instant.now())) {
+//            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR);
+//        }
+//        // 如果生成时间小于过期时间，则表示token异常
+//        if (Objects.nonNull(issuedAt) && issuedAt.isBefore(expiresAt)) {
+//            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);
+//        }
     }
 
     protected void validateAuthority(Collection<? extends GrantedAuthority> authorities) {

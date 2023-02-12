@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * @create: 2023/1/18 16:06
  **/
 @Slf4j
+@Primary
 @Component
 public class SystemWebReactiveAuthenticationManager extends AbstractReactiveAuthenticationManager {
 

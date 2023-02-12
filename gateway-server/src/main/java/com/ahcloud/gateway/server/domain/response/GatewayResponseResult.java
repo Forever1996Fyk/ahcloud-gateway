@@ -49,6 +49,7 @@ public class GatewayResponseResult {
                 .success(true)
                 .code(0)
                 .traceId(Constant.CTX_KEY_TRACE_ID.get())
+                .message("成功")
                 .build();
     }
 
@@ -57,6 +58,7 @@ public class GatewayResponseResult {
                 .success(true)
                 .code(0)
                 .traceId(Constant.CTX_KEY_TRACE_ID.get())
+                .message("成功")
                 .build();
     }
 

@@ -4,8 +4,29 @@ spring:
   application:
     name: ahcloud-gateway
   profiles:
-    active: dev
+    active: local
 
 # 服务配置
 server:
   port: 8081
+
+
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: count=countSql
+
+# slf4j日志配置
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    root: INFO
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR

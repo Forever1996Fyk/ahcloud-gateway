@@ -7,6 +7,8 @@ import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.apache.skywalking.apm.toolkit.trace.TraceCrossThread;
 import org.reactivestreams.Publisher;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -34,6 +36,7 @@ import java.nio.charset.StandardCharsets;
  **/
 @Slf4j
 @Component
+@TraceCrossThread
 public class ResponseConvertFilter implements WebFilter, Ordered {
     @Override
     public int getOrder() {
@@ -77,11 +80,16 @@ public class ResponseConvertFilter implements WebFilter, Ordered {
     }
 
     private GatewayResponseResult convert(String resData) {
-        if (StringUtils.isNotBlank(resData)) {
-            Object o = JsonUtils.stringToBean(resData, Object.class);
-            return GatewayResponseResult.ofSuccess(o);
-        } else {
-            return GatewayResponseResult.ofSuccess();
+        try {
+            if (StringUtils.isNotBlank(resData)) {
+                Object o = JsonUtils.stringToBean(resData, Object.class);
+                String traceId = TraceContext.traceId();
+                return GatewayResponseResult.ofSuccess(o);
+            } else {
+                return GatewayResponseResult.ofSuccess();
+            }
+        } catch (Exception e) {
+            return GatewayResponseResult.ofFailed();
         }
     }
 }

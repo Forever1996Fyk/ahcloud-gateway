@@ -5,6 +5,8 @@
     <modules>
         <module>gateway-server</module>
         <module>gateway-client</module>
+        <module>gateway-spring-boot-starter</module>
+        <module>gateway-dubbo</module>
     </modules>
     <parent>
         <groupId>com.ahcloud.kernel</groupId>
@@ -107,6 +109,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.ahcloud.gateway</groupId>
+                <artifactId>gateway-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.ahcloud.common</groupId>
                 <artifactId>common-utils</artifactId>
                 <version>${ahcloud.common.version}</version>
@@ -140,15 +147,15 @@
 
     <distributionManagement>
         <repository>
-            <id>releases</id>
+            <id>rdc-releases</id>
             <name>Releases</name>
-            <url>https://packages.aliyun.com/maven/repository/2282959-release-FSRTjT/</url>
+            <url>https://packages.aliyun.com/maven/repository/2282959-release-FSRTjT</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
+            <id>rdc-snapshots</id>
             <name>Snapshots</name>
-            <url>https://packages.aliyun.com/maven/repository/2282959-snapshot-bgSgRk/</url>
+            <url>https://packages.aliyun.com/maven/repository/2282959-snapshot-bgSgRk</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

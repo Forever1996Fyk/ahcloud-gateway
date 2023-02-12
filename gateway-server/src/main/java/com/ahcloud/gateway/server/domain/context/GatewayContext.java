@@ -48,4 +48,9 @@ public class GatewayContext {
      */
     private String path;
 
+    /**
+     * 用户信息
+     */
+    private String userId;
+
 }

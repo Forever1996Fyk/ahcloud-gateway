@@ -21,10 +21,6 @@ import java.util.Collection;
 @Component
 public class AppReactiveAuthenticationManager extends AbstractReactiveAuthenticationManager {
 
-    public AppReactiveAuthenticationManager() {
-        super(tokenEndpointService);
-    }
-
     @Override
     protected AppPlatformEnum getAppPlatform() {
         return AppPlatformEnum.APP;

@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
  **/
 public class GatewayAccessDeniedException extends AccessDeniedException {
 
+    private static final long serialVersionUID = 5646497118339999023L;
     private final ErrorCode errorCode;
 
     public GatewayAccessDeniedException(ErrorCode errorCode) {

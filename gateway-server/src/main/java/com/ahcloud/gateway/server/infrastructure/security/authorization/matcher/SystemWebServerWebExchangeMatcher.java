@@ -2,16 +2,16 @@ package com.ahcloud.gateway.server.infrastructure.security.authorization.matcher
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
-import com.ahcloud.gateway.server.infrastructure.security.authentication.converter.SystemWebGatewayServerAuthenticationConverter;
+import com.ahcloud.gateway.server.infrastructure.security.token.RedisTokenAuthenticationToken;
 import com.google.common.collect.Maps;
 import lombok.Setter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher.MatchResult.match;
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher.MatchResult.notMatch;
@@ -25,18 +25,27 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 @Setter
 public class SystemWebServerWebExchangeMatcher implements ServerWebExchangeMatcher {
 
-    private ServerAuthenticationConverter converter = new SystemWebGatewayServerAuthenticationConverter();
+    private final ServerAuthenticationConverter converter;
+
+    public SystemWebServerWebExchangeMatcher(ServerAuthenticationConverter converter) {
+        this.converter = converter;
+    }
 
     @Override
     public Mono<MatchResult> matches(ServerWebExchange exchange) {
         return converter.convert(exchange)
+                .cast(RedisTokenAuthenticationToken.class)
                 .flatMap(this::nullAuthentication)
                 .onErrorResume(e -> notMatch());
     }
 
-    private Mono<MatchResult> nullAuthentication(Authentication authentication) {
+    private Mono<MatchResult> nullAuthentication(RedisTokenAuthenticationToken authentication) {
+        if (Objects.isNull(authentication) || (AppPlatformEnum.SYSTEM_WEB != authentication.getAppPlatformEnum())) {
+            return notMatch();
+        }
         Map<String, Object> variables = Maps.newHashMap();
-        variables.put(GatewayConstants.APP_PLATFORM, AppPlatformEnum.SYSTEM_WEB);
-        return authentication == null ? notMatch() : match(variables);
+        variables.put(GatewayConstants.APP_PLATFORM, authentication.getAppPlatformEnum());
+        return match(variables);
     }
+
 }

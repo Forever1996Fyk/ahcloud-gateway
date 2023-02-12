@@ -28,8 +28,48 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.ahcloud.gateway</groupId>
             <artifactId>gateway-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ahcloud.gateway</groupId>
+            <artifactId>gateway-dubbo</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ahcloud.admin</groupId>
@@ -66,6 +106,10 @@
         <dependency>
             <groupId>com.ahcloud.kernel</groupId>
             <artifactId>kernel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ahcloud.kernel</groupId>
+            <artifactId>kernel-logback</artifactId>
         </dependency>
         <!-- 引入Actuator监控依赖 -->
         <dependency>

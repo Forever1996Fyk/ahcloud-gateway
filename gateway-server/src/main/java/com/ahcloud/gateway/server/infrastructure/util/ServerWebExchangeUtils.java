@@ -1,8 +1,11 @@
 package com.ahcloud.gateway.server.infrastructure.util;
 
+import com.ahcloud.common.model.KeyValue;
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.K;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -32,7 +35,7 @@ public class ServerWebExchangeUtils {
     public static String getTokenFromRequest(ServerWebExchange exchange, String prefix) {
         String originToken = getOriginTokenFromRequest(exchange);
         // 如果以Bearer开头，则提取。
-        if (StringUtils.startsWith(originToken, prefix.toLowerCase())) {
+        if (StringUtils.startsWith(originToken, prefix)) {
             String authHeaderValue = StringUtils.substring(originToken, prefix.length()).trim();
             int commaIndex = authHeaderValue.indexOf(',');
             if (commaIndex > 0) {
@@ -52,6 +55,17 @@ public class ServerWebExchangeUtils {
         ServerHttpRequest request = exchange.getRequest();
         String appPlatform = request.getHeaders().getFirst(GatewayConstants.APP_PLATFORM);
         return AppPlatformEnum.getByValue(appPlatform);
+    }
+
+    /**
+     * 追加信息到请求头
+     * @param exchange
+     * @param keyValue
+     */
+    public static void appendValueToHeaders(ServerWebExchange exchange, KeyValue<String, String> keyValue) {
+        ServerHttpRequest request = exchange.getRequest();
+        HttpHeaders headers = request.getHeaders();
+        headers.add(keyValue.getKey(), keyValue.getValue());
     }
 
 }

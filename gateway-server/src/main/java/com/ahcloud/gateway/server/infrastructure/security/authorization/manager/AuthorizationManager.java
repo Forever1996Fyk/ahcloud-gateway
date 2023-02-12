@@ -1,7 +1,9 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
+import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
+import com.ahcloud.gateway.server.infrastructure.exception.GatewayAccessDeniedException;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access.AccessProvider;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access.AccessProviderStrategyFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -29,13 +31,22 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         return accessProvider.check(authentication, context);
     }
 
-    @Override
-    public Mono<Void> verify(Mono<Authentication> authentication, AuthorizationContext context) {
-        return check(authentication, context)
-                .filter(AuthorizationDecision::isGranted)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new AccessDeniedException("Access Denied"))))
-                .flatMap(d -> Mono.empty());
-    }
+    /**
+     * 此方法重写无效, 根据AuthorizeExchangeSpec的源码可知，无论如何最终加载的ReactiveAuthorizationManager类型，一定是DelegatingReactiveAuthorizationManager,
+     *
+     * 而DelegatingReactiveAuthorizationManager已经默认实现了verify方法，无法变更。
+     * 因此想要抛出AccessDeniedException，只能在check方法中，抛出
+     * @param authentication the Authentication to check
+     * @param context the object to check
+     * @return
+     */
+//    @Override
+//    public Mono<Void> verify(Mono<Authentication> authentication, AuthorizationContext context) {
+//        return check(authentication, context)
+//                .filter(AuthorizationDecision::isGranted)
+//                .switchIfEmpty(Mono.defer(() -> Mono.error(new GatewayAccessDeniedException(GatewayRetCodeEnum.AUTHORIZATION_NOT_OWNED))))
+//                .flatMap(d -> Mono.empty());
+//    }
 }
 
 
