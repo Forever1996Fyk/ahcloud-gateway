@@ -3,7 +3,9 @@ package com.ahcloud.gateway.starter.repository;
 import com.ahcloud.common.result.RpcResult;
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;
+import com.ahcloud.gateway.client.dubbo.route.dto.RouteRegisterDTO;
 import com.ahcloud.gateway.dubbo.api.ApiRegisterDubboService;
+import com.ahcloud.gateway.dubbo.api.RouteRefreshDubboService;
 import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
 import com.ahcloud.gateway.starter.shutdown.GatewayClientShutdownHook;
 import com.google.common.base.Throwables;
@@ -26,6 +28,8 @@ public class GatewayClientDubboRegisterRepository implements GatewayClientRegist
 
     @DubboReference(version = "1.0.0", timeout = 6000)
     private ApiRegisterDubboService apiRegisterDubboService;
+    @DubboReference(version = "1.0.0", timeout = 6000)
+    private RouteRefreshDubboService routeRefreshDubboService;
 
     private final PropertiesConfiguration clientConfig;
     private final Environment env;
@@ -59,6 +63,20 @@ public class GatewayClientDubboRegisterRepository implements GatewayClientRegist
         } catch (Exception e) {
             log.error("GatewayClientDubboRegisterRepository[batchPersistApi] client register error is {}, cause by {}"
                     , JsonUtils.toJsonString(apiRegisterDTOList)
+                    , Throwables.getStackTraceAsString(e));
+        }
+    }
+
+    @Override
+    public void persistRoute(RouteRegisterDTO registerDTO) {
+        try {
+            RpcResult<Boolean> result = routeRefreshDubboService.routeRegister(registerDTO);
+            if (result.isFailed() || !result.getData()) {
+                log.error("GatewayClientDubboRegisterRepository[persistRoute] client route register error is {}", registerDTO);
+            }
+        } catch (Exception e) {
+            log.error("GatewayClientDubboRegisterRepository[persistRoute] client route register error is {}, cause by {}"
+                    , registerDTO
                     , Throwables.getStackTraceAsString(e));
         }
     }

@@ -1,5 +1,6 @@
 package com.ahcloud.gateway.starter.repository;
 
+import com.ahcloud.gateway.client.dubbo.route.dto.RouteRegisterDTO;
 import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
 import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;
 
@@ -32,6 +33,12 @@ public interface GatewayClientRegisterRepository {
      * @param apiRegisterDTOList
      */
     void batchPersistApi(List<ApiRegisterDTO> apiRegisterDTOList);
+
+    /**
+     * 持久化路由
+     * @param registerDTO
+     */
+    void persistRoute(RouteRegisterDTO registerDTO);
 
     /**
      * 关闭

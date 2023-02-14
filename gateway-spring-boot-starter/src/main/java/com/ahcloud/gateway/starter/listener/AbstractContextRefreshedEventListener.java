@@ -2,9 +2,11 @@ package com.ahcloud.gateway.starter.listener;
 
 import com.ahcloud.gateway.client.constant.GatewayClientConstants;
 import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;
+import com.ahcloud.gateway.client.dubbo.route.dto.RouteRegisterDTO;
 import com.ahcloud.gateway.client.exception.GatewayClientIllegalArgumentException;
 import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
 import com.ahcloud.gateway.starter.register.event.ApiRegisterEvent;
+import com.ahcloud.gateway.starter.register.event.RouteRegisterEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
@@ -62,8 +64,14 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         if (!registered.compareAndSet(false, true)) {
             return;
         }
+        // 路由注册
+        publisher.publishEvent(new RouteRegisterEvent(buildRouteRegisterDTO(context, beans)));
+
+        // 接口注册
         beans.forEach((k, v) -> publisher.publishEvent(new ApiRegisterEvent(buildApiRegisterDTO(context, v))));
+
     }
+
 
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
@@ -90,6 +98,14 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
      * @return
      */
     protected abstract List<ApiRegisterDTO> buildApiRegisterDTO(ApplicationContext context, T beans);
+
+    /**
+     * 构建路由注册实体
+     * @param context
+     * @param beans
+     * @return
+     */
+    protected abstract RouteRegisterDTO buildRouteRegisterDTO(ApplicationContext context, Map<String, T> beans);
 
     public String getAppName() {
         return appName;

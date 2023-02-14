@@ -41,6 +41,7 @@ public class SystemWebAccessProvider implements AccessProvider {
                 .cast(BearerTokenAuthentication.class)
                 .map(BearerTokenAuthentication::getPrincipal)
                 .cast(AdminOAuth2User.class)
+                .filter(Objects::nonNull)
                 .map(oAuth2User -> {
                     // 这里如果需要可以做权限校验 不满足权限可以抛出 GatewayAccessDeniedException todo
                     //注意，因为webflux的响应式编程 不能再采取原先的编码方式 即应该先将gatewayContext放入exchange中，否则其他地方可能取不到

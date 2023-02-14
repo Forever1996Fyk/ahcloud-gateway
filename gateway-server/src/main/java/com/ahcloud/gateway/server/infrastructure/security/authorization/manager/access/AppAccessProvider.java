@@ -30,6 +30,7 @@ public class AppAccessProvider implements AccessProvider {
                 .cast(BearerTokenAuthentication.class)
                 .map(BearerTokenAuthentication::getPrincipal)
                 .cast(AdminOAuth2User.class)
+                .filter(Objects::nonNull)
                 .map(oAuth2User -> {
                     //注意，因为webflux的响应式编程 不能再采取原先的编码方式 即应该先将gatewayContext放入exchange中，否则其他地方可能取不到
                     context.getExchange().getAttributes().put(Constant.CTX_KEY_USER_ID.toString(), oAuth2User.getUserId());

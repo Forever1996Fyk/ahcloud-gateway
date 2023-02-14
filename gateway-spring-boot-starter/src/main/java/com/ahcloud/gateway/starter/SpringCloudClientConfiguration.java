@@ -1,18 +1,13 @@
 package com.ahcloud.gateway.starter;
 
-import com.ahcloud.gateway.dubbo.api.ApiRegisterDubboService;
 import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
 import com.ahcloud.gateway.starter.listener.ApiRegisterEventListener;
+import com.ahcloud.gateway.starter.listener.RouteRegisterEventListener;
 import com.ahcloud.gateway.starter.listener.SpringCloudClientEventListener;
 import com.ahcloud.gateway.starter.repository.GatewayClientDubboRegisterRepository;
 import com.ahcloud.gateway.starter.repository.GatewayClientRegisterRepository;
-import org.apache.dubbo.config.RegistryConfig;
-import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.spring.ReferenceBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 /**
@@ -39,6 +34,11 @@ public class SpringCloudClientConfiguration {
     @Bean
     public ApiRegisterEventListener apiRegisterEventListener(GatewayClientRegisterRepository gatewayClientRegisterRepository) {
         return new ApiRegisterEventListener(gatewayClientRegisterRepository);
+    }
+
+    @Bean
+    public RouteRegisterEventListener routeRegisterEventListener(GatewayClientRegisterRepository gatewayClientRegisterRepository) {
+        return new RouteRegisterEventListener(gatewayClientRegisterRepository);
     }
 
     @Bean

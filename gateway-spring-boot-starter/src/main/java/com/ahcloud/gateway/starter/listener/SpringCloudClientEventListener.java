@@ -2,6 +2,7 @@ package com.ahcloud.gateway.starter.listener;
 
 import com.ahcloud.gateway.client.constant.GatewayClientConstants;
 import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;
+import com.ahcloud.gateway.client.dubbo.route.dto.RouteRegisterDTO;
 import com.ahcloud.gateway.client.enums.ApiHttpMethodEnum;
 import com.ahcloud.gateway.starter.annotation.GatewaySpringCloudClient;
 import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
@@ -92,6 +93,13 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
                 }
             }
             return list;
+    }
+
+    @Override
+    protected RouteRegisterDTO buildRouteRegisterDTO(ApplicationContext context, Map<String, Object> beans) {
+        return RouteRegisterDTO.builder()
+                .serviceId(getAppName())
+                .build();
     }
 
     @Override
