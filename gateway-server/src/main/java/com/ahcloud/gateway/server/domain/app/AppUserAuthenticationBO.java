@@ -1,4 +1,4 @@
-package com.ahcloud.gateway.server.domain.admin.bo;
+package com.ahcloud.gateway.server.domain.app;
 
 import lombok.*;
 
@@ -15,7 +15,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminUserAuthenticationBO {
+public class AppUserAuthenticationBO {
 
     /**
      * 用户id
@@ -33,12 +33,7 @@ public class AdminUserAuthenticationBO {
     private Set<String> scopes;
 
     /**
-     * 权限集合
-     */
-    private Set<String> authorities;
-
-    /**
      * token信息
      */
-    private AdminAccessTokenBO accessTokenBO;
+    private AppAccessTokenBO accessTokenBO;
 }

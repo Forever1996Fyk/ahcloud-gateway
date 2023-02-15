@@ -1,28 +1,21 @@
 package com.ahcloud.gateway.server.infrastructure.rpc;
 
-import com.ahcloud.admin.client.domain.dubbo.base.BaseAuthorityDTO;
-import com.ahcloud.admin.client.domain.dubbo.base.query.BaseAuthorityPageQueryDTO;
 import com.ahcloud.admin.client.domain.dubbo.token.AdminUserAuthenticationDTO;
 import com.ahcloud.admin.dubbo.authentication.TokenAuthenticationDubboService;
-import com.ahcloud.admin.dubbo.base.AdminBaseDubboService;
 import com.ahcloud.common.result.RpcResult;
-import com.ahcloud.common.result.page.RpcPageResult;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.application.helper.AdminUserAuthenticationHelper;
-import com.ahcloud.gateway.server.domain.admin.bo.AdminAuthorityBO;
+import com.ahcloud.gateway.server.application.helper.AppUserAuthenticationHelper;
 import com.ahcloud.gateway.server.domain.admin.bo.AdminUserAuthenticationBO;
-import com.ahcloud.gateway.server.domain.admin.query.AdminAuthorityQuery;
+import com.ahcloud.gateway.server.domain.app.AppUserAuthenticationBO;
 import com.ahcloud.gateway.server.infrastructure.exception.BizException;
-import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
-import com.ahcloud.gateway.server.infrastructure.exception.TokenExpiredException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @program: ahcloud-gateway
@@ -32,7 +25,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Service
-public class AdminRpcService {
+public class AppUserRpcService {
     @DubboReference(version = "1.0.0", check = false)
     private TokenAuthenticationDubboService tokenAuthenticationDubboService;
 
@@ -41,27 +34,19 @@ public class AdminRpcService {
      * @param token
      * @return
      */
-    public AdminUserAuthenticationBO getAdminUserAuthenticationByToken(String token) {
+    public AppUserAuthenticationBO getAppUserAuthenticationByToken(String token) {
         try {
             RpcResult<AdminUserAuthenticationDTO> result = tokenAuthenticationDubboService.findUserAuthenticationByToken(token);
-            AdminUserAuthenticationDTO adminUserAuthenticationDTO = result.getData();
-            if (result.isFailed() || Objects.isNull(adminUserAuthenticationDTO) || Objects.isNull(adminUserAuthenticationDTO.getAccessTokenDTO())) {
-                log.error("AdminRpcService[getAdminUserAuthenticationByToken] 获取admin用户认证信息失败 token is {}, result is {}, errorMsg:{}"
+            if (result.isFailed() || Objects.isNull(result.getData()) || Objects.isNull(result.getData().getAccessTokenDTO())) {
+                log.error("AppUserRpcService[getAppUserAuthenticationByToken] 获取app用户认证信息失败 token is {}, result is {}, errorMsg:{}"
                         , token
                         , result
                         , result.getMessage());
                 throw new BizException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);
             }
-            // 判断token是否过期
-            Boolean tokenExpired = adminUserAuthenticationDTO.getTokenExpired();
-            if (tokenExpired) {
-                throw new TokenExpiredException();
-            }
-            return AdminUserAuthenticationHelper.convertBO(adminUserAuthenticationDTO);
-        } catch (TokenExpiredException e) {
-            throw e;
+            return AppUserAuthenticationHelper.convertBO(result.getData());
         } catch (Exception e) {
-            log.error("AdminRpcService[getAdminUserAuthenticationByToken] 获取admin用户认证信息失败, token is {}，caused by {}"
+            log.error("AdminRpcService[getAppUserAuthenticationByToken] 获取app用户认证信息失败, token is {}，caused by {}"
                     , token
                     , Throwables.getStackTraceAsString(e));
             throw new BizException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);

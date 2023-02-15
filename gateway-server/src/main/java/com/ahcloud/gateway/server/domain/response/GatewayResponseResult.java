@@ -38,17 +38,11 @@ public class GatewayResponseResult {
      */
     private boolean success;
 
-    /**
-     * traceId
-     */
-    private String traceId;
-
     public static GatewayResponseResult ofSuccess(Object result) {
         return GatewayResponseResult.builder()
                 .result(result)
                 .success(true)
                 .code(0)
-                .traceId(Constant.CTX_KEY_TRACE_ID.get())
                 .message("成功")
                 .build();
     }
@@ -57,7 +51,6 @@ public class GatewayResponseResult {
         return GatewayResponseResult.builder()
                 .success(true)
                 .code(0)
-                .traceId(Constant.CTX_KEY_TRACE_ID.get())
                 .message("成功")
                 .build();
     }
@@ -67,7 +60,6 @@ public class GatewayResponseResult {
                 .success(false)
                 .message(message)
                 .code(code)
-                .traceId(Constant.CTX_KEY_TRACE_ID.get())
                 .build();
     }
 

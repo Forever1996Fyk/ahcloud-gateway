@@ -1,9 +1,12 @@
-package com.ahcloud.gateway.server.infrastructure.exception;
+package com.ahcloud.gateway.server.infrastructure.exception.handler;
 
 import com.ahcloud.common.enums.ErrorCode;
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.domain.response.GatewayResponseResult;
+import com.ahcloud.gateway.server.infrastructure.exception.BizException;
+import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.server.infrastructure.exception.TokenExpiredException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -54,6 +57,10 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
             code = bizException.getCode();
             message = bizException.getMessage();
             data = BizExceptionResult.of(bizException.getErrorCode());
+        } else if (ex instanceof TokenExpiredException) {
+            code = GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR.getCode();
+            message = GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR.getMessage();
+            data = BizExceptionResult.of(GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR);
         } else {
             code = GatewayRetCodeEnum.SYSTEM_ERROR.getCode();
             message = GatewayRetCodeEnum.SYSTEM_ERROR.getMessage();

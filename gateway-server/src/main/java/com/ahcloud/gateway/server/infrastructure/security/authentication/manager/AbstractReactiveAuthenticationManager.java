@@ -59,6 +59,8 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
          */
         if (StringUtils.isBlank(tokenMark.getLeft())) {
             return Mono.just(new AnonymousAuthenticationToken("Anonymous", new Object(), Lists.newArrayList(new GrantedAuthority() {
+                private static final long serialVersionUID = 8343073439065949441L;
+
                 @Override
                 public String getAuthority() {
                     return "Anonymous";

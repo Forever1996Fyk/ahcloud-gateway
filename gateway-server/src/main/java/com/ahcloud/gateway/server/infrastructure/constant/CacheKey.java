@@ -15,6 +15,6 @@ public class CacheKey {
      * @return
      */
     public static String generateAuthenticationCacheKey(String prefix, String token) {
-        return prefix + token;
+        return prefix + ":" + token;
     }
 }
