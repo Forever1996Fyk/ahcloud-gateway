@@ -6,6 +6,7 @@ import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.K;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.PathContainer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -67,5 +68,4 @@ public class ServerWebExchangeUtils {
         HttpHeaders headers = request.getHeaders();
         headers.add(keyValue.getKey(), keyValue.getValue());
     }
-
 }

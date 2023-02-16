@@ -1,6 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
+import com.ahcloud.gateway.server.infrastructure.config.properties.GatewayAuthProperties;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AdminOAuth2User;
 import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @program: ahcloud-gateway
@@ -21,10 +23,16 @@ import java.util.Objects;
  **/
 @Slf4j
 @Component
-public class AppAccessProvider implements AccessProvider {
+public class AppAccessProvider extends AbstractAccessProvider {
+
+    private final static String LOG_MARK = "AppAccessProvider";
+
+    protected AppAccessProvider(GatewayAuthProperties properties) {
+        super(properties.getIgnoreAuthUrlSet());
+    }
 
     @Override
-    public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext context) {
+    public Mono<AuthorizationDecision> doCheck(Mono<Authentication> authentication, AuthorizationContext context) {
         return authentication
                 .filter(Authentication::isAuthenticated)
                 .cast(BearerTokenAuthentication.class)
@@ -37,6 +45,11 @@ public class AppAccessProvider implements AccessProvider {
                     return new AuthorizationDecision(true);
                 })
                 .defaultIfEmpty(new AuthorizationDecision(false));
+    }
+
+    @Override
+    protected String getLogMark() {
+        return LOG_MARK;
     }
 
     @Override

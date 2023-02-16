@@ -54,7 +54,6 @@ public class GatewayAuthProperties {
 
     public String[] getIgnoreAuthUrlArray() {
         String[] array = new String[] {};
-        Set<String> set = Sets.newHashSet();
         if (ignoreAuthUrlSet == null || ignoreAuthUrlSet.length() == 0) {
             return array;
         }

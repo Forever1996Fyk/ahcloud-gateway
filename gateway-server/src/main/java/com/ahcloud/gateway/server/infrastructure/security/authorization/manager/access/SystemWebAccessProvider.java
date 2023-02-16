@@ -1,17 +1,12 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
-import com.ahcloud.common.model.KeyValue;
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
-import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.server.domain.context.GatewayContext;
-import com.ahcloud.gateway.server.infrastructure.exception.GatewayAccessDeniedException;
+import com.ahcloud.gateway.server.infrastructure.config.properties.GatewayAuthProperties;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AdminOAuth2User;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.authority.bo.AdminUserReactiveAuthorityBo;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.service.ReactiveAuthorityService;
-import com.ahcloud.gateway.server.infrastructure.util.ServerWebExchangeUtils;
 import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
@@ -19,8 +14,8 @@ import org.springframework.security.web.server.authorization.AuthorizationContex
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Resource;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @program: ahcloud-gateway
@@ -30,12 +25,18 @@ import java.util.Objects;
  **/
 @Slf4j
 @Component
-public class SystemWebAccessProvider implements AccessProvider {
-    @Resource
-    private ReactiveAuthorityService<AdminUserReactiveAuthorityBo> adminReactiveAuthorityService;
+public class SystemWebAccessProvider extends AbstractAccessProvider {
+    private final static String LOG_MARK = "SystemWebAccessProvider";
+
+    private final ReactiveAuthorityService<AdminUserReactiveAuthorityBo> adminReactiveAuthorityService;
+
+    protected SystemWebAccessProvider(GatewayAuthProperties properties, ReactiveAuthorityService<AdminUserReactiveAuthorityBo> adminReactiveAuthorityService) {
+        super(properties.getIgnoreAuthUrlSet());
+        this.adminReactiveAuthorityService = adminReactiveAuthorityService;
+    }
 
     @Override
-    public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext context) {
+    public Mono<AuthorizationDecision> doCheck(Mono<Authentication> authentication, AuthorizationContext context) {
         return authentication
                 .filter(Authentication::isAuthenticated)
                 .cast(BearerTokenAuthentication.class)
@@ -48,6 +49,11 @@ public class SystemWebAccessProvider implements AccessProvider {
                     context.getExchange().getAttributes().put(Constant.CTX_KEY_USER_ID.toString(), oAuth2User.getUserId());
                    return new AuthorizationDecision(true);
                 }).defaultIfEmpty(new AuthorizationDecision(false));
+    }
+
+    @Override
+    protected String getLogMark() {
+        return LOG_MARK;
     }
 
     @Override
