@@ -60,6 +60,7 @@ public class SystemWebReactiveAuthenticationManager extends AbstractReactiveAuth
                 .tenantId(adminUserAuthenticationBO.getTenantId())
                 .username(adminUserAuthenticationBO.getAccount())
                 .authorities(convert(adminUserAuthenticationBO.getAuthorities()))
+                .attributes(attributes)
                 .build();
 
         AccessTokenBO accessTokenBO = adminUserAuthenticationBO.getAccessTokenBO();
