@@ -1,0 +1,74 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam actorStyle hollow
+
+start
+: APP/Web/小程序请求接口;
+: 通过gateway;
+: 先通过AuthenticationWebFilter过滤器;
+group AuthenticationWebFilter认证过滤器
+    : ServerRedisTokenAuthenticationConverter 对当前请求数据进行判断和转换;
+    : 获取当前请求接口全路径path(包含应用名);
+    if (当前path是否存在忽略认证的配置中)then(是)
+        : 直接返回Mono.empty();
+        note left: 过滤器链会传递到AnonymousAuthenticationWebFilter, 生成AnonymousAuthenticationToken;
+    else
+        : 从请求头获取token;
+        if (token is null) then(是)
+        : 直接抛出异常, 用户认证凭证异常;
+        else
+        : 从请求头获取app-platform;
+        if (app-platform is null) then(是)
+        : 直接抛出异常, 系统异常;
+        endif
+        endif
+        : 生成RedisTokenAuthenticationToken;
+        : 调用 AuthenticationWebFilter#authenticate方法;
+        group AuthenticationWebFilter#authenticate逻辑
+            : 先通过 ReactiveAuthenticationManagerResolver方法，根据resolve方法返回不同类型的认证管理器即ReactiveAuthenticationManager;
+            note left
+                具体的实现为: DelegatingGatewayReactiveAuthenticationManagerResolver根据请求中的app-platform获取具体的ReactiveAuthenticationManagerResolver
+                            ->
+                            AppGatewayReactiveAuthenticationManagerResolver SystemWebGatewayReactiveAuthenticationManagerResolver
+            end note
+            : 最终解析的认证管理器为 AbstractReactiveAuthenticationManager;
+            group AbstractReactiveAuthenticationManager逻辑
+                : Authentication 强制转换为 RedisTokenAuthenticationToken;
+                : 获取其中的token和前缀标识;
+                if (当前redis中不存在用户认证信息) then (是)
+                : 调用admin或者app的dubbo接口，根据token获取用户认证信息并返回;
+                : 如果认证信息不为空，则存入redis并返回;
+                else
+                : 直接从redis中获取并返回用户认证信息 BearerTokenAuthentication;
+                endif
+            end group
+        end group
+        : 将生成的BearerTokenAuthentication信息存入当前线程上下文ReactiveSecurityContextHolder;
+    endif
+end group
+
+: 通过AuthorizationWebFilter过滤器;
+group AuthorizationWebFilter授权过滤器
+    : 先从当前线程上下文中, ReactiveSecurityContextHolder获取当前的认证信息, 即RedisTokenAuthenticationToken;
+    if (RedisTokenAuthenticationToken is null) then(是)
+    : 直接传入下一过滤链;
+    else
+    : 调用ReactiveAuthorizationManager的verify方法;
+    note left
+        具体实现类为: DelegatingReactiveAuthorizationManager
+                    ->
+                    调用ServerWebExchangeMatcher的matches方法匹配到具体的ReactiveAuthorizationManager的实现类
+                    ->
+                    AuthorizationManager
+    end note
+    : AuthorizationManager实现check方法, 通过app-platform类型选择不同的AccessProvider直接逻辑, 最终返回AuthorizationDecision;
+    if (AuthorizationDecision is true)then(是)
+    : 权限校验成功;
+    else
+    : 权限校验失败;
+    endif
+    endif
+end group
+end
+@enduml

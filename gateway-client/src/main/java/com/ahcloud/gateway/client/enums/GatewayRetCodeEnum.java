@@ -15,7 +15,7 @@ public enum GatewayRetCodeEnum implements ErrorCode {
      * http status
      */
     CERTIFICATE_EXPIRED_ERROR(401, "用户认证凭证已过期"),
-    CERTIFICATE_EXCEPTION_ERROR(401, "用户认证凭证异常"),
+    CERTIFICATE_EXCEPTION_ERROR(401_1, "用户认证凭证异常"),
 
     /**
      * 公共响应码

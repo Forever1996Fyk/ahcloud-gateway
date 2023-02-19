@@ -1,6 +1,10 @@
 package com.ahcloud.gateway.server.infrastructure.security.token.service.impl;
 
+import com.ahcloud.common.utils.DateUtils;
+import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
+import com.ahcloud.gateway.server.domain.admin.bo.AdminAccessTokenBO;
 import com.ahcloud.gateway.server.domain.admin.bo.AdminUserAuthenticationBO;
+import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AccessTokenBO;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AdminUserReactiveAuthenticationBO;
 import com.ahcloud.gateway.server.infrastructure.rpc.AdminRpcService;
@@ -10,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * @program: ahcloud-gateway
@@ -33,15 +38,20 @@ public class AdminTokenEndpointServiceImpl extends CacheTokenEndpointService<Adm
     @Override
     protected AdminUserReactiveAuthenticationBO createUserReactiveAuthentication(String token) {
         AdminUserAuthenticationBO authentication = adminRpcService.getAdminUserAuthenticationByToken(token);
+        AdminAccessTokenBO accessTokenBO = authentication.getAccessTokenBO();
+        if (Objects.isNull(accessTokenBO)) {
+            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);
+        }
         return AdminUserReactiveAuthenticationBO.builder()
                 .scopes(authentication.getScopes())
                 .userId(authentication.getUserId())
                 .authorities(authentication.getAuthorities())
                 .accessTokenBO(
                         AccessTokenBO.builder()
-                                .token(authentication.getAccessTokenBO().getToken())
-                                .expireTime(authentication.getAccessTokenBO().getExpireAt())
-                                .issuedTime(authentication.getAccessTokenBO().getIssuedAt())
+                                .token(accessTokenBO.getToken())
+                                .expireAt(DateUtils.dateToInstant(accessTokenBO.getExpireTime()))
+                                .issuedAt(DateUtils.dateToInstant(accessTokenBO.getIssuedTime()))
+                                .expiresIn(accessTokenBO.getExpiresIn())
                                 .build()
                 )
                 .build();

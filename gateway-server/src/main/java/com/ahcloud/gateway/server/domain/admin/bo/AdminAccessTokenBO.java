@@ -2,6 +2,8 @@ package com.ahcloud.gateway.server.domain.admin.bo;
 
 import lombok.*;
 
+import java.util.Date;
+
 /**
  * @program: ahcloud-gateway
  * @description:
@@ -23,12 +25,17 @@ public class AdminAccessTokenBO {
     /**
      * 过期时间
      */
-    private Integer expireAt;
+    private Date expireTime;
 
     /**
      * 创建时间
      */
-    private Integer issuedAt;
+    private Date issuedTime;
+
+    /**
+     * 还剩多长时间(秒)
+     */
+    private Integer expiresIn;
 
     /**
      * token类型

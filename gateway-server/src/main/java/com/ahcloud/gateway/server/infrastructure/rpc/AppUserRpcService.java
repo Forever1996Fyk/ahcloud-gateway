@@ -9,6 +9,9 @@ import com.ahcloud.gateway.server.application.helper.AppUserAuthenticationHelper
 import com.ahcloud.gateway.server.domain.admin.bo.AdminUserAuthenticationBO;
 import com.ahcloud.gateway.server.domain.app.AppUserAuthenticationBO;
 import com.ahcloud.gateway.server.infrastructure.exception.BizException;
+import com.ahcloud.gateway.server.infrastructure.exception.TokenExpiredException;
+import com.ahcloud.uaa.client.domain.dubbo.token.AppUserAuthenticationDTO;
+import com.ahcloud.uaa.dubbo.authentication.AppTokenAuthenticationDubboService;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -27,7 +30,7 @@ import java.util.Objects;
 @Service
 public class AppUserRpcService {
     @DubboReference(version = "1.0.0", check = false)
-    private TokenAuthenticationDubboService tokenAuthenticationDubboService;
+    private AppTokenAuthenticationDubboService tokenAuthenticationDubboService;
 
     /**
      * 根据token调用admin服务rpc接口查询admin用户认证信息
@@ -36,17 +39,23 @@ public class AppUserRpcService {
      */
     public AppUserAuthenticationBO getAppUserAuthenticationByToken(String token) {
         try {
-            RpcResult<AdminUserAuthenticationDTO> result = tokenAuthenticationDubboService.findUserAuthenticationByToken(token);
-            if (result.isFailed() || Objects.isNull(result.getData()) || Objects.isNull(result.getData().getAccessTokenDTO())) {
+            RpcResult<AppUserAuthenticationDTO> result = tokenAuthenticationDubboService.findUserAuthenticationByToken(token);
+            AppUserAuthenticationDTO userAuthenticationDTO = result.getData();
+            if (result.isFailed() || Objects.isNull(userAuthenticationDTO) || Objects.isNull(userAuthenticationDTO.getAccessTokenDTO())) {
                 log.error("AppUserRpcService[getAppUserAuthenticationByToken] 获取app用户认证信息失败 token is {}, result is {}, errorMsg:{}"
                         , token
                         , result
                         , result.getMessage());
                 throw new BizException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);
             }
-            return AppUserAuthenticationHelper.convertBO(result.getData());
+            // 判断token是否过期
+            Boolean tokenExpired = userAuthenticationDTO.getTokenExpired();
+            if (tokenExpired) {
+                throw new TokenExpiredException();
+            }
+            return AppUserAuthenticationHelper.convertBO(userAuthenticationDTO);
         } catch (Exception e) {
-            log.error("AdminRpcService[getAppUserAuthenticationByToken] 获取app用户认证信息失败, token is {}，caused by {}"
+            log.error("AppUserRpcService[getAppUserAuthenticationByToken] 获取app用户认证信息失败, token is {}，caused by {}"
                     , token
                     , Throwables.getStackTraceAsString(e));
             throw new BizException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);

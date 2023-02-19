@@ -1,5 +1,6 @@
 package com.ahcloud.gateway.starter.listener;
 
+import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.gateway.client.constant.GatewayClientConstants;
 import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;
 import com.ahcloud.gateway.client.dubbo.route.dto.RouteRegisterDTO;
@@ -7,6 +8,7 @@ import com.ahcloud.gateway.client.enums.ApiHttpMethodEnum;
 import com.ahcloud.gateway.starter.annotation.GatewaySpringCloudClient;
 import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.support.AopUtils;
@@ -18,14 +20,13 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,6 +74,23 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
                 if (!method.isAnnotationPresent(GatewaySpringCloudClient.class) && !method.isAnnotationPresent(RequestMapping.class)) {
                     continue;
                 }
+                Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+                Set<String> pathMarkSet = Sets.newHashSet();
+                for (Annotation[] parameter : parameterAnnotations) {
+                    if (parameter.length == 0) {
+                        continue;
+                    }
+                    for (Annotation parameterAnnotation : parameter) {
+                        if (parameterAnnotation.annotationType().equals(PathVariable.class)) {
+                            PathVariable pathVariable = (PathVariable) parameterAnnotation;
+                            String value = pathVariable.value();
+                            if (StringUtils.isNotBlank(value)) {
+                                String mark = "{" + value + "}";
+                                pathMarkSet.add(mark);
+                            }
+                        }
+                    }
+                }
                 RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
                 GatewaySpringCloudClient gatewaySpringCloudClient = AnnotatedElementUtils.findMergedAnnotation(method, GatewaySpringCloudClient.class);
                 String produce = requestMapping.produces().length == 0 ? GatewayClientConstants.MEDIA_TYPE_ALL_VALUE : String.join(",", requestMapping.produces());
@@ -88,6 +106,11 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
                     build(appName, superPath, path, apiHttpMethodEnums, list, produce, consume, method, clazz.getName());
                 } else {
                     for (String value : paths) {
+                        if (CollectionUtils.isNotEmpty(pathMarkSet)) {
+                            for (String pathMark : pathMarkSet) {
+                                value = StringUtils.replace(value, pathMark, "*");
+                            }
+                        }
                         build(appName, superPath, value, apiHttpMethodEnums, list, produce, consume, method, clazz.getName());
                     }
                 }

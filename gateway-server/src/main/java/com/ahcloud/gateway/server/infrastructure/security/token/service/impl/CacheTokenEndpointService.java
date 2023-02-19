@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,7 +39,7 @@ public abstract class CacheTokenEndpointService<T extends UserReactiveAuthentica
                 throw new GatewayAuthenticationException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);
             }
             AccessTokenBO accessTokenBO = t.getAccessTokenBO();
-            redisTemplate.opsForValue().set(cacheKey, t, accessTokenBO.getExpireTime(), TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(cacheKey, t, accessTokenBO.getExpiresIn(), TimeUnit.SECONDS);
         }
         return t;
     }

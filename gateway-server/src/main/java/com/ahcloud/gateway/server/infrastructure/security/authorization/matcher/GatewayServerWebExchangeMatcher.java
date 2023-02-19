@@ -2,11 +2,10 @@ package com.ahcloud.gateway.server.infrastructure.security.authorization.matcher
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.server.application.constant.GatewayConstants;
-import com.ahcloud.gateway.server.infrastructure.security.authentication.converter.AppGatewayServerAuthenticationConverter;
 import com.ahcloud.gateway.server.infrastructure.security.token.RedisTokenAuthenticationToken;
+import com.ahcloud.gateway.server.infrastructure.util.ServerWebExchangeUtils;
 import com.google.common.collect.Maps;
 import lombok.Setter;
-import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -24,29 +23,21 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
  * @create: 2023/1/18 16:36
  **/
 @Setter
-public class AppServerWebExchangeMatcher implements ServerWebExchangeMatcher {
-
-    private final ServerAuthenticationConverter converter;
-
-    public AppServerWebExchangeMatcher(ServerAuthenticationConverter converter) {
-        this.converter = converter;
-    }
-
+public class GatewayServerWebExchangeMatcher implements ServerWebExchangeMatcher {
 
     @Override
     public Mono<MatchResult> matches(ServerWebExchange exchange) {
-        return converter.convert(exchange)
-                .cast(RedisTokenAuthenticationToken.class)
-                .flatMap(this::nullAuthentication)
-                .onErrorResume(e -> notMatch());
+        return nullPlatform(exchange);
     }
 
-    private Mono<MatchResult> nullAuthentication(RedisTokenAuthenticationToken authentication) {
-        if (Objects.isNull(authentication) || (AppPlatformEnum.APP != authentication.getAppPlatformEnum())) {
+    private Mono<MatchResult> nullPlatform(ServerWebExchange exchange) {
+        AppPlatformEnum platformEnum = (AppPlatformEnum) exchange.getAttributes().get(GatewayConstants.APP_PLATFORM);
+        if (Objects.isNull(platformEnum)) {
             return notMatch();
         }
+        // 此处数据会在 DelegatingReactiveAuthorizationManager 鉴权管理中心的check方法中会用到
         Map<String, Object> variables = Maps.newHashMap();
-        variables.put(GatewayConstants.APP_PLATFORM, authentication.getAppPlatformEnum());
+        variables.put(GatewayConstants.APP_PLATFORM, platformEnum);
         return match(variables);
     }
 }

@@ -22,7 +22,7 @@ public class SystemWebGatewayReactiveAuthenticationManagerResolver implements Ga
 
     @Override
     public Mono<AppPlatformEnum> getAppPlatform() {
-        return Mono.just(AppPlatformEnum.SYSTEM_WEB);
+        return Mono.just(AppPlatformEnum.ADMIN);
     }
 
     @Override

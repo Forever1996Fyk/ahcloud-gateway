@@ -22,14 +22,16 @@ public class AdminUserAuthenticationHelper {
         AccessTokenDTO accessTokenDTO = userAuthenticationDTO.getAccessTokenDTO();
         return AdminUserAuthenticationBO.builder()
                 .userId(userAuthenticationDTO.getUserId())
+                .tenantId(userAuthenticationDTO.getTenantId())
                 .authorities(userAuthenticationDTO.getAuthorities())
                 .scopes(userAuthenticationDTO.getScopes())
                 .accessTokenBO(
                         AdminAccessTokenBO.builder()
                                 .token(accessTokenDTO.getToken())
-                                .expireAt(accessTokenDTO.getExpireAt())
-                                .issuedAt(accessTokenDTO.getIssuedAt())
+                                .expireTime(accessTokenDTO.getExpireTime())
+                                .issuedTime(accessTokenDTO.getIssuedTime())
                                 .tokenType(accessTokenDTO.getTokenType())
+                                .expiresIn(accessTokenDTO.getExpiresIn())
                                 .build()
                 )
                 .build();

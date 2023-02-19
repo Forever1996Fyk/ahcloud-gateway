@@ -27,10 +27,6 @@ public class AppAccessProvider extends AbstractAccessProvider {
 
     private final static String LOG_MARK = "AppAccessProvider";
 
-    protected AppAccessProvider(GatewayAuthProperties properties) {
-        super(properties.getIgnoreAuthUrlSet());
-    }
-
     @Override
     public Mono<AuthorizationDecision> doCheck(Mono<Authentication> authentication, AuthorizationContext context) {
         return authentication

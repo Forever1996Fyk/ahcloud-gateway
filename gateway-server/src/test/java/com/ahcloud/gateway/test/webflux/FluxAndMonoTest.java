@@ -2,11 +2,14 @@ package com.ahcloud.gateway.test.webflux;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang3.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -19,65 +22,15 @@ import java.util.function.Function;
 public class FluxAndMonoTest {
 
     public static void main(String[] args) {
-        test();
-    }
+        String url = "findById/{id}/{id2}/{id3}";
 
-    private static class Test {
-        private Integer id;
-
-        private String name;
-
-        public Test(Integer id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    private static List<Integer> cache = Lists.newArrayList(1,2,3);
-    private static List<Integer> cache1 = Lists.newArrayList(4,5,6);
-    private static void test() {
-        Flux.fromIterable(cache)
-                .flatMap(FluxAndMonoTest::test)
-                .then(
-                        Mono.defer(() -> {
-                            Flux.fromIterable(cache1)
-                                    .flatMap(FluxAndMonoTest::test2)
-                                    .subscribe(System.out::println);
-                            return Mono.empty();
-                        })
-
-                ).subscribe();
-    }
-
-    private static Mono<Void> test(Integer item) {
-        cache1.add(item);
-        return Mono.empty();
-    }
-
-    private static Mono<Integer> test2(Integer item) {
-        return Mono.just(item * 2);
-    }
-
-    private static Mono<Void> eq(String d) {
-        if (d.equals("测试4")) {
-            System.out.println("操作成功");
-        }
-        return Mono.empty();
+        Set<String> paths = Sets.newHashSet(
+                "{id}",
+                "{id2}",
+                "{id3}"
+        );
+        String[] strings = paths.toArray(new String[0]);
+        String replace = StringUtils.replaceEach(url, strings, new String[] {"*","*","*"});
+        System.out.println(replace);
     }
 }

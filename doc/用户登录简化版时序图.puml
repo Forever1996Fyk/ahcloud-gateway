@@ -1,0 +1,33 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam actorStyle hollow
+
+actor 业务用户 as user
+entity 浏览器app小程序 as client
+entity 用户认证服务 as user_auth #red
+entity 其他服务 as other
+
+==用户登录==
+user -> client : 输入账号密码登录
+client -> user_auth
+user_auth -> client: 返回access_token, refresh_token
+client -> client : 将获取的access_token, refresh_token存入本地缓存
+
+group 用户token过期操作
+==用户携带access_token请求==
+user -> client: 用户登录后操作页面
+client -> other: 客户端从本地缓存获取access_token, 放入请求头中带入请求接口
+other -> client : 返回码为404
+client -> client: 判断当前返回码是否是404, 如果是404, 则表示token错误或已过期, 则调用刷新token接口
+
+==客户端调用刷新token接口==
+client -> user_auth : 客户端从本地缓存获取refresh_token, 放入请求头中调用refreshToken接口
+user_auth -> client : 返回最新的access_token, refresh_token
+client -> client : 将获取的access_token, refresh_token存入本地缓存
+
+client -> other : 将最新的access_token携带重新请求接口
+other -> client : 返回正确数据
+client -> user
+end group
+@enduml

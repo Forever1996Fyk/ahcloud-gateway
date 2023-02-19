@@ -1,11 +1,8 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.manager;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
-import com.ahcloud.gateway.server.domain.app.AppUserAuthenticationBO;
-import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AdminOAuth2User;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AppOAuth2User;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AccessTokenBO;
-import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AdminUserReactiveAuthenticationBO;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AppUserReactiveAuthenticationBO;
 import com.ahcloud.gateway.server.infrastructure.security.token.service.TokenEndpointService;
 import com.google.common.collect.Maps;
@@ -61,8 +58,8 @@ public class AppReactiveAuthenticationManager extends AbstractReactiveAuthentica
         OAuth2AccessToken accessToken = new OAuth2AccessToken(
                 OAuth2AccessToken.TokenType.BEARER
                 , accessTokenBO.getToken()
-                , Instant.ofEpochSecond(accessTokenBO.getIssuedTime())
-                , Instant.ofEpochSecond(accessTokenBO.getExpireTime())
+                , accessTokenBO.getIssuedAt()
+                , accessTokenBO.getExpireAt()
                 , appUserReactiveAuthenticationBO.getScopes()
         );
         return Triple.of(user, accessToken, user.getAuthorities());

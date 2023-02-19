@@ -13,7 +13,7 @@ public enum AppPlatformEnum {
     /**
      * app平台类型
      */
-    SYSTEM_WEB("system_web", "系统后台"),
+    ADMIN("admin", "系统后台"),
     APP("app", "app"),
     ;
 

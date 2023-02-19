@@ -33,7 +33,6 @@ import java.util.Objects;
 @Slf4j
 public abstract class AbstractReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
-
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         log.info("AbstractReactiveAuthenticationManager[authenticate] start user authentication by app_platform is {}", getAppPlatform());
@@ -57,16 +56,6 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
             4、权限列表(可选)
             5、scope权限范围列表(一般OAuth2 单点登录时,用于判断第三方是否有权限访问)
          */
-        if (StringUtils.isBlank(tokenMark.getLeft())) {
-            return Mono.just(new AnonymousAuthenticationToken("Anonymous", new Object(), Lists.newArrayList(new GrantedAuthority() {
-                private static final long serialVersionUID = 8343073439065949441L;
-
-                @Override
-                public String getAuthority() {
-                    return "Anonymous";
-                }
-            })));
-        }
         Triple<OAuth2AuthenticatedPrincipal, OAuth2AccessToken, Collection<? extends GrantedAuthority>> triple = checkToken(tokenMark);
         OAuth2AuthenticatedPrincipal principal = triple.getLeft();
         OAuth2AccessToken accessToken = triple.getMiddle();
@@ -81,7 +70,7 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
      * @param token
      * @param authorities
      */
-    private void validateTokenAuthentication(OAuth2AuthenticatedPrincipal principal, OAuth2AccessToken token, Collection<? extends GrantedAuthority> authorities) {
+    protected void validateTokenAuthentication(OAuth2AuthenticatedPrincipal principal, OAuth2AccessToken token, Collection<? extends GrantedAuthority> authorities) {
         validateOAuth2Token(token);
         validatePrincipal(principal);
 //        validateAuthority(authorities);
@@ -98,18 +87,18 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
 
     protected void validateOAuth2Token(OAuth2AccessToken token) {
         if (Objects.isNull(token)) {
+            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);
+        }
+        Instant expiresAt = token.getExpiresAt();
+        // token生成时间
+        Instant issuedAt = token.getIssuedAt();
+        if (Objects.nonNull(expiresAt) && expiresAt.isBefore(Instant.now())) {
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR);
         }
-//        Instant expiresAt = token.getExpiresAt();
-//        // token生成时间
-//        Instant issuedAt = token.getIssuedAt();
-//        if (Objects.isNull(expiresAt) || expiresAt.isBefore(Instant.now())) {
-//            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR);
-//        }
-//        // 如果生成时间小于过期时间，则表示token异常
-//        if (Objects.nonNull(issuedAt) && issuedAt.isBefore(expiresAt)) {
-//            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);
-//        }
+        // 如果生成时间小于过期时间，则表示token异常
+        if (Objects.nonNull(issuedAt) && Objects.nonNull(expiresAt) && issuedAt.isBefore(expiresAt)) {
+            throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);
+        }
     }
 
     protected void validateAuthority(Collection<? extends GrantedAuthority> authorities) {

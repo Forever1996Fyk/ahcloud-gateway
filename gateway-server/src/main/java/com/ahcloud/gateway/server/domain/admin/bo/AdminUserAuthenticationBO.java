@@ -23,6 +23,11 @@ public class AdminUserAuthenticationBO {
     private Long userId;
 
     /**
+     * 租户id
+     */
+    private String tenantId;
+
+    /**
      * 用户名
      */
     private String username;

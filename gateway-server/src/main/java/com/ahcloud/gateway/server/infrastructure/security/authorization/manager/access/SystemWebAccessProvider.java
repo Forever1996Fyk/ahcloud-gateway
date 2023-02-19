@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @program: ahcloud-gateway
@@ -31,7 +30,6 @@ public class SystemWebAccessProvider extends AbstractAccessProvider {
     private final ReactiveAuthorityService<AdminUserReactiveAuthorityBo> adminReactiveAuthorityService;
 
     protected SystemWebAccessProvider(GatewayAuthProperties properties, ReactiveAuthorityService<AdminUserReactiveAuthorityBo> adminReactiveAuthorityService) {
-        super(properties.getIgnoreAuthUrlSet());
         this.adminReactiveAuthorityService = adminReactiveAuthorityService;
     }
 
@@ -58,11 +56,11 @@ public class SystemWebAccessProvider extends AbstractAccessProvider {
 
     @Override
     public AppPlatformEnum getAppPlatform() {
-        return AppPlatformEnum.SYSTEM_WEB;
+        return AppPlatformEnum.ADMIN;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        AccessProviderStrategyFactory.register(AppPlatformEnum.SYSTEM_WEB, this);
+        AccessProviderStrategyFactory.register(AppPlatformEnum.ADMIN, this);
     }
 }

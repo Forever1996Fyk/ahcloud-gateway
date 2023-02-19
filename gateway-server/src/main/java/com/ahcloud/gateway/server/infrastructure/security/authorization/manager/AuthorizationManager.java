@@ -6,7 +6,9 @@ import com.ahcloud.gateway.server.application.constant.GatewayConstants;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAccessDeniedException;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access.AccessProvider;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access.AccessProviderStrategyFactory;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -25,10 +27,16 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext context) {
-        Map<String, Object> variables = context.getVariables();
-        AppPlatformEnum platformEnum = (AppPlatformEnum) variables.get(GatewayConstants.APP_PLATFORM);
-        AccessProvider accessProvider = AccessProviderStrategyFactory.getStrategy(platformEnum);
-        return accessProvider.check(authentication, context);
+        return authentication
+                .flatMap(authenticationToken -> {
+                    if (authenticationToken instanceof AnonymousAuthenticationToken) {
+                        return Mono.just(new AuthorizationDecision(true));
+                    }
+                    Map<String, Object> variables = context.getVariables();
+                    AppPlatformEnum platformEnum = (AppPlatformEnum) variables.get(GatewayConstants.APP_PLATFORM);
+                    AccessProvider accessProvider = AccessProviderStrategyFactory.getStrategy(platformEnum);
+                    return accessProvider.check(authentication, context);
+                });
     }
 
     /**

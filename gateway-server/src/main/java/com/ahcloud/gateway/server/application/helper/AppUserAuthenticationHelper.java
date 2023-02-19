@@ -1,11 +1,9 @@
 package com.ahcloud.gateway.server.application.helper;
 
-import com.ahcloud.admin.client.domain.dubbo.token.AccessTokenDTO;
-import com.ahcloud.admin.client.domain.dubbo.token.AdminUserAuthenticationDTO;
-import com.ahcloud.gateway.server.domain.admin.bo.AdminAccessTokenBO;
-import com.ahcloud.gateway.server.domain.admin.bo.AdminUserAuthenticationBO;
 import com.ahcloud.gateway.server.domain.app.AppAccessTokenBO;
 import com.ahcloud.gateway.server.domain.app.AppUserAuthenticationBO;
+import com.ahcloud.uaa.client.domain.dubbo.token.AccessTokenDTO;
+import com.ahcloud.uaa.client.domain.dubbo.token.AppUserAuthenticationDTO;
 
 /**
  * @program: ahcloud-gateway
@@ -20,17 +18,18 @@ public class AppUserAuthenticationHelper {
      * @param userAuthenticationDTO
      * @return
      */
-    public static AppUserAuthenticationBO convertBO(AdminUserAuthenticationDTO userAuthenticationDTO) {
+    public static AppUserAuthenticationBO convertBO(AppUserAuthenticationDTO userAuthenticationDTO) {
         AccessTokenDTO accessTokenDTO = userAuthenticationDTO.getAccessTokenDTO();
         return AppUserAuthenticationBO.builder()
                 .userId(userAuthenticationDTO.getUserId())
-                .scopes(userAuthenticationDTO.getScopes())
+                .tenantId(userAuthenticationDTO.getTenantId())
                 .accessTokenBO(
                         AppAccessTokenBO.builder()
                                 .token(accessTokenDTO.getToken())
                                 .expireAt(accessTokenDTO.getExpireAt())
                                 .issuedAt(accessTokenDTO.getIssuedAt())
                                 .tokenType(accessTokenDTO.getTokenType())
+                                .expiresIn(accessTokenDTO.getExpiresIn())
                                 .build()
                 )
                 .build();

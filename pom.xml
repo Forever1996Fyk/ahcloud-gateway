@@ -42,6 +42,7 @@
         <ahcloud.common.version>1.0.0-SNAPSHOT</ahcloud.common.version>
         <ahcloud.uaa.version>1.0.0-SNAPSHOT</ahcloud.uaa.version>
         <ahcloud.admin.version>1.0.0-SNAPSHOT</ahcloud.admin.version>
+        <ahcloud.uaa.version>1.0.0-SNAPSHOT</ahcloud.uaa.version>
     </properties>
 
     <dependencyManagement>
@@ -128,20 +129,39 @@
                 <artifactId>admin-dubbo</artifactId>
                 <version>${ahcloud.admin.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ahcloud.uaa</groupId>
+                <artifactId>uaa-dubbo</artifactId>
+                <version>${ahcloud.uaa.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>releases</id>-->
+<!--            <name>Releases</name>-->
+<!--            <url>http://localhost:8081/repository/maven-releases/</url>-->
+<!--            <uniqueVersion>true</uniqueVersion>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>snapshots</id>-->
+<!--            <name>Snapshots</name>-->
+<!--            <url>http://localhost:8081/repository/maven-snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+
     <distributionManagement>
         <repository>
-            <id>releases</id>
+            <id>rdc-releases</id>
             <name>Releases</name>
-            <url>http://localhost:8081/repository/maven-releases/</url>
+            <url>https://packages.aliyun.com/maven/repository/2282959-release-FSRTjT</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
+            <id>rdc-snapshots</id>
             <name>Snapshots</name>
-            <url>http://localhost:8081/repository/maven-snapshots/</url>
+            <url>https://packages.aliyun.com/maven/repository/2282959-snapshot-bgSgRk</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

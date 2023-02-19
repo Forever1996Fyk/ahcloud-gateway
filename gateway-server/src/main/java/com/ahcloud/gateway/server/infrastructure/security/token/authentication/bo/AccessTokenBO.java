@@ -3,6 +3,7 @@ package com.ahcloud.gateway.server.infrastructure.security.token.authentication.
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * @program: ahcloud-gateway
@@ -26,10 +27,15 @@ public class AccessTokenBO implements Serializable {
     /**
      * 过期时间
      */
-    private Integer expireTime;
+    private Instant expireAt;
 
     /**
      * 创建时间
      */
-    private Integer issuedTime;
+    private Instant issuedAt;
+
+    /**
+     * 还剩多长时间(秒)
+     */
+    private Integer expiresIn;
 }

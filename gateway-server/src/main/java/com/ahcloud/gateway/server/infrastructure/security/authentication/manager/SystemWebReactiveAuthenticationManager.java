@@ -15,11 +15,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -46,7 +44,7 @@ public class SystemWebReactiveAuthenticationManager extends AbstractReactiveAuth
 
     @Override
     protected AppPlatformEnum getAppPlatform() {
-        return AppPlatformEnum.SYSTEM_WEB;
+        return AppPlatformEnum.ADMIN;
     }
 
     @Override
@@ -67,8 +65,8 @@ public class SystemWebReactiveAuthenticationManager extends AbstractReactiveAuth
         OAuth2AccessToken accessToken = new OAuth2AccessToken(
                 OAuth2AccessToken.TokenType.BEARER
                 , accessTokenBO.getToken()
-                , Instant.ofEpochSecond(accessTokenBO.getIssuedTime())
-                , Instant.ofEpochSecond(accessTokenBO.getExpireTime())
+                , accessTokenBO.getIssuedAt()
+                , accessTokenBO.getExpireAt()
                 , adminUserAuthenticationBO.getScopes()
         );
         return Triple.of(user, accessToken, user.getAuthorities());
