@@ -108,7 +108,7 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
                     for (String value : paths) {
                         if (CollectionUtils.isNotEmpty(pathMarkSet)) {
                             for (String pathMark : pathMarkSet) {
-                                value = StringUtils.replace(value, pathMark, "*");
+                                value = StringUtils.replace(value, pathMark, "**");
                             }
                         }
                         build(appName, superPath, value, apiHttpMethodEnums, list, produce, consume, method, clazz.getName());

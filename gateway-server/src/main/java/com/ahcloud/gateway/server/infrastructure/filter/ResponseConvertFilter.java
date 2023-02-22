@@ -2,7 +2,7 @@ package com.ahcloud.gateway.server.infrastructure.filter;
 
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.server.domain.response.GatewayResponseResult;
+import com.ahcloud.gateway.core.domain.response.GatewayResponseResult;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +36,10 @@ import java.nio.charset.StandardCharsets;
  **/
 @Slf4j
 @Component
-@TraceCrossThread
 public class ResponseConvertFilter implements WebFilter, Ordered {
     @Override
     public int getOrder() {
-        return 101;
+        return HIGHEST_PRECEDENCE;
     }
 
     @Override
@@ -83,7 +82,6 @@ public class ResponseConvertFilter implements WebFilter, Ordered {
         try {
             if (StringUtils.isNotBlank(resData)) {
                 Object o = JsonUtils.stringToBean(resData, Object.class);
-                String traceId = TraceContext.traceId();
                 return GatewayResponseResult.ofSuccess(o);
             } else {
                 return GatewayResponseResult.ofSuccess();

@@ -12,6 +12,11 @@ import com.ahcloud.common.enums.ErrorCode;
 public enum GatewayRetCodeEnum implements ErrorCode {
 
     /**
+     * 状态码
+     */
+    SUCCESS(0, "成功"),
+
+    /**
      * http status
      */
     CERTIFICATE_EXPIRED_ERROR(401, "用户认证凭证已过期"),
@@ -21,6 +26,19 @@ public enum GatewayRetCodeEnum implements ErrorCode {
      * 公共响应码
      */
     SYSTEM_ERROR(1_0_100_1001, "系统异常"),
+    VERSION_ERROR(1_0_100_1005, "数据版本异常"),
+
+//    PARAM_MISS(100_1_001,"缺少必要参数[%s]"),
+    PARAM_ILLEGAL(100_1_002,"参数非法"),
+    PARAM_ILLEGAL_FIELD(100_1_004,"[%s]参数非法"),
+    PARAM_PARSING_FIELD(100_1_005,"参数解析失败"),
+
+    /**
+     * 网关
+     */
+    GATEWAY_PARAM_MISS(1_1_100_1004, "网关缺少必要参数"),
+    GATEWAY_API_DISABLED(1_1_100_1002, "接口已被禁用"),
+    GATEWAY_API_OFFLINE(1_1_100_1003, "接口已下线"),
 
     /**
      * 响应错误码

@@ -1,6 +1,5 @@
 package com.ahcloud.gateway.server.infrastructure.security;
 
-import com.ahcloud.gateway.server.infrastructure.config.properties.GatewayAuthProperties;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.converter.ServerRedisTokenAuthenticationConverter;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.resolver.DelegatingGatewayReactiveAuthenticationManagerResolver;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.resolver.GatewayReactiveAuthenticationManagerResolver;
@@ -29,8 +28,6 @@ import java.util.List;
 @Configuration
 @EnableWebFluxSecurity
 public class OAuth2ResourceServerConfiguration {
-    @Resource
-    private GatewayAuthProperties gatewayAuthProperties;
 
     @Resource
     private List<GatewayReactiveAuthenticationManagerResolver> authenticationManagerList;
@@ -46,7 +43,7 @@ public class OAuth2ResourceServerConfiguration {
         http.anonymous()
                 .and()
                 .oauth2ResourceServer()// OAuth2 资源认证处理
-                    .bearerTokenConverter(new ServerRedisTokenAuthenticationConverter(gatewayAuthProperties))
+                    .bearerTokenConverter(new ServerRedisTokenAuthenticationConverter())
                     .authenticationManagerResolver(createReactiveAuthenticationManagerResolver())
                     .authenticationEntryPoint(authenticationEntryPoint)
                 .and()

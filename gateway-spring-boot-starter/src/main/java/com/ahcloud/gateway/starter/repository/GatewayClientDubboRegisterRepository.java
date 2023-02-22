@@ -5,7 +5,7 @@ import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;
 import com.ahcloud.gateway.client.dubbo.route.dto.RouteRegisterDTO;
 import com.ahcloud.gateway.dubbo.api.ApiRegisterDubboService;
-import com.ahcloud.gateway.dubbo.api.RouteRefreshDubboService;
+import com.ahcloud.gateway.dubbo.route.RouteRefreshDubboService;
 import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
 import com.ahcloud.gateway.starter.shutdown.GatewayClientShutdownHook;
 import com.google.common.base.Throwables;
@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -26,9 +25,9 @@ import java.util.List;
 @Slf4j
 public class GatewayClientDubboRegisterRepository implements GatewayClientRegisterRepository, InitializingBean {
 
-    @DubboReference(version = "1.0.0", timeout = 6000)
+    @DubboReference(version = "1.0.0", timeout = 6000, mock = "com.ahcloud.gateway.dubbo.api.mock.ApiRegisterDubboMockServiceImpl", check = false)
     private ApiRegisterDubboService apiRegisterDubboService;
-    @DubboReference(version = "1.0.0", timeout = 6000)
+    @DubboReference(version = "1.0.0", timeout = 6000, mock = "com.ahcloud.gateway.dubbo.route.mock.RouteRefreshDubboMockServiceImpl", check = false)
     private RouteRefreshDubboService routeRefreshDubboService;
 
     private final PropertiesConfiguration clientConfig;

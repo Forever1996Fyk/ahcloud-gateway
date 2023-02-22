@@ -1,7 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
-import com.ahcloud.gateway.server.infrastructure.config.properties.GatewayAuthProperties;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AdminOAuth2User;
 import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;

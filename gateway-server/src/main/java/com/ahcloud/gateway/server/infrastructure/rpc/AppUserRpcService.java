@@ -1,21 +1,16 @@
 package com.ahcloud.gateway.server.infrastructure.rpc;
 
-import com.ahcloud.admin.client.domain.dubbo.token.AdminUserAuthenticationDTO;
-import com.ahcloud.admin.dubbo.authentication.TokenAuthenticationDubboService;
 import com.ahcloud.common.result.RpcResult;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.server.application.helper.AdminUserAuthenticationHelper;
-import com.ahcloud.gateway.server.application.helper.AppUserAuthenticationHelper;
-import com.ahcloud.gateway.server.domain.admin.bo.AdminUserAuthenticationBO;
+import com.ahcloud.gateway.core.infrastructure.exception.BizException;
+import com.ahcloud.gateway.core.infrastructure.exception.TokenExpiredException;
+import com.ahcloud.gateway.server.helper.AppUserAuthenticationHelper;
 import com.ahcloud.gateway.server.domain.app.AppUserAuthenticationBO;
-import com.ahcloud.gateway.server.infrastructure.exception.BizException;
-import com.ahcloud.gateway.server.infrastructure.exception.TokenExpiredException;
 import com.ahcloud.uaa.client.domain.dubbo.token.AppUserAuthenticationDTO;
 import com.ahcloud.uaa.dubbo.authentication.AppTokenAuthenticationDubboService;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

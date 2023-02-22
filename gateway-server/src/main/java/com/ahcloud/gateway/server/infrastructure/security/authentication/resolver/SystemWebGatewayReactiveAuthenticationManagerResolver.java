@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.resolver;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
-import com.ahcloud.gateway.server.infrastructure.security.authentication.manager.SystemWebReactiveAuthenticationManager;
+import com.ahcloud.gateway.server.infrastructure.security.authentication.manager.AdminReactiveAuthenticationManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 @Component
 public class SystemWebGatewayReactiveAuthenticationManagerResolver implements GatewayReactiveAuthenticationManagerResolver {
     @Resource
-    private SystemWebReactiveAuthenticationManager authenticationManager;
+    private AdminReactiveAuthenticationManager authenticationManager;
 
     @Override
     public Mono<AppPlatformEnum> getAppPlatform() {

@@ -3,7 +3,7 @@ spring:
     nacos:
       server-addr: 127.0.0.1:8850
       config:
-        namespace: 3c6eaeb5-5621-404a-8cdc-5af8b82bd816
+        namespace: gateway
         max-retry: 10
         refresh-enabled: true
         username: LTAI5tQYb6LvUrix4x4xKo4X
@@ -31,4 +31,4 @@ dubbo:
   provider:
     group: local
   scan:
-    base-packages: com.ahcloud.gateway.server.api.rpc
+    base-packages: com.ahcloud.gateway.server.rpc

@@ -2,8 +2,8 @@ package com.ahcloud.gateway.server.infrastructure.security.authentication.resolv
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
+import com.ahcloud.gateway.core.infrastructure.util.ServerWebExchangeUtils;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
-import com.ahcloud.gateway.server.infrastructure.util.ServerWebExchangeUtils;
 import com.google.common.base.Throwables;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

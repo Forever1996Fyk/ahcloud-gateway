@@ -2,14 +2,18 @@ package com.ahcloud.gateway.server.infrastructure.gateway.service;
 
 import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.server.infrastructure.constant.NacosPathConstants;
+import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.route.dto.RouteDefinitionDTO;
+import com.ahcloud.gateway.core.infrastructure.constant.NacosPathConstants;
+import com.ahcloud.gateway.server.helper.RouteDefinitionHelper;
+import com.ahcloud.gateway.server.infrastructure.gateway.factory.GatewayApiCacheFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.route.RouteDefinition;
+import org.springframework.core.env.Environment;
 
 import java.util.*;
 import java.util.concurrent.Executor;
@@ -30,9 +34,12 @@ public abstract class NacosCacheHandler {
 
     protected final GatewayService gatewayService;
 
-    protected NacosCacheHandler(ConfigService configService, GatewayService gatewayService) {
+    protected final Environment environment;
+
+    protected NacosCacheHandler(ConfigService configService, GatewayService gatewayService, Environment environment) {
         this.configService = configService;
         this.gatewayService = gatewayService;
+        this.environment = environment;
     }
 
     public ConfigService getConfigService() {
@@ -46,10 +53,25 @@ public abstract class NacosCacheHandler {
             return;
         }
         Collection<Map<String, Object>> values = routeDefinitionMap.values();
-        List<RouteDefinition> routeDefinitions = values.stream().map(
-                value -> JsonUtils.mapToBean(value, RouteDefinition.class)
+        List<RouteDefinitionDTO> routeDefinitionDTOList = values.stream().map(
+                value -> JsonUtils.mapToBean(value, RouteDefinitionDTO.class)
         ).collect(Collectors.toList());
-        gatewayService.refreshRoute(routeDefinitions).subscribe();
+        if (CollectionUtils.isNotEmpty(routeDefinitionDTOList)) {
+            gatewayService.refreshRoute(RouteDefinitionHelper.convertToList(routeDefinitionDTOList)).subscribe();
+        }
+    }
+
+    protected void updateApiRefreshMap(final String configInfo) {
+        log.info("configInfo: {}", configInfo);
+        Map<String, Map<String, Object>> apiRefreshMap = JsonUtils.stringToMap2(configInfo);
+        if (CollectionUtils.isEmpty(apiRefreshMap) && CollectionUtils.isNotEmpty(apiRefreshMap.values())) {
+            return;
+        }
+        Collection<Map<String, Object>> values = apiRefreshMap.values();
+        List<ApiRefreshDTO> apiRefreshDTOList = values.stream().map(
+                value -> JsonUtils.mapToBean(value, ApiRefreshDTO.class)
+        ).collect(Collectors.toList());
+        GatewayApiCacheFactory.refreshCacheApi(apiRefreshDTOList);
     }
 
     protected void watcherData(final String dataId, final OnChange oc) {

@@ -1,0 +1,53 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam actorStyle hollow
+title 网关过滤器
+
+autonumber
+
+entity 客户端 as client
+entity 网关服务 as server
+
+entity RequestConvertFilter as request
+entity ApiPathFilter as api
+entity ResponseConvertFilter as response
+entity AuthenticationWebFilter as authentication
+entity AuthorizationWebFilter as authorization
+entity HeaderConvertFilter_Global as header
+
+client -> server : 客户端请求
+server -> request : 通过请求过滤器
+note over request
+    1、app-platform标识是否存在
+    2、构建GatewayContext请求上下文
+end note
+request -> api : 通过Api路径过滤器
+note over api
+    请求路径匹配
+    获取ApiGatewayBO信息
+end note
+api -> response : 通过响应体修改过滤器
+note over response
+    等待响应返回后再做处理
+end note
+response -> authentication : 通过认证过滤器
+note over authentication
+    1、接口状态是否可访问
+    2、判断是否需要认证
+    3、token是否存在,
+    4、根据token获取当前用户的认证信息
+end note
+authentication -> authorization : 通过授权过滤器
+note over authorization
+    1、判断当前用户是否有权限访问接口
+    2、用户信息更新到GatewayContext
+end note
+authorization -> header : 通过请求header过滤器
+note over header
+    1、将转发到下游服务的公用数据存入请求头
+    2、下游数据可以统一获取
+end note
+
+response -> client : 响应过滤器处理返回的响应数据
+@enduml

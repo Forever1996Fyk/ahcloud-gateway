@@ -1,7 +1,9 @@
 package com.ahcloud.gateway.client.enums;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,17 +27,22 @@ public enum ApiStatusEnum {
      * 禁用
      */
     DISABLED(2, "禁用"),
+
+    /**
+     * 下线
+     */
+    OFFLINE(3, "下线"),
     ;
 
     /**
      * 状态
      */
-    private Integer status;
+    private final Integer status;
 
     /**
      * 描述
      */
-    private String desc;
+    private final String desc;
 
     ApiStatusEnum(Integer status, String desc) {
         this.status = status;
@@ -60,5 +67,18 @@ public enum ApiStatusEnum {
             }
         }
         return UNKNOWN;
+    }
+
+    private final static List<ApiStatusEnum> DISABLED_LIST = Lists.newArrayList(
+            UNKNOWN,
+            DISABLED,
+            OFFLINE
+    );
+    public boolean disabled() {
+        return DISABLED_LIST.contains(this);
+    }
+
+    public boolean enabled() {
+        return Objects.equals(this, NORMAL);
     }
 }

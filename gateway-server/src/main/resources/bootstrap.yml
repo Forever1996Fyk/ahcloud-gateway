@@ -2,7 +2,7 @@
 # SpringBoot的相关配置
 spring:
   application:
-    name: ahcloud-gateway
+    name: ahcloud-gateway-server
   profiles:
     active: local
 

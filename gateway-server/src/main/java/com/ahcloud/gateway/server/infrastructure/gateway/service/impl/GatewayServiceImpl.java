@@ -2,13 +2,7 @@ package com.ahcloud.gateway.server.infrastructure.gateway.service.impl;
 
 import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.client.common.DeletedEnum;
-import com.ahcloud.gateway.client.enums.ApiStatusEnum;
-import com.ahcloud.gateway.server.application.helper.RouteHelper;
-import com.ahcloud.gateway.server.application.service.GatewayApiService;
 import com.ahcloud.gateway.server.infrastructure.gateway.service.GatewayService;
-import com.ahcloud.gateway.server.infrastructure.repository.bean.GatewayApi;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.ApplicationArguments;
@@ -35,13 +29,11 @@ import java.util.Objects;
 @Component
 public class GatewayServiceImpl implements GatewayService, ApplicationEventPublisherAware, ApplicationRunner {
 
-    private final GatewayApiService gatewayApiService;
     private final RouteDefinitionRepository routeDefinitionRepository;
 
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public GatewayServiceImpl(GatewayApiService gatewayApiService, RouteDefinitionRepository routeDefinitionRepository) {
-        this.gatewayApiService = gatewayApiService;
+    public GatewayServiceImpl(RouteDefinitionRepository routeDefinitionRepository) {
         this.routeDefinitionRepository = routeDefinitionRepository;
     }
 
@@ -144,7 +136,9 @@ public class GatewayServiceImpl implements GatewayService, ApplicationEventPubli
                 .flatMap(routeDefinition -> routeDefinitionRepository.delete(Mono.just(routeDefinition.getId())))
                 .then(Mono.defer(() ->
                         Flux.fromIterable(routeDefinitionList)
-                                .flatMap(routeDefinition -> routeDefinitionRepository.save(Mono.just(routeDefinition)))
+                                .flatMap(routeDefinition -> {
+                                    return routeDefinitionRepository.save(Mono.just(routeDefinition));
+                                })
                                 .then(Mono.defer(() -> {
                                     this.applicationEventPublisher.publishEvent(new RefreshRoutesEvent(this));
                                     return Mono.empty();

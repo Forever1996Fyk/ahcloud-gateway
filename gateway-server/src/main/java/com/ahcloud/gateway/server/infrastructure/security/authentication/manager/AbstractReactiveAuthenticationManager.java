@@ -80,9 +80,6 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
         if (Objects.isNull(principal)) {
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.AUTHENTICATION_USER_PRINCIPAL_ERROR);
         }
-//        if (StringUtils.isBlank(principal.getName())) {
-//            throw new GatewayAuthenticationException(GatewayRetCodeEnum.AUTHENTICATION_USER_PRINCIPAL_ERROR);
-//        }
     }
 
     protected void validateOAuth2Token(OAuth2AccessToken token) {
@@ -96,7 +93,7 @@ public abstract class AbstractReactiveAuthenticationManager implements ReactiveA
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXPIRED_ERROR);
         }
         // 如果生成时间小于过期时间，则表示token异常
-        if (Objects.nonNull(issuedAt) && Objects.nonNull(expiresAt) && issuedAt.isBefore(expiresAt)) {
+        if (Objects.nonNull(issuedAt) && Objects.nonNull(expiresAt) && issuedAt.isAfter(expiresAt)) {
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);
         }
     }

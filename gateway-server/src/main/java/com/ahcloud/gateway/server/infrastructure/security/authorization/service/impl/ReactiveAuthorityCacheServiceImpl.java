@@ -2,16 +2,13 @@ package com.ahcloud.gateway.server.infrastructure.security.authorization.service
 
 import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.gateway.server.domain.admin.bo.AdminAuthorityBO;
-import com.ahcloud.gateway.server.domain.admin.query.AdminAuthorityQuery;
 import com.ahcloud.gateway.server.infrastructure.rpc.AdminRpcService;
 import com.ahcloud.gateway.server.infrastructure.security.authorization.service.ReactiveAuthorityCacheService;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 

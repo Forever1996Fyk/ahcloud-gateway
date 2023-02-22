@@ -2,15 +2,12 @@ package com.ahcloud.gateway.server.infrastructure.security.token.service.impl;
 
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.UserReactiveAuthentication;
-import com.ahcloud.gateway.server.infrastructure.constant.CacheKey;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
-import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AccessTokenBO;
 import com.ahcloud.gateway.server.infrastructure.security.token.service.TokenEndpointService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @program: ahcloud-gateway
@@ -30,16 +27,10 @@ public abstract class CacheTokenEndpointService<T extends UserReactiveAuthentica
 
     @Override
     public T authenticationByToken(String token, String prefix) {
-        String cacheKey = CacheKey.generateAuthenticationCacheKey(prefix, token);
-        T t = (T) redisTemplate.opsForValue().get(cacheKey);
+        T t = createUserReactiveAuthentication(token);
         if (Objects.isNull(t)) {
-            t = createUserReactiveAuthentication(token);
-            if (Objects.isNull(t)) {
-                log.error("{}[authenticationByToken] 认证失败， 用户认证信息不存在, token is {}, prefix is {}", getLogMark(), token, prefix);
-                throw new GatewayAuthenticationException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);
-            }
-            AccessTokenBO accessTokenBO = t.getAccessTokenBO();
-            redisTemplate.opsForValue().set(cacheKey, t, accessTokenBO.getExpiresIn(), TimeUnit.SECONDS);
+            log.error("{}[authenticationByToken] 认证失败， 用户认证信息不存在, token is {}, prefix is {}", getLogMark(), token, prefix);
+            throw new GatewayAuthenticationException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);
         }
         return t;
     }

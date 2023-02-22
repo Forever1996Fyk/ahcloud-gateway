@@ -7,6 +7,8 @@
         <module>gateway-client</module>
         <module>gateway-spring-boot-starter</module>
         <module>gateway-dubbo</module>
+        <module>gateway-api</module>
+        <module>gateway-core</module>
     </modules>
     <parent>
         <groupId>com.ahcloud.kernel</groupId>
@@ -112,6 +114,16 @@
             <dependency>
                 <groupId>com.ahcloud.gateway</groupId>
                 <artifactId>gateway-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ahcloud.gateway</groupId>
+                <artifactId>gateway-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ahcloud.gateway</groupId>
+                <artifactId>gateway-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

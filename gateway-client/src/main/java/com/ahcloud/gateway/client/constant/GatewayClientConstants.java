@@ -14,6 +14,11 @@ public class GatewayClientConstants {
     public static final String APP_NAME = "spring.application.name";
 
     /**
+     * the constant of active.
+     */
+    public static final String ENV = "spring.application.active";
+
+    /**
      * media type all value.
      */
     public static final String MEDIA_TYPE_ALL_VALUE = "*/*";
