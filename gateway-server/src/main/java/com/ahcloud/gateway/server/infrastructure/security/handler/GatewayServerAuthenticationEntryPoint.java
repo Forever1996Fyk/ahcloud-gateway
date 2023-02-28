@@ -1,9 +1,9 @@
 package com.ahcloud.gateway.server.infrastructure.security.handler;
 
 import com.ahcloud.common.enums.ErrorCode;
+import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.domain.response.GatewayResponseResult;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
@@ -37,13 +37,12 @@ public class GatewayServerAuthenticationEntryPoint implements ServerAuthenticati
         log.error("GatewayServerAuthenticationEntryPoint[commence] AuthenticationException is {}", Throwables.getStackTraceAsString(e));
         Map<String, String> parameters = new LinkedHashMap<>();
 
-        AuthenticationEntryPointResult authenticationEntryPointResult = AuthenticationEntryPointResult.of();
+        ErrorCode errorCode = GatewayRetCodeEnum.SYSTEM_ERROR;
         if (e instanceof GatewayAuthenticationException) {
             GatewayAuthenticationException authenticationException = (GatewayAuthenticationException) e;
-            ErrorCode errorCode = authenticationException.getErrorCode();
-            authenticationEntryPointResult = AuthenticationEntryPointResult.of(errorCode);
+            errorCode = authenticationException.getErrorCode();
         }
-        GatewayResponseResult result = GatewayResponseResult.ofSuccess(authenticationEntryPointResult);
+        ResponseResult<Void> result = ResponseResult.ofFailed(errorCode.getCode(), errorCode.getMessage());
 
         return exchange.getPrincipal()
                 .filter(AbstractOAuth2TokenAuthenticationToken.class::isInstance)
@@ -59,7 +58,7 @@ public class GatewayServerAuthenticationEntryPoint implements ServerAuthenticati
         return parameters;
     }
 
-    private static Mono<Void> respond(ServerWebExchange exchange, Map<String, String> parameters, GatewayResponseResult result) {
+    private static Mono<Void> respond(ServerWebExchange exchange, Map<String, String> parameters, ResponseResult<Void> result) {
         String wwwAuthenticate = computeWWWAuthenticateHeaderValue(parameters);
         ServerHttpResponse response = exchange.getResponse();
         DataBufferFactory dataBufferFactory = response.bufferFactory();
@@ -70,7 +69,7 @@ public class GatewayServerAuthenticationEntryPoint implements ServerAuthenticati
                 .doOnError(error -> DataBufferUtils.release(buffer));
     }
 
-    private static byte[] createErrorMsg(GatewayResponseResult result) {
+    private static byte[] createErrorMsg(ResponseResult<Void> result) {
         return JsonUtils.beanToByte(result);
     }
 

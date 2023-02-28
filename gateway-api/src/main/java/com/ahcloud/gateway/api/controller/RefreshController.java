@@ -3,7 +3,6 @@ package com.ahcloud.gateway.api.controller;
 import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.gateway.core.application.manager.GatewayApiManager;
 import com.ahcloud.gateway.core.application.manager.GatewayRouteManager;
-import com.ahcloud.gateway.core.domain.response.GatewayResponseResult;
 import com.ahcloud.gateway.starter.annotation.GatewaySpringCloudClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.ahcloud.gateway.server.rpc;
+package com.ahcloud.gateway.server.dubbo;
 
 import com.ahcloud.common.result.RpcResult;
 import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;

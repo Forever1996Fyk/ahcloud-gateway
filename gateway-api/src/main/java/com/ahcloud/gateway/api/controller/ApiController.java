@@ -7,7 +7,6 @@ import com.ahcloud.gateway.core.domain.api.form.ApiAddForm;
 import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.query.ApiQuery;
 import com.ahcloud.gateway.core.domain.api.vo.ApiVO;
-import com.ahcloud.gateway.core.domain.response.GatewayResponseResult;
 import com.ahcloud.gateway.starter.annotation.GatewaySpringCloudClient;
 import org.springframework.web.bind.annotation.*;
 

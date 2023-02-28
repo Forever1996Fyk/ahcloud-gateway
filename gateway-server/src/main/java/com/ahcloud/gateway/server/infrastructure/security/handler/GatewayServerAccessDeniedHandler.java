@@ -1,9 +1,9 @@
 package com.ahcloud.gateway.server.infrastructure.security.handler;
 
 import com.ahcloud.common.enums.ErrorCode;
+import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.domain.response.GatewayResponseResult;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAccessDeniedException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
@@ -37,14 +37,12 @@ public class GatewayServerAccessDeniedHandler implements ServerAccessDeniedHandl
         log.error("GatewayServerAccessDeniedHandler[handle] handle is {}", Throwables.getStackTraceAsString(denied));
         Map<String, String> parameters = new LinkedHashMap<>();
 
-        AccessDeniedResult accessDeniedResult = AccessDeniedResult.of();
-        if (denied instanceof GatewayAccessDeniedException) {
+        ErrorCode errorCode = GatewayRetCodeEnum.SYSTEM_ERROR;
+         if (denied instanceof GatewayAccessDeniedException) {
             GatewayAccessDeniedException accessDeniedException = (GatewayAccessDeniedException) denied;
-            ErrorCode errorCode = accessDeniedException.getErrorCode();
-            accessDeniedResult = AccessDeniedResult.of(errorCode);
+            errorCode = accessDeniedException.getErrorCode();
         }
-        GatewayResponseResult result = GatewayResponseResult.ofSuccess(accessDeniedResult);
-
+        ResponseResult<Void> result = ResponseResult.ofFailed(errorCode.getCode(), errorCode.getMessage());
         return exchange.getPrincipal()
                 .filter(AbstractOAuth2TokenAuthenticationToken.class::isInstance)
                 .map(token -> errorMessageParameters(parameters))
@@ -60,7 +58,7 @@ public class GatewayServerAccessDeniedHandler implements ServerAccessDeniedHandl
         return parameters;
     }
 
-    private static Mono<Void> respond(ServerWebExchange exchange, Map<String, String> parameters, GatewayResponseResult result) {
+    private static Mono<Void> respond(ServerWebExchange exchange, Map<String, String> parameters, ResponseResult<Void> result) {
         String wwwAuthenticate = computeWWWAuthenticateHeaderValue(parameters);
         ServerHttpResponse response = exchange.getResponse();
         DataBufferFactory dataBufferFactory = response.bufferFactory();
@@ -71,7 +69,7 @@ public class GatewayServerAccessDeniedHandler implements ServerAccessDeniedHandl
                 .doOnError(error -> DataBufferUtils.release(buffer));
     }
 
-    private static byte[] createErrorMsg(GatewayResponseResult result) {
+    private static byte[] createErrorMsg(ResponseResult<Void> result) {
         return JsonUtils.beanToByte(result);
     }
 
@@ -91,40 +89,5 @@ public class GatewayServerAccessDeniedHandler implements ServerAccessDeniedHandl
         }
 
         return wwwAuthenticate.toString();
-    }
-
-    private static class AccessDeniedResult {
-
-        /**
-         * 返回码
-         */
-        private final int code;
-
-        /**
-         * 错误信息
-         */
-        private final String message;
-
-
-        public AccessDeniedResult(int code, String message) {
-            this.code = code;
-            this.message = message;
-        }
-
-        public int getCode() {
-            return code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public static AccessDeniedResult of() {
-            return new AccessDeniedResult(GatewayRetCodeEnum.SYSTEM_ERROR.getCode(), GatewayRetCodeEnum.SYSTEM_ERROR.getMessage());
-        }
-
-        public static AccessDeniedResult of(ErrorCode errorCode) {
-            return new AccessDeniedResult(errorCode.getCode(), errorCode.getMessage());
-        }
     }
 }

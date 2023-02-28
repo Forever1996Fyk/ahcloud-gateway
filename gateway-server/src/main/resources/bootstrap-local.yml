@@ -31,4 +31,4 @@ dubbo:
   provider:
     group: local
   scan:
-    base-packages: com.ahcloud.gateway.server.rpc
+    base-packages: com.ahcloud.gateway.server.dubbo

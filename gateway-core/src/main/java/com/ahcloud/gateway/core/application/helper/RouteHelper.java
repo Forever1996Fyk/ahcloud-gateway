@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -68,6 +69,7 @@ public class RouteHelper {
                 .predicates(predicates)
                 .filters(filters)
                 .order(0)
+                .metadata(new HashMap<>(2))
                 .build();
     }
 
