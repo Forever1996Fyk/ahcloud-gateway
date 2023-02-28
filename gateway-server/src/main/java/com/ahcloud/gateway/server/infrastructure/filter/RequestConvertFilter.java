@@ -5,7 +5,9 @@ import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
 import com.ahcloud.gateway.core.infrastructure.util.ServerWebExchangeUtils;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
+import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -40,11 +42,19 @@ public class RequestConvertFilter implements WebFilter, Ordered {
             throw new GatewayException(GatewayRetCodeEnum.SYSTEM_ERROR);
         }
         HttpHeaders headers = request.getHeaders();
+        String tenantId = "";
+        if (appPlatformEnum.needTenant()) {
+            tenantId = headers.getFirst(Constant.CTX_KEY_TENANT_ID.toString());
+            if (StringUtils.isBlank(tenantId)) {
+                throw new GatewayException(GatewayRetCodeEnum.GATEWAY_PARAM_MISS);
+            }
+        }
         GatewayContext context = GatewayContext.builder()
                 .pathContainer(request.getPath().pathWithinApplication())
                 .ipAddress(String.valueOf(request.getRemoteAddress()))
                 .headers(headers)
                 .appPlatformEnum(appPlatformEnum)
+                .tenantId(tenantId)
                 .build();
         //注意，因为webflux的响应式编程 不能再采取原先的编码方式 即应该先将gatewayContext放入exchange中，否则其他地方可能取不到
         exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, context);

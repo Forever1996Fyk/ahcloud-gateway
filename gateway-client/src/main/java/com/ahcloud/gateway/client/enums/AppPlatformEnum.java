@@ -1,6 +1,9 @@
 package com.ahcloud.gateway.client.enums;
 
+import com.google.common.collect.Lists;
+
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @program: ahcloud-gateway
@@ -39,5 +42,12 @@ public enum AppPlatformEnum {
                 .filter(appPlatformEnum -> appPlatformEnum.getValue().equals(value))
                 .findFirst()
                 .orElse(null);
+    }
+
+    private final static List<AppPlatformEnum> NEED_TENANT_LIST = Lists.newArrayList(
+            APP
+    );
+    public boolean needTenant() {
+        return NEED_TENANT_LIST.contains(this);
     }
 }

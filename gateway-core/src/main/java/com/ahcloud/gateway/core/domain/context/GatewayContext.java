@@ -57,6 +57,11 @@ public class GatewayContext {
     private AppPlatformEnum appPlatformEnum;
 
     /**
+     * 租户id
+     */
+    private String tenantId;
+
+    /**
      * 属性
      */
     private Map<String, Object> attribute = Maps.newHashMap();
