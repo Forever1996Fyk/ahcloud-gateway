@@ -52,6 +52,7 @@ public class RequestConvertFilter implements WebFilter, Ordered {
         GatewayContext context = GatewayContext.builder()
                 .pathContainer(request.getPath().pathWithinApplication())
                 .ipAddress(String.valueOf(request.getRemoteAddress()))
+                .origin(request.getHeaders().getOrigin())
                 .headers(headers)
                 .appPlatformEnum(appPlatformEnum)
                 .tenantId(tenantId)

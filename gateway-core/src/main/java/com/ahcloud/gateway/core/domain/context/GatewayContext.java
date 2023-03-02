@@ -37,6 +37,11 @@ public class GatewayContext {
     private String ipAddress;
 
     /**
+     * 请求源域名
+     */
+    private String origin;
+
+    /**
      * 请求路径
      */
     private PathContainer pathContainer;
