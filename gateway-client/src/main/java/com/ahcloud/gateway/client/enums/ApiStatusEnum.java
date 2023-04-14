@@ -19,19 +19,22 @@ public enum ApiStatusEnum {
      * 未知
      */
     UNKNOWN(-1, "未知"),
-    /**
-     * 正常
-     */
-    NORMAL(1, "正常"),
-    /**
-     * 禁用
-     */
-    DISABLED(2, "禁用"),
+
 
     /**
      * 下线
      */
-    OFFLINE(3, "下线"),
+    OFFLINE(0, "下线"),
+
+    /**
+     * 上线
+     */
+    ONLINE(1, "正常"),
+
+    /**
+     * 禁用
+     */
+    DISABLED(2, "禁用"),
     ;
 
     /**
@@ -79,6 +82,6 @@ public enum ApiStatusEnum {
     }
 
     public boolean enabled() {
-        return Objects.equals(this, NORMAL);
+        return Objects.equals(this, ONLINE);
     }
 }

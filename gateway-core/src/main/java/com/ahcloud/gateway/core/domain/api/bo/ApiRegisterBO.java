@@ -50,4 +50,9 @@ public class ApiRegisterBO {
      * RequestMapping produce
      */
     private String produce;
+
+    /**
+     * 环境
+     */
+    private String env;
 }

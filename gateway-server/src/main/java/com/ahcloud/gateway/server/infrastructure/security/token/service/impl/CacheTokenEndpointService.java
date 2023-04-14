@@ -1,11 +1,10 @@
 package com.ahcloud.gateway.server.infrastructure.security.token.service.impl;
 
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.server.infrastructure.security.token.authentication.UserReactiveAuthentication;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
+import com.ahcloud.gateway.server.infrastructure.security.token.authentication.UserReactiveAuthentication;
 import com.ahcloud.gateway.server.infrastructure.security.token.service.TokenEndpointService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Objects;
 
@@ -17,12 +16,6 @@ import java.util.Objects;
  **/
 @Slf4j
 public abstract class CacheTokenEndpointService<T extends UserReactiveAuthentication> implements TokenEndpointService<T> {
-
-    private final RedisTemplate<String, Object> redisTemplate;
-
-    protected CacheTokenEndpointService(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
 
     @Override

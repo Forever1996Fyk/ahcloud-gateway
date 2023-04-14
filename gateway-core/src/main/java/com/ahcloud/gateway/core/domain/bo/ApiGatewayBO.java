@@ -31,7 +31,27 @@ public class ApiGatewayBO {
     private Boolean auth;
 
     /**
-     * api状态
+     * 开发环境状态
      */
-    private ApiStatusEnum apiStatusEnum;
+    private Integer dev;
+
+    /**
+     * 联调环境状态
+     */
+    private Integer test;
+
+    /**
+     * 测试环境状态
+     */
+    private Integer sit;
+
+    /**
+     * 预发环境状态
+     */
+    private Integer pre;
+
+    /**
+     * 生产环境状态
+     */
+    private Integer prod;
 }

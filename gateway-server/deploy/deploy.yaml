@@ -2,15 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ahcloud-gateway-$ENV
-  name: ahcloud-gateway-$ENV
+    app: gateway-server-$ENV
+  name: gateway-server-$ENV
   namespace: ahcloud   #一定要写名称空间
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   selector:
     matchLabels:
-      app: ahcloud-gateway-$ENV
+      app: gateway-server-$ENV
   strategy:
     rollingUpdate:
       maxSurge: 50%
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        app: ahcloud-gateway-$ENV
+        app: gateway-server-$ENV
     spec:
       imagePullSecrets:
         - name: aliyun-docker-hub  #提前在项目下配置访问阿里云的账号密码
@@ -85,8 +85,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ahcloud-gateway-$ENV
-  name: ahcloud-gateway-$ENV
+    app: gateway-server-$ENV
+  name: gateway-server-$ENV
   namespace: ahcloud
 spec:
   ports:
@@ -95,6 +95,38 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: ahcloud-gateway-$ENV
+    app: gateway-server-$ENV
   sessionAffinity: None
   type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-gateway
+  namespace: ahcloud
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # 指定我们的 rules 的 path 可以使用正则表达式
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    # 连接超时时间，默认为 5s
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    # 后端服务器回转数据超时时间，默认为 60s
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    # 后端服务器响应超时时间，默认为 60s
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    # 客户端上传文件，最大大小，默认为 20m
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    # URL 重写
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: apigw.ahcloud.com
+    http:
+      paths:
+      - path:
+        backend:
+          # 后台部署的 Service Name，与上面部署的  containers-name 对应
+          serviceName: app
+          # 后台部署的 Service Port，与上面部署的 Tomcat 对应
+          servicePort: 8080

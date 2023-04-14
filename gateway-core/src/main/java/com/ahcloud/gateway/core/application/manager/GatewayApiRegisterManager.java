@@ -122,14 +122,15 @@ public class GatewayApiRegisterManager {
      * @param serviceId
      * @return
      */
-    public Integer deleteApiRegisterByServiceId(String serviceId) {
+    public Integer deleteApiRegisterByServiceId(String serviceId, String env) {
         // 根据serviceId删除已经注册的api
-        return gatewayApiRegisterService.deleteApiRegisterByServiceId(serviceId);
+        return gatewayApiRegisterService.deleteApiRegisterByServiceId(serviceId, env);
     }
 
     private GatewayApiRegister convert(ApiRegisterBO registerBO) {
         GatewayApiRegister gatewayApiRegister = new GatewayApiRegister();
         gatewayApiRegister.setApiPath(registerBO.getApiPath());
+        gatewayApiRegister.setEnv(registerBO.getEnv());
         gatewayApiRegister.setHttpMethod(registerBO.getApiHttpMethodEnum().getName());
         gatewayApiRegister.setDeleted(0L);
         gatewayApiRegister.setMethodName(registerBO.getMethodName());

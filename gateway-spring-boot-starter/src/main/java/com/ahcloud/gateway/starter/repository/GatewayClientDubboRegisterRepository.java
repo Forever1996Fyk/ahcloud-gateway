@@ -41,7 +41,7 @@ public class GatewayClientDubboRegisterRepository implements GatewayClientRegist
     @Override
     public void persistApi(ApiRegisterDTO apiRegisterDTO) {
         try {
-            RpcResult<Boolean> result = apiRegisterDubboService.apiRegister(apiRegisterDTO);
+            RpcResult<Boolean> result = apiRegisterDubboService.apiRegister(apiRegisterDTO, getEnv());
             if (result.isFailed() || !result.getData()) {
                 log.error("GatewayClientDubboRegisterRepository[persistApi] client register error is {}", apiRegisterDTO);
             }
@@ -55,7 +55,7 @@ public class GatewayClientDubboRegisterRepository implements GatewayClientRegist
     @Override
     public void batchPersistApi(List<ApiRegisterDTO> apiRegisterDTOList) {
         try {
-            RpcResult<Boolean> result = apiRegisterDubboService.apiBatchRegister(apiRegisterDTOList);
+            RpcResult<Boolean> result = apiRegisterDubboService.apiBatchRegister(apiRegisterDTOList, getEnv());
             if (result.isFailed() || !result.getData()) {
                 log.error("GatewayClientDubboRegisterRepository[batchPersistApi] client register error is {}", JsonUtils.toJsonString(apiRegisterDTOList));
             }
@@ -84,7 +84,7 @@ public class GatewayClientDubboRegisterRepository implements GatewayClientRegist
     public void close() {
         String serviceId = getServiceId();
         try {
-            RpcResult<Boolean> result = apiRegisterDubboService.deleteApiRegisterByServiceId(serviceId);
+            RpcResult<Boolean> result = apiRegisterDubboService.deleteApiRegisterByServiceId(serviceId, getEnv());
             if (result.isFailed() || !result.getData()) {
                 log.error("GatewayClientDubboRegisterRepository[close] client register error is {}", serviceId);
             }
@@ -97,6 +97,10 @@ public class GatewayClientDubboRegisterRepository implements GatewayClientRegist
 
     private String getServiceId() {
         return env.getProperty("spring.application.name");
+    }
+
+    private String getEnv() {
+        return env.getProperty("spring.profiles.active");
     }
 
     @Override

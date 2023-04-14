@@ -9,8 +9,6 @@ import com.ahcloud.gateway.server.infrastructure.rpc.AppUserRpcService;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AccessTokenBO;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AppUserReactiveAuthenticationBO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,11 +27,6 @@ public class AppTokenEndpointServiceImpl extends CacheTokenEndpointService<AppUs
     private AppUserRpcService appUserRpcService;
 
     private final static String LOG_MARK = "AppTokenEndpointServiceImpl";
-
-    @Autowired
-    public AppTokenEndpointServiceImpl(RedisTemplate<String, Object> redisTemplate) {
-        super(redisTemplate);
-    }
 
     @Override
     protected AppUserReactiveAuthenticationBO createUserReactiveAuthentication(String token) {

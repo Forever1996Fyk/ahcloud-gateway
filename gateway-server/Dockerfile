@@ -13,7 +13,8 @@ ENV CE=$DEAULT_CE
 
 #docker run -e PARAMS="--server.port 8080"
 #ENV PARAMS="-javaagent:/usr/skywalking/agent/skywalking-agent.jar=agent.service_name=ahcloud-gateway-$CE,collector.backend_service=skywalking.oap.middleware:11800,plugin.toolkit.log.grpc.reporter.server_host=oap.skywalking,plugin.toolkit.log.grpc.reporter.server_port=11800 --server.port=8080"
-ENV PARAMS="-javaagent:/Users/fanyukai/Desktop/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=ahcloud-gateway-server -Dskywalking.collector.backend_service=172.16.0.4:11800 --server.port=8080"
+#ENV PARAMS="--server.port=8080"
+ENV PARAMS="-javaagent:/usr/soft/skywalking/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=ahcloud-gateway-server -Dskywalking.collector.backend_service=172.16.0.4:11800 --server.port=8080"
 
 RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 

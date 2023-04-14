@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -39,7 +38,7 @@ public class GatewayRouteManager {
                 new QueryWrapper<GatewayApi>().lambda()
                         .select(GatewayApi::getServiceId)
                         .groupBy(GatewayApi::getServiceId)
-                        .eq(GatewayApi::getStatus, ApiStatusEnum.NORMAL.getStatus())
+                        .eq(GatewayApi::getStatus, ApiStatusEnum.ONLINE.getStatus())
                         .eq(GatewayApi::getDeleted, DeletedEnum.NO.value)
         );
         applicationEventPublisher.publishEvent(

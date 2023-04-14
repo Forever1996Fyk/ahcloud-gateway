@@ -57,6 +57,11 @@ public class GatewayApiRegister implements Serializable {
     private String methodName;
 
     /**
+     * 环境类型
+     */
+    private String env;
+
+    /**
      * 备注
      */
     private String remark;

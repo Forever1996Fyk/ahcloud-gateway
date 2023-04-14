@@ -40,7 +40,6 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         int code;
         String message;
-        Object data = null;
         log.error("exception is {}", Throwables.getStackTraceAsString(ex));
         if (ex instanceof GatewayException) {
             GatewayException gatewayException = (GatewayException) ex;

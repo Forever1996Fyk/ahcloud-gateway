@@ -38,13 +38,6 @@ public class ServerRedisTokenAuthenticationConverter implements ServerAuthentica
         if (Objects.isNull(apiGatewayBO)) {
             return Mono.empty();
         }
-        ApiStatusEnum apiStatusEnum = apiGatewayBO.getApiStatusEnum();
-        if (Objects.equals(apiStatusEnum, ApiStatusEnum.OFFLINE)) {
-            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_OFFLINE);
-        }
-        if (Objects.equals(apiStatusEnum, ApiStatusEnum.DISABLED)) {
-            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_DISABLED);
-        }
         // 当前接口无需认证
         if (!apiGatewayBO.getAuth()) {
             return Mono.empty();

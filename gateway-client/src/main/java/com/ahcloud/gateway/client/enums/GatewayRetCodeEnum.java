@@ -32,13 +32,16 @@ public enum GatewayRetCodeEnum implements ErrorCode {
     PARAM_ILLEGAL(100_1_002,"参数非法"),
     PARAM_ILLEGAL_FIELD(100_1_004,"[%s]参数非法"),
     PARAM_PARSING_FIELD(100_1_005,"参数解析失败"),
+    ENV_PARAM_ERROR(100_1_006,"环境参数异常"),
 
     /**
      * 网关
      */
-    GATEWAY_PARAM_MISS(1_1_100_1004, "网关缺少必要参数"),
+    GATEWAY_PARAM_MISS(1_1_100_1001, "网关缺少必要参数"),
     GATEWAY_API_DISABLED(1_1_100_1002, "接口已被禁用"),
     GATEWAY_API_OFFLINE(1_1_100_1003, "接口已下线"),
+
+    GATEWAY_API_NOT_EXISTED(1_1_100_1004, "接口不存在"),
 
     /**
      * 响应错误码

@@ -22,24 +22,24 @@ public class ApiRegisterDubboServiceImpl implements ApiRegisterDubboService {
     @Resource
     private GatewayApiRegisterManager gatewayApiRegisterManager;
     @Override
-    public RpcResult<Boolean> apiRegister(ApiRegisterDTO registerDTO) {
-        Boolean result = gatewayApiRegisterManager.apiRegister(convertToBO(registerDTO));
+    public RpcResult<Boolean> apiRegister(ApiRegisterDTO registerDTO, String env) {
+        Boolean result = gatewayApiRegisterManager.apiRegister(convertToBO(registerDTO, env));
         return RpcResult.ofSuccess(result);
     }
 
     @Override
-    public RpcResult<Boolean> apiBatchRegister(List<ApiRegisterDTO> apiRegisterDTOList) {
-        Boolean result = gatewayApiRegisterManager.batchApiRegister(convertToBO(apiRegisterDTOList));
+    public RpcResult<Boolean> apiBatchRegister(List<ApiRegisterDTO> apiRegisterDTOList, String env) {
+        Boolean result = gatewayApiRegisterManager.batchApiRegister(convertToBO(apiRegisterDTOList, env));
         return RpcResult.ofSuccess(result);
     }
 
     @Override
-    public RpcResult<Boolean> deleteApiRegisterByServiceId(String serviceId) {
-        Integer row = gatewayApiRegisterManager.deleteApiRegisterByServiceId(serviceId);
+    public RpcResult<Boolean> deleteApiRegisterByServiceId(String serviceId, String env) {
+        Integer row = gatewayApiRegisterManager.deleteApiRegisterByServiceId(serviceId, env);
         return RpcResult.ofSuccess(row > 0);
     }
 
-    private ApiRegisterBO convertToBO(ApiRegisterDTO dto) {
+    private ApiRegisterBO convertToBO(ApiRegisterDTO dto, String env) {
         return ApiRegisterBO.builder()
                 .apiPath(dto.getApiPath())
                 .apiHttpMethodEnum(dto.getApiHttpMethodEnum())
@@ -48,12 +48,13 @@ public class ApiRegisterDubboServiceImpl implements ApiRegisterDubboService {
                 .methodName(dto.getMethodName())
                 .qualifiedName(dto.getQualifiedName())
                 .serviceId(dto.getServiceId())
+                .env(env)
                 .build();
     }
 
-    private List<ApiRegisterBO> convertToBO(List<ApiRegisterDTO> apiRegisterDTOList) {
+    private List<ApiRegisterBO> convertToBO(List<ApiRegisterDTO> apiRegisterDTOList, String env) {
         return apiRegisterDTOList.stream()
-                .map(this::convertToBO)
+                .map(apiRegisterDTO -> this.convertToBO(apiRegisterDTO, env))
                 .collect(Collectors.toList());
     }
 }

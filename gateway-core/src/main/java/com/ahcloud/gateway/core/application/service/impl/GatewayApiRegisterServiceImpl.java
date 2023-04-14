@@ -29,10 +29,11 @@ public class GatewayApiRegisterServiceImpl extends ServiceImpl<GatewayApiRegiste
     }
 
     @Override
-    public int deleteApiRegisterByServiceId(String serviceId) {
+    public int deleteApiRegisterByServiceId(String serviceId, String env) {
         return baseMapper.delete(
                 new QueryWrapper<GatewayApiRegister>().lambda()
                         .eq(GatewayApiRegister::getServiceId, serviceId)
+                        .eq(GatewayApiRegister::getEnv, env)
         );
     }
 }

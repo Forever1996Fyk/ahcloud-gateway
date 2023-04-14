@@ -1,12 +1,18 @@
 package com.ahcloud.gateway.server.infrastructure.filter;
 
 import com.ahcloud.common.utils.CollectionUtils;
+import com.ahcloud.gateway.client.enums.ApiStatusEnum;
+import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternBO;
 import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
 import com.ahcloud.gateway.core.domain.bo.ApiGatewayBO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
+import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
+import com.ahcloud.gateway.core.infrastructure.config.GatewayConfiguration;
+import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
 import com.ahcloud.gateway.server.infrastructure.gateway.factory.GatewayApiCacheFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
@@ -27,6 +33,13 @@ import java.util.Set;
 @Slf4j
 @Component
 public class ApiPathConvertFilter implements WebFilter, Ordered {
+
+    private final GatewayConfiguration gatewayConfiguration;
+
+    @Autowired
+    public ApiPathConvertFilter(GatewayConfiguration gatewayConfiguration) {
+        this.gatewayConfiguration = gatewayConfiguration;
+    }
 
     @Override
     public int getOrder() {
@@ -51,15 +64,45 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
             return chain.filter(exchange);
         }
         ApiRefreshDTO apiRefreshDTO = refreshPatternBO.getApiRefreshDTO();
-        if (Objects.nonNull(apiRefreshDTO)) {
-            ApiGatewayBO apiGatewayBO = ApiGatewayBO.builder()
-                    .path(apiRefreshDTO.getPath())
-                    .apiCode(apiRefreshDTO.getApiCode())
-                    .apiStatusEnum(apiRefreshDTO.getApiStatusEnum())
-                    .auth(apiRefreshDTO.getAuth())
-                    .build();
-            gatewayContext.setApiGatewayBO(apiGatewayBO);
+        if (Objects.isNull(apiRefreshDTO)) {
+            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_NOT_EXISTED);
         }
+        // 校验api状态
+        checkApiStatus(apiRefreshDTO);
+        ApiGatewayBO apiGatewayBO = ApiGatewayBO.builder()
+                .path(apiRefreshDTO.getPath())
+                .apiCode(apiRefreshDTO.getApiCode())
+                .dev(apiRefreshDTO.getDev())
+                .test(apiRefreshDTO.getTest())
+                .sit(apiRefreshDTO.getSit())
+                .pre(apiRefreshDTO.getPre())
+                .prod(apiRefreshDTO.getProd())
+                .auth(apiRefreshDTO.getAuth())
+                .build();
+        gatewayContext.setApiGatewayBO(apiGatewayBO);
         return chain.filter(exchange);
+    }
+
+    private void checkApiStatus(ApiRefreshDTO apiRefreshDTO) {
+        String env = gatewayConfiguration.getEnv();
+        Integer status = 0;
+        if (EnvConstants.isDev(env)) {
+            status = apiRefreshDTO.getDev();
+        } else if (EnvConstants.isTest(env)) {
+            status = apiRefreshDTO.getTest();
+        } else if (EnvConstants.isSit(env)) {
+            status = apiRefreshDTO.getSit();
+        } else if (EnvConstants.isPre(env)) {
+            status = apiRefreshDTO.getPre();
+        } else if (EnvConstants.isProd(env)) {
+            status = apiRefreshDTO.getProd();
+        }
+        ApiStatusEnum apiStatusEnum = ApiStatusEnum.valueOf(status);
+        if (Objects.equals(apiStatusEnum, ApiStatusEnum.OFFLINE)) {
+            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_OFFLINE);
+        }
+        if (Objects.equals(apiStatusEnum, ApiStatusEnum.DISABLED)) {
+            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_DISABLED);
+        }
     }
 }

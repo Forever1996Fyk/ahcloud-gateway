@@ -26,8 +26,9 @@ public interface GatewayApiRegisterService extends IService<GatewayApiRegister> 
     /**
      * 删除已经注册的api
      * @param serviceId
+     * @param env
      * @return
      */
-    int deleteApiRegisterByServiceId(String serviceId);
+    int deleteApiRegisterByServiceId(String serviceId, String env);
 
 }

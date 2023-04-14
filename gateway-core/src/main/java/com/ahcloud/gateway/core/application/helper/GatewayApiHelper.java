@@ -29,7 +29,6 @@ public class GatewayApiHelper {
      */
     public static GatewayApi convert(ApiAddForm form) {
         GatewayApi gatewayApi = Convert.INSTANCE.convert(form);
-        gatewayApi.setStatus(ApiStatusEnum.OFFLINE.getStatus());
         gatewayApi.setCreator("system");
         gatewayApi.setModifier("system");
         return gatewayApi;
@@ -82,9 +81,13 @@ public class GatewayApiHelper {
     public static ApiRefreshDTO convertToDTO(GatewayApi gatewayApi) {
         return ApiRefreshDTO.builder()
                 .apiCode(gatewayApi.getApiCode())
-                .apiStatusEnum(ApiStatusEnum.valueOf(gatewayApi.getStatus()))
                 .auth(gatewayApi.getAuth() != null && gatewayApi.getAuth() == 1)
                 .path(gatewayApi.getApiPath())
+                .dev(gatewayApi.getDev())
+                .test(gatewayApi.getTest())
+                .sit(gatewayApi.getSit())
+                .pre(gatewayApi.getPre())
+                .prod(gatewayApi.getProd())
                 .build();
     }
 

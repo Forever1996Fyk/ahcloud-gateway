@@ -11,6 +11,7 @@ import com.ahcloud.gateway.core.domain.api.form.ApiAddForm;
 import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.query.ApiQuery;
 import com.ahcloud.gateway.core.domain.api.vo.ApiVO;
+import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
 import com.ahcloud.gateway.core.infrastructure.exception.BizException;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.ConfigGroupEnum;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.DataEventTypeEnum;
@@ -25,7 +26,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -180,6 +180,8 @@ public class GatewayApiManager {
 
     /**
      * 刷新接口
+     *
+     * 加锁操作，防止并发多次刷新
      */
     public void refreshApi() {
         List<GatewayApi> gatewayApiList = gatewayApiService.list(
@@ -195,19 +197,19 @@ public class GatewayApiManager {
      * 下线接口
      * @param id
      */
-    public void offlineApi(Long id) {
-        operateApi(id, ApiStatusEnum.OFFLINE);
+    public void offlineApi(Long id, String env) {
+        operateApi(id, ApiStatusEnum.OFFLINE, env);
     }
 
     /**
      * 下线接口
      * @param id
      */
-    public void onlineApi(Long id) {
-        operateApi(id, ApiStatusEnum.NORMAL);
+    public void onlineApi(Long id, String env) {
+        operateApi(id, ApiStatusEnum.ONLINE, env);
     }
 
-    private void operateApi(Long id, ApiStatusEnum apiStatusEnum) {
+    private void operateApi(Long id, ApiStatusEnum apiStatusEnum, String env) {
         GatewayApi existedGatewayApi = gatewayApiService.getOne(
                 new QueryWrapper<GatewayApi>().lambda()
                         .eq(GatewayApi::getId, id)
@@ -217,7 +219,11 @@ public class GatewayApiManager {
             throw new BizException(GatewayRetCodeEnum.GATEWAY_API_NOT_EXITED);
         }
         GatewayApi updateGatewayApi = new GatewayApi();
-        updateGatewayApi.setStatus(apiStatusEnum.getStatus());
+        Integer status = apiStatusEnum.getStatus();
+        setEnvStatus(env, updateGatewayApi, status);
+        if (EnvConstants.isDev(env)) {
+            updateGatewayApi.setDev(status);
+        }
         updateGatewayApi.setVersion(existedGatewayApi.getVersion());
         boolean updateResult = gatewayApiService.update(
                 updateGatewayApi,
@@ -229,10 +235,31 @@ public class GatewayApiManager {
             throw new BizException(GatewayRetCodeEnum.VERSION_ERROR);
         }
 
-        existedGatewayApi.setStatus(apiStatusEnum.getStatus());
         ApiRefreshDTO apiRefreshDTO = GatewayApiHelper.convertToDTO(existedGatewayApi);
         applicationEventPublisher.publishEvent(
                 new DataChangedEvent(apiRefreshDTO, DataEventTypeEnum.UPDATE, ConfigGroupEnum.API)
         );
+    }
+
+    private void setEnvStatus(String env, GatewayApi updateGatewayApi, Integer status) {
+        switch (env) {
+            case EnvConstants.DEV:
+                updateGatewayApi.setDev(status);
+                break;
+            case EnvConstants.TEST:
+                updateGatewayApi.setTest(status);
+                break;
+            case EnvConstants.SIT:
+                updateGatewayApi.setSit(status);
+                break;
+            case EnvConstants.PRE:
+                updateGatewayApi.setPre(status);
+                break;
+            case EnvConstants.PROD:
+                updateGatewayApi.setProd(status);
+                break;
+            default:
+                throw new BizException(GatewayRetCodeEnum.ENV_PARAM_ERROR);
+        }
     }
 }

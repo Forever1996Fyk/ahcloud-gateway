@@ -89,10 +89,10 @@ public class ApiController {
      * @param id
      * @return
      */
-    @PostMapping("/offlineApi/{id}")
+    @PostMapping("/offlineApi/{id}/{env}")
     @GatewaySpringCloudClient
-    public ResponseResult<Void> offlineApi(@PathVariable("id") Long id) {
-        gatewayApiManager.offlineApi(id);
+    public ResponseResult<Void> offlineApi(@PathVariable("id") Long id, @PathVariable("env") String env) {
+        gatewayApiManager.offlineApi(id, env);
         return ResponseResult.ofSuccess();
     }
 
@@ -101,10 +101,10 @@ public class ApiController {
      * @param id
      * @return
      */
-    @PostMapping("/onlineApi/{id}")
+    @PostMapping("/onlineApi/{id}/{env}")
     @GatewaySpringCloudClient
-    public ResponseResult<Void> onlineApi(@PathVariable("id") Long id) {
-        gatewayApiManager.onlineApi(id);
+    public ResponseResult<Void> onlineApi(@PathVariable("id") Long id, @PathVariable("env") String env) {
+        gatewayApiManager.onlineApi(id, env);
         return ResponseResult.ofSuccess();
     }
 }

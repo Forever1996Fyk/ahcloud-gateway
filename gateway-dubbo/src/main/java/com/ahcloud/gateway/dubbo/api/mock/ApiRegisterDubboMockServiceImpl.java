@@ -17,19 +17,19 @@ import java.util.List;
 @Slf4j
 public class ApiRegisterDubboMockServiceImpl implements ApiRegisterDubboService {
     @Override
-    public RpcResult<Boolean> apiRegister(ApiRegisterDTO registerDTO) {
+    public RpcResult<Boolean> apiRegister(ApiRegisterDTO registerDTO, String env) {
         log.error("GatewayServer Api Register service, method is apiRegister offline");
         return RpcResult.ofSuccess(false);
     }
 
     @Override
-    public RpcResult<Boolean> apiBatchRegister(List<ApiRegisterDTO> apiRegisterDTOList) {
+    public RpcResult<Boolean> apiBatchRegister(List<ApiRegisterDTO> apiRegisterDTOList, String env) {
         log.error("GatewayServer Api Register service, method is apiBatchRegister offline");
         return RpcResult.ofSuccess(false);
     }
 
     @Override
-    public RpcResult<Boolean> deleteApiRegisterByServiceId(String serviceId) {
+    public RpcResult<Boolean> deleteApiRegisterByServiceId(String serviceId, String env) {
         log.error("GatewayServer Api Register service, method is deleteApiRegisterByServiceId offline");
         return RpcResult.ofSuccess(false);
     }

@@ -74,11 +74,6 @@ public class GatewayApi implements Serializable {
     private String apiDesc;
 
     /**
-     * 接口状态(1:启用,2:停用)
-     */
-    private Integer status;
-
-    /**
      * 是否认证
      */
     @TableField(value = "is_auth")
@@ -88,6 +83,31 @@ public class GatewayApi implements Serializable {
      * 是否可变
      */
     private Integer changeable;
+
+    /**
+     * 开发环境状态
+     */
+    private Integer dev;
+
+    /**
+     * 联调环境状态
+     */
+    private Integer test;
+
+    /**
+     * 测试环境状态
+     */
+    private Integer sit;
+
+    /**
+     * 预发环境状态
+     */
+    private Integer pre;
+
+    /**
+     * 生产环境状态
+     */
+    private Integer prod;
 
     /**
      * 备注
