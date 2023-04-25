@@ -22,6 +22,9 @@ public class AppUserAuthenticationHelper {
         AccessTokenDTO accessTokenDTO = userAuthenticationDTO.getAccessTokenDTO();
         return AppUserAuthenticationBO.builder()
                 .userId(userAuthenticationDTO.getUserId())
+                .userName(userAuthenticationDTO.getUserName())
+                .account(userAuthenticationDTO.getAccount())
+                .nickName(userAuthenticationDTO.getNickName())
                 .tenantId(userAuthenticationDTO.getTenantId())
                 .accessTokenBO(
                         AppAccessTokenBO.builder()

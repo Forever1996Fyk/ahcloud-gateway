@@ -39,6 +39,9 @@ public class AdminTokenEndpointServiceImpl extends CacheTokenEndpointService<Adm
                 .scopes(authentication.getScopes())
                 .userId(authentication.getUserId())
                 .authorities(authentication.getAuthorities())
+                .userName(authentication.getUserName())
+                .account(authentication.getAccount())
+                .nickName(authentication.getNickName())
                 .accessTokenBO(
                         AccessTokenBO.builder()
                                 .token(accessTokenBO.getToken())

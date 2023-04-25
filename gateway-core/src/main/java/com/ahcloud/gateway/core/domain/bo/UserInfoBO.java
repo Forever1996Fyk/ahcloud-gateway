@@ -21,10 +21,20 @@ public class UserInfoBO {
     /**
      * 租户id
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 请求token
      */
     private String token;
+
+    /**
+     * 用户名称
+     */
+    private String userName;
+
+    /**
+     * 昵称
+     */
+    private String nickName;
 }

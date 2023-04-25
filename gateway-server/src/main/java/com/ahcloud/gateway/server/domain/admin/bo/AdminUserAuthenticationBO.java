@@ -25,12 +25,22 @@ public class AdminUserAuthenticationBO {
     /**
      * 租户id
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 用户名
      */
-    private String username;
+    private String userName;
+
+    /**
+     * 用户昵称
+     */
+    private String nickName;
+
+    /**
+     * 用户账号
+     */
+    private String account;
 
     /**
      * scope权限范围

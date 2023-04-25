@@ -36,6 +36,16 @@ public class AdminUserReactiveAuthenticationBO implements Serializable, UserReac
     private String account;
 
     /**
+     * 用户名称
+     */
+    private String userName;
+
+    /**
+     * 用户昵称
+     */
+    private String nickName;
+
+    /**
      * 权限集合
      */
     private Set<String> authorities;

@@ -40,6 +40,16 @@ public class AdminOAuth2User implements OAuth2User, Serializable {
     private String username;
 
     /**
+     * 用户名称
+     */
+    private String name;
+
+    /**
+     * 用户昵称
+     */
+    private String nickName;
+
+    /**
      * 权限集合
      */
     private Collection<? extends GrantedAuthority> authorities;

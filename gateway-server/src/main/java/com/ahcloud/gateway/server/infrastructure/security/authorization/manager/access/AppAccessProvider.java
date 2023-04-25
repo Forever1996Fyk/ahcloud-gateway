@@ -4,6 +4,7 @@ import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.core.domain.bo.UserInfoBO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AdminOAuth2User;
+import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AppOAuth2User;
 import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,13 +37,16 @@ public class AppAccessProvider extends AbstractAccessProvider {
                 .filter(Authentication::isAuthenticated)
                 .cast(BearerTokenAuthentication.class)
                 .map(BearerTokenAuthentication::getPrincipal)
-                .cast(AdminOAuth2User.class)
+                .cast(AppOAuth2User.class)
                 .filter(Objects::nonNull)
                 .map(oAuth2User -> {
                     GatewayContext gatewayContext = (GatewayContext) context.getExchange().getAttributes().get(GatewayContext.CACHE_GATEWAY_CONTEXT);
                     UserInfoBO userInfoBO = new UserInfoBO();
                     userInfoBO.setUserId(String.valueOf(oAuth2User.getUserId()));
-                    userInfoBO.setTenantId(String.valueOf(oAuth2User.getTenantId()));
+                    userInfoBO.setTenantId(oAuth2User.getTenantId());
+
+                    userInfoBO.setNickName(oAuth2User.getNickName());
+                    userInfoBO.setUserName(oAuth2User.getName());
                     Map<String, Object> attributes = oAuth2User.getAttributes();
                     userInfoBO.setToken(attributes.containsKey("token") ? String.valueOf(attributes.get("token")) : StringUtils.EMPTY);
 

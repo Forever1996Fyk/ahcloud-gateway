@@ -30,7 +30,17 @@ public class AppUserAuthenticationBO {
     /**
      * 用户名
      */
-    private String username;
+    private String userName;
+
+    /**
+     * 用户昵称
+     */
+    private String nickName;
+
+    /**
+     * 账号
+     */
+    private String account;
 
     /**
      * scope权限范围

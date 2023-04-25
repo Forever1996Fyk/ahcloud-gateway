@@ -51,6 +51,8 @@ public class AppReactiveAuthenticationManager extends AbstractReactiveAuthentica
                 .userId(appUserReactiveAuthenticationBO.getUserId())
                 .tenantId(appUserReactiveAuthenticationBO.getTenantId())
                 .username(appUserReactiveAuthenticationBO.getAccount())
+                .name(appUserReactiveAuthenticationBO.getUserName())
+                .nickName(appUserReactiveAuthenticationBO.getNickName())
                 .attributes(attributes)
                 .build();
 

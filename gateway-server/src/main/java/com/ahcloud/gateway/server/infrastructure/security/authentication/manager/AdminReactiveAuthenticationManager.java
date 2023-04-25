@@ -58,6 +58,8 @@ public class AdminReactiveAuthenticationManager extends AbstractReactiveAuthenti
                 .username(adminUserAuthenticationBO.getAccount())
                 .authorities(convert(adminUserAuthenticationBO.getAuthorities()))
                 .attributes(attributes)
+                .name(adminUserAuthenticationBO.getUserName())
+                .nickName(adminUserAuthenticationBO.getNickName())
                 .build();
 
         AccessTokenBO accessTokenBO = adminUserAuthenticationBO.getAccessTokenBO();

@@ -41,6 +41,16 @@ public class AppOAuth2User implements OAuth2User, Serializable {
     private String username;
 
     /**
+     * 用户名称
+     */
+    private String name;
+
+    /**
+     * 用户昵称
+     */
+    private String nickName;
+
+    /**
      * 参数属性
      */
     private Map<String, Object> attributes;

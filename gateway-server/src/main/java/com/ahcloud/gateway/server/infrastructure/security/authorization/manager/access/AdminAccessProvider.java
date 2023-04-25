@@ -40,7 +40,9 @@ public class AdminAccessProvider extends AbstractAccessProvider {
                     // 这里如果需要可以做权限校验 不满足权限可以抛出 GatewayAccessDeniedException todo
                     UserInfoBO userInfoBO = new UserInfoBO();
                     userInfoBO.setUserId(String.valueOf(oAuth2User.getUserId()));
-                    userInfoBO.setTenantId(String.valueOf(oAuth2User.getTenantId()));
+                    userInfoBO.setTenantId(oAuth2User.getTenantId());
+                    userInfoBO.setUserName(oAuth2User.getName());
+                    userInfoBO.setNickName(oAuth2User.getNickName());
                     Map<String, Object> attributes = oAuth2User.getAttributes();
                     userInfoBO.setToken(attributes.containsKey("token") ? String.valueOf(attributes.get("token")) : StringUtils.EMPTY);
 

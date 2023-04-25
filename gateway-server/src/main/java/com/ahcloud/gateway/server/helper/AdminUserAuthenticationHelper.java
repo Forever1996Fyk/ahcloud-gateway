@@ -22,6 +22,9 @@ public class AdminUserAuthenticationHelper {
         AccessTokenDTO accessTokenDTO = userAuthenticationDTO.getAccessTokenDTO();
         return AdminUserAuthenticationBO.builder()
                 .userId(userAuthenticationDTO.getUserId())
+                .account(userAuthenticationDTO.getAccount())
+                .nickName(userAuthenticationDTO.getNickName())
+                .userName(userAuthenticationDTO.getUserName())
                 .tenantId(userAuthenticationDTO.getTenantId())
                 .authorities(userAuthenticationDTO.getAuthorities())
                 .scopes(userAuthenticationDTO.getScopes())

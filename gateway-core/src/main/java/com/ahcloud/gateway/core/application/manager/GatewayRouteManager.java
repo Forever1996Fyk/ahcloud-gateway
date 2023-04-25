@@ -38,7 +38,6 @@ public class GatewayRouteManager {
                 new QueryWrapper<GatewayApi>().lambda()
                         .select(GatewayApi::getServiceId)
                         .groupBy(GatewayApi::getServiceId)
-                        .eq(GatewayApi::getStatus, ApiStatusEnum.ONLINE.getStatus())
                         .eq(GatewayApi::getDeleted, DeletedEnum.NO.value)
         );
         applicationEventPublisher.publishEvent(
