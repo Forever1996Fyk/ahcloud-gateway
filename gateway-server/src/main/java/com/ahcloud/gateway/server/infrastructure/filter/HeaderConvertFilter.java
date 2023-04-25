@@ -48,6 +48,7 @@ public class HeaderConvertFilter implements GlobalFilter, Ordered {
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.putAll(super.getHeaders());
 
+
                 if (Objects.nonNull(userInfoBO)) {
                     httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoBO.getUserId()));
                     httpHeaders.set(Constant.CTX_KEY_USER_NAME.toString(), NullUtils.of(userInfoBO.getUserName()));
