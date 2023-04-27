@@ -1,6 +1,5 @@
-package com.ahcloud.gateway.core.domain.bo;
+package com.ahcloud.gateway.core.domain.dto;
 
-import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import lombok.*;
 
 /**
@@ -14,7 +13,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiGatewayBO {
+public class ApiGatewayDTO {
     /**
      * api编码
      */

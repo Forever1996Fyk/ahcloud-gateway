@@ -1,22 +1,13 @@
 package com.ahcloud.gateway.server.infrastructure.gateway.service.impl;
 
-import com.ahcloud.gateway.client.enums.ApiStatusEnum;
-import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternBO;
+import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
 import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
 import com.ahcloud.gateway.server.infrastructure.gateway.service.GatewayApiCacheService;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @program: ahcloud-gateway
@@ -27,12 +18,12 @@ import java.util.stream.Collectors;
 public class GatewayApiCacheServiceImpl implements GatewayApiCacheService {
     private final static PathPatternParser DEFAULT_PATH_PARSER = new PathPatternParser();
 
-    private final static Map<String, ApiRefreshPatternBO> API_PATTERN_CACHE = Maps.newConcurrentMap();
+    private final static Map<String, ApiRefreshPatternDTO> API_PATTERN_CACHE = Maps.newConcurrentMap();
 
     @Override
     public void cacheCurrentApi(ApiRefreshDTO apiRefreshDTO) {
         API_PATTERN_CACHE.put(apiRefreshDTO.getPath(),
-                new ApiRefreshPatternBO(DEFAULT_PATH_PARSER.parse(apiRefreshDTO.getPath()), apiRefreshDTO)
+                new ApiRefreshPatternDTO(DEFAULT_PATH_PARSER.parse(apiRefreshDTO.getPath()), apiRefreshDTO)
         );
     }
 
@@ -42,7 +33,7 @@ public class GatewayApiCacheServiceImpl implements GatewayApiCacheService {
     }
 
     @Override
-    public Collection<ApiRefreshPatternBO> getValues() {
+    public Collection<ApiRefreshPatternDTO> getValues() {
         return API_PATTERN_CACHE.values();
     }
 

@@ -1,9 +1,8 @@
 package com.ahcloud.gateway.server.infrastructure.security.authentication.converter;
 
-import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.domain.bo.ApiGatewayBO;
+import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
 import com.ahcloud.gateway.core.infrastructure.constant.GatewayConstants;
 import com.ahcloud.gateway.core.infrastructure.util.ServerWebExchangeUtils;
@@ -33,13 +32,13 @@ public class ServerRedisTokenAuthenticationConverter implements ServerAuthentica
             throw new GatewayException(GatewayRetCodeEnum.SYSTEM_ERROR);
         }
         GatewayContext gatewayContext = (GatewayContext) o;
-        ApiGatewayBO apiGatewayBO = gatewayContext.getApiGatewayBO();
+        ApiGatewayDTO apiGatewayDTO = gatewayContext.getApiGatewayDTO();
         // 如果接口信息为空，默认匿名访问
-        if (Objects.isNull(apiGatewayBO)) {
+        if (Objects.isNull(apiGatewayDTO)) {
             return Mono.empty();
         }
         // 当前接口无需认证
-        if (!apiGatewayBO.getAuth()) {
+        if (!apiGatewayDTO.getAuth()) {
             return Mono.empty();
         }
         String token = ServerWebExchangeUtils.getTokenFromRequest(exchange, GatewayConstants.TOKEN_PREFIX);

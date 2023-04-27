@@ -1,8 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.gateway.service;
 
-import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternBO;
+import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
 import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.Collection;
 
@@ -32,7 +31,7 @@ public interface GatewayApiCacheService {
      * 获取所有缓存value
      * @return
      */
-    Collection<ApiRefreshPatternBO> getValues();
+    Collection<ApiRefreshPatternDTO> getValues();
 
     /**
      * 清除所有缓存

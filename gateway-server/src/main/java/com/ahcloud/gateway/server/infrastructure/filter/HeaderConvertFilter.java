@@ -1,11 +1,10 @@
 package com.ahcloud.gateway.server.infrastructure.filter;
 
 import com.ahcloud.common.utils.NullUtils;
-import com.ahcloud.gateway.core.domain.bo.UserInfoBO;
+import com.ahcloud.gateway.core.domain.dto.UserInfoDTO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
 import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -39,7 +38,7 @@ public class HeaderConvertFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
         GatewayContext gatewayContext = (GatewayContext) o;
-        UserInfoBO userInfoBO = gatewayContext.getUserInfoBO();
+        UserInfoDTO userInfoDTO = gatewayContext.getUserInfoDTO();
         // 处理参数
         MediaType contentType = headers.getContentType();
         ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(exchange.getRequest()) {
@@ -48,13 +47,12 @@ public class HeaderConvertFilter implements GlobalFilter, Ordered {
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.putAll(super.getHeaders());
 
-
-                if (Objects.nonNull(userInfoBO)) {
-                    httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoBO.getUserId()));
-                    httpHeaders.set(Constant.CTX_KEY_USER_NAME.toString(), NullUtils.of(userInfoBO.getUserName()));
-                    httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoBO.getUserId()));
-                    httpHeaders.set(Constant.CTX_KEY_TOKEN.toString(), NullUtils.of(userInfoBO.getToken()));
-                    Long tenantId = userInfoBO.getTenantId();
+                if (Objects.nonNull(userInfoDTO)) {
+                    httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoDTO.getUserId()));
+                    httpHeaders.set(Constant.CTX_KEY_USER_NAME.toString(), NullUtils.of(userInfoDTO.getUserName()));
+                    httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoDTO.getUserId()));
+                    httpHeaders.set(Constant.CTX_KEY_TOKEN.toString(), NullUtils.of(userInfoDTO.getToken()));
+                    Long tenantId = userInfoDTO.getTenantId();
                     if (tenantId != null) {
                         httpHeaders.set(Constant.CTX_KEY_TENANT_ID.toString(), String.valueOf(NullUtils.of(tenantId)));
                     }

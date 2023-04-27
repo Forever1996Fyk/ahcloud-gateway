@@ -1,11 +1,9 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
-import com.ahcloud.gateway.core.domain.bo.UserInfoBO;
+import com.ahcloud.gateway.core.domain.dto.UserInfoDTO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
-import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AdminOAuth2User;
 import com.ahcloud.gateway.server.infrastructure.security.authentication.user.AppOAuth2User;
-import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -17,7 +15,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @program: ahcloud-gateway
@@ -41,16 +38,16 @@ public class AppAccessProvider extends AbstractAccessProvider {
                 .filter(Objects::nonNull)
                 .map(oAuth2User -> {
                     GatewayContext gatewayContext = (GatewayContext) context.getExchange().getAttributes().get(GatewayContext.CACHE_GATEWAY_CONTEXT);
-                    UserInfoBO userInfoBO = new UserInfoBO();
-                    userInfoBO.setUserId(String.valueOf(oAuth2User.getUserId()));
-                    userInfoBO.setTenantId(oAuth2User.getTenantId());
+                    UserInfoDTO userInfoDTO = new UserInfoDTO();
+                    userInfoDTO.setUserId(String.valueOf(oAuth2User.getUserId()));
+                    userInfoDTO.setTenantId(oAuth2User.getTenantId());
 
-                    userInfoBO.setNickName(oAuth2User.getNickName());
-                    userInfoBO.setUserName(oAuth2User.getName());
+                    userInfoDTO.setNickName(oAuth2User.getNickName());
+                    userInfoDTO.setUserName(oAuth2User.getName());
                     Map<String, Object> attributes = oAuth2User.getAttributes();
-                    userInfoBO.setToken(attributes.containsKey("token") ? String.valueOf(attributes.get("token")) : StringUtils.EMPTY);
+                    userInfoDTO.setToken(attributes.containsKey("token") ? String.valueOf(attributes.get("token")) : StringUtils.EMPTY);
 
-                    gatewayContext.setUserInfoBO(userInfoBO);
+                    gatewayContext.setUserInfoDTO(userInfoDTO);
                     return new AuthorizationDecision(true);
                 })
                 .defaultIfEmpty(new AuthorizationDecision(false));

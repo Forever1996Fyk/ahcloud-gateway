@@ -11,7 +11,7 @@ import org.springframework.web.util.pattern.PathPattern;
  * @create: 2023/2/21 09:00
  **/
 @Data
-public class ApiRefreshPatternBO {
+public class ApiRefreshPatternDTO {
 
     /**
      * 路径匹配
@@ -23,7 +23,7 @@ public class ApiRefreshPatternBO {
      */
     private final ApiRefreshDTO apiRefreshDTO;
 
-    public ApiRefreshPatternBO(PathPattern pathPattern, ApiRefreshDTO apiRefreshDTO) {
+    public ApiRefreshPatternDTO(PathPattern pathPattern, ApiRefreshDTO apiRefreshDTO) {
         this.pathPattern = pathPattern;
         this.apiRefreshDTO = apiRefreshDTO;
     }

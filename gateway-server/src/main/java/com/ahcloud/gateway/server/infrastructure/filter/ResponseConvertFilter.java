@@ -27,11 +27,12 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * @program: ahcloud-gateway
- * @description: 响应过滤器
+ * @description: 响应过滤器 (暂时废弃)
  * @author: YuKai Fan
  * @create: 2023/1/15 22:50
  **/
 @Slf4j
+@Deprecated
 //@Component
 public class ResponseConvertFilter implements WebFilter, Ordered {
     @Override

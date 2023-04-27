@@ -1,8 +1,8 @@
 package com.ahcloud.gateway.core.domain.context;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
-import com.ahcloud.gateway.core.domain.bo.ApiGatewayBO;
-import com.ahcloud.gateway.core.domain.bo.UserInfoBO;
+import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
+import com.ahcloud.gateway.core.domain.dto.UserInfoDTO;
 import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,12 +49,12 @@ public class GatewayContext {
     /**
      * api网关信息
      */
-    private ApiGatewayBO apiGatewayBO;
+    private ApiGatewayDTO apiGatewayDTO;
 
     /**
      * 用户信息
      */
-    private UserInfoBO userInfoBO;
+    private UserInfoDTO userInfoDTO;
 
     /**
      * app-platform

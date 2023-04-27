@@ -1,4 +1,4 @@
-package com.ahcloud.gateway.core.domain.bo;
+package com.ahcloud.gateway.core.domain.dto;
 
 import lombok.*;
 
@@ -11,7 +11,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoBO {
+public class UserInfoDTO {
 
     /**
      * 用户id

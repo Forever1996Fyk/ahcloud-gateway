@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.gateway.factory;
 
 import com.ahcloud.common.utils.CollectionUtils;
-import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternBO;
+import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
 import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
 import com.ahcloud.gateway.server.infrastructure.gateway.service.GatewayApiCacheService;
 import com.ahcloud.gateway.server.infrastructure.gateway.service.impl.GatewayApiCacheServiceImpl;
@@ -35,7 +35,7 @@ public class GatewayApiCacheFactory {
      *
      * @return ImmutableSet
      */
-    public static Set<ApiRefreshPatternBO> getValues() {
+    public static Set<ApiRefreshPatternDTO> getValues() {
         return ImmutableSet.copyOf(LOCAL_CACHE_SERVICE.getValues());
     }
 

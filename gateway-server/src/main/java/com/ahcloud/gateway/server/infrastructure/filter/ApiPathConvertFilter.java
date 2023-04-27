@@ -3,9 +3,9 @@ package com.ahcloud.gateway.server.infrastructure.filter;
 import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternBO;
+import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
 import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
-import com.ahcloud.gateway.core.domain.bo.ApiGatewayBO;
+import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
 import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
 import com.ahcloud.gateway.core.infrastructure.config.GatewayConfiguration;
@@ -54,11 +54,11 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         }
         GatewayContext gatewayContext = (GatewayContext) o;
         PathContainer pathContainer = gatewayContext.getPathContainer();
-        Set<ApiRefreshPatternBO> values = GatewayApiCacheFactory.getValues();
+        Set<ApiRefreshPatternDTO> values = GatewayApiCacheFactory.getValues();
         if (CollectionUtils.isEmpty(values)) {
             return chain.filter(exchange);
         }
-        ApiRefreshPatternBO refreshPatternBO = values.stream().filter(apiRefreshPatternBO -> apiRefreshPatternBO.getPathPattern().matches(pathContainer))
+        ApiRefreshPatternDTO refreshPatternBO = values.stream().filter(apiRefreshPatternDTO -> apiRefreshPatternDTO.getPathPattern().matches(pathContainer))
                 .findFirst().orElse(null);
         if (Objects.isNull(refreshPatternBO)) {
             return chain.filter(exchange);
@@ -69,7 +69,7 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         }
         // 校验api状态
         checkApiStatus(apiRefreshDTO);
-        ApiGatewayBO apiGatewayBO = ApiGatewayBO.builder()
+        ApiGatewayDTO apiGatewayDTO = ApiGatewayDTO.builder()
                 .path(apiRefreshDTO.getPath())
                 .apiCode(apiRefreshDTO.getApiCode())
                 .dev(apiRefreshDTO.getDev())
@@ -79,7 +79,7 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
                 .prod(apiRefreshDTO.getProd())
                 .auth(apiRefreshDTO.getAuth())
                 .build();
-        gatewayContext.setApiGatewayBO(apiGatewayBO);
+        gatewayContext.setApiGatewayDTO(apiGatewayDTO);
         return chain.filter(exchange);
     }
 
