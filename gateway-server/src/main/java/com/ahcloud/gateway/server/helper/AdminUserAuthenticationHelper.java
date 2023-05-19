@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.helper;
 
-import com.ahcloud.admin.client.domain.dubbo.token.AccessTokenDTO;
-import com.ahcloud.admin.client.domain.dubbo.token.AdminUserAuthenticationDTO;
+import com.ahcloud.admin.client.domain.dubbo.token.dto.AccessTokenDTO;
+import com.ahcloud.admin.client.domain.dubbo.token.response.AdminUserAuthenticationResponse;
 import com.ahcloud.gateway.server.domain.admin.bo.AdminAccessTokenBO;
 import com.ahcloud.gateway.server.domain.admin.bo.AdminUserAuthenticationBO;
 
@@ -15,19 +15,19 @@ public class AdminUserAuthenticationHelper {
 
     /**
      * 数据转换
-     * @param userAuthenticationDTO
+     * @param response
      * @return
      */
-    public static AdminUserAuthenticationBO convertBO(AdminUserAuthenticationDTO userAuthenticationDTO) {
-        AccessTokenDTO accessTokenDTO = userAuthenticationDTO.getAccessTokenDTO();
+    public static AdminUserAuthenticationBO convertBO(AdminUserAuthenticationResponse response) {
+        AccessTokenDTO accessTokenDTO = response.getAccessTokenDTO();
         return AdminUserAuthenticationBO.builder()
-                .userId(userAuthenticationDTO.getUserId())
-                .account(userAuthenticationDTO.getAccount())
-                .nickName(userAuthenticationDTO.getNickName())
-                .userName(userAuthenticationDTO.getUserName())
-                .tenantId(userAuthenticationDTO.getTenantId())
-                .authorities(userAuthenticationDTO.getAuthorities())
-                .scopes(userAuthenticationDTO.getScopes())
+                .userId(response.getUserId())
+                .account(response.getAccount())
+                .nickName(response.getNickName())
+                .userName(response.getUserName())
+                .tenantId(response.getTenantId())
+                .authorities(response.getAuthorities())
+                .scopes(response.getScopes())
                 .accessTokenBO(
                         AdminAccessTokenBO.builder()
                                 .token(accessTokenDTO.getToken())

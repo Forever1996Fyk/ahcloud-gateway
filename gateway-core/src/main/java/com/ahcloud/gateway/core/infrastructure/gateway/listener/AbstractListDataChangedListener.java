@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.core.infrastructure.gateway.listener;
 
 import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.route.dto.RouteDefinitionDTO;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.DataEventTypeEnum;
 import com.google.common.collect.Maps;
@@ -22,7 +22,7 @@ public abstract class AbstractListDataChangedListener implements DataChangeListe
     private final ChangeData changeData;
 
     private static final Map<String, RouteDefinitionDTO> ROUTE_DEFINITION_MAP = Maps.newConcurrentMap();
-    private static final Map<String, ApiRefreshDTO> API_REFRESH_MAP = Maps.newConcurrentMap();
+    private static final Map<String, ApiDefinitionDTO> API_REFRESH_MAP = Maps.newConcurrentMap();
 
     protected AbstractListDataChangedListener(ChangeData changeData) {
         this.changeData = changeData;
@@ -50,22 +50,22 @@ public abstract class AbstractListDataChangedListener implements DataChangeListe
     }
 
     @Override
-    public void onApiRefreshChanged(List<ApiRefreshDTO> apiRefreshDTOList, DataEventTypeEnum eventType) {
+    public void onApiRefreshChanged(List<ApiDefinitionDTO> apiDefinitionDTOList, DataEventTypeEnum eventType) {
         updateApiRefreshMap(getConfig(changeData.getApiDataId()));
         switch (eventType) {
             case REFRESH:
                 Set<String> set = Sets.newHashSet(API_REFRESH_MAP.keySet());
-                apiRefreshDTOList.forEach(apiRefreshDTO -> {
+                apiDefinitionDTOList.forEach(apiRefreshDTO -> {
                     set.remove(apiRefreshDTO.getApiCode());
                     API_REFRESH_MAP.put(apiRefreshDTO.getApiCode(), apiRefreshDTO);
                 });
                 API_REFRESH_MAP.keySet().removeAll(set);
                 break;
             case DELETE:
-                apiRefreshDTOList.forEach(apiRefreshDTO -> API_REFRESH_MAP.remove(apiRefreshDTO.getApiCode()));
+                apiDefinitionDTOList.forEach(apiRefreshDTO -> API_REFRESH_MAP.remove(apiRefreshDTO.getApiCode()));
                 break;
             default:
-                apiRefreshDTOList.forEach(apiRefreshDTO -> API_REFRESH_MAP.put(apiRefreshDTO.getApiCode(), apiRefreshDTO));
+                apiDefinitionDTOList.forEach(apiRefreshDTO -> API_REFRESH_MAP.put(apiRefreshDTO.getApiCode(), apiRefreshDTO));
         }
         publishConfig(changeData.getApiDataId(), API_REFRESH_MAP);
     }
@@ -99,7 +99,7 @@ public abstract class AbstractListDataChangedListener implements DataChangeListe
         Set<String> set = Sets.newHashSet(API_REFRESH_MAP.keySet());
         for (Map.Entry<String, Map<String, Object>> entry : map.entrySet()) {
             set.remove(entry.getKey());
-            API_REFRESH_MAP.put(entry.getKey(), JsonUtils.mapToBean(entry.getValue(), ApiRefreshDTO.class));
+            API_REFRESH_MAP.put(entry.getKey(), JsonUtils.mapToBean(entry.getValue(), ApiDefinitionDTO.class));
         }
         API_REFRESH_MAP.keySet().removeAll(set);
     }

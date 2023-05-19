@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.rpc;
 
-import com.ahcloud.admin.client.domain.dubbo.token.AdminUserAuthenticationDTO;
+import com.ahcloud.admin.client.domain.dubbo.token.response.AdminUserAuthenticationResponse;
 import com.ahcloud.admin.dubbo.authentication.TokenAuthenticationDubboService;
 import com.ahcloud.common.result.RpcResult;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
@@ -24,7 +24,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 public class AdminRpcService {
-    @DubboReference(version = "1.0.0", check = false)
+    @DubboReference(version = "1.0.0", check = false, stub = "true")
     private TokenAuthenticationDubboService tokenAuthenticationDubboService;
 
     /**
@@ -34,9 +34,9 @@ public class AdminRpcService {
      */
     public AdminUserAuthenticationBO getAdminUserAuthenticationByToken(String token) {
         try {
-            RpcResult<AdminUserAuthenticationDTO> result = tokenAuthenticationDubboService.findUserAuthenticationByToken(token);
-            AdminUserAuthenticationDTO adminUserAuthenticationDTO = result.getData();
-            if (result.isFailed() || Objects.isNull(adminUserAuthenticationDTO) || Objects.isNull(adminUserAuthenticationDTO.getAccessTokenDTO())) {
+            RpcResult<AdminUserAuthenticationResponse> result = tokenAuthenticationDubboService.findUserAuthenticationByToken(token);
+            AdminUserAuthenticationResponse response = result.getData();
+            if (result.isFailed() || Objects.isNull(response) || Objects.isNull(response.getAccessTokenDTO())) {
                 log.error("AdminRpcService[getAdminUserAuthenticationByToken] 获取admin用户认证信息失败 token is {}, result is {}, errorMsg:{}"
                         , token
                         , result
@@ -44,11 +44,11 @@ public class AdminRpcService {
                 throw new BizException(GatewayRetCodeEnum.GATEWAY_USER_AUTHENTICATION_FAILED);
             }
             // 判断token是否过期
-            Boolean tokenExpired = adminUserAuthenticationDTO.getTokenExpired();
+            Boolean tokenExpired = response.getTokenExpired();
             if (tokenExpired) {
                 throw new TokenExpiredException();
             }
-            return AdminUserAuthenticationHelper.convertBO(adminUserAuthenticationDTO);
+            return AdminUserAuthenticationHelper.convertBO(response);
         } catch (TokenExpiredException e) {
             throw e;
         } catch (Exception e) {

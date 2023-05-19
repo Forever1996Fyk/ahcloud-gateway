@@ -4,7 +4,7 @@ import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
 import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
@@ -63,39 +63,39 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         if (Objects.isNull(refreshPatternBO)) {
             return chain.filter(exchange);
         }
-        ApiRefreshDTO apiRefreshDTO = refreshPatternBO.getApiRefreshDTO();
-        if (Objects.isNull(apiRefreshDTO)) {
+        ApiDefinitionDTO apiDefinitionDTO = refreshPatternBO.getApiDefinitionDTO();
+        if (Objects.isNull(apiDefinitionDTO)) {
             throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_NOT_EXISTED);
         }
         // 校验api状态
-        checkApiStatus(apiRefreshDTO);
+        checkApiStatus(apiDefinitionDTO);
         ApiGatewayDTO apiGatewayDTO = ApiGatewayDTO.builder()
-                .path(apiRefreshDTO.getPath())
-                .apiCode(apiRefreshDTO.getApiCode())
-                .dev(apiRefreshDTO.getDev())
-                .test(apiRefreshDTO.getTest())
-                .sit(apiRefreshDTO.getSit())
-                .pre(apiRefreshDTO.getPre())
-                .prod(apiRefreshDTO.getProd())
-                .auth(apiRefreshDTO.getAuth())
+                .path(apiDefinitionDTO.getPath())
+                .apiCode(apiDefinitionDTO.getApiCode())
+                .dev(apiDefinitionDTO.getDev())
+                .test(apiDefinitionDTO.getTest())
+                .sit(apiDefinitionDTO.getSit())
+                .pre(apiDefinitionDTO.getPre())
+                .prod(apiDefinitionDTO.getProd())
+                .auth(apiDefinitionDTO.getAuth())
                 .build();
         gatewayContext.setApiGatewayDTO(apiGatewayDTO);
         return chain.filter(exchange);
     }
 
-    private void checkApiStatus(ApiRefreshDTO apiRefreshDTO) {
+    private void checkApiStatus(ApiDefinitionDTO apiDefinitionDTO) {
         String env = gatewayConfiguration.getEnv();
         Integer status = 0;
         if (EnvConstants.isDev(env)) {
-            status = apiRefreshDTO.getDev();
+            status = apiDefinitionDTO.getDev();
         } else if (EnvConstants.isTest(env)) {
-            status = apiRefreshDTO.getTest();
+            status = apiDefinitionDTO.getTest();
         } else if (EnvConstants.isSit(env)) {
-            status = apiRefreshDTO.getSit();
+            status = apiDefinitionDTO.getSit();
         } else if (EnvConstants.isPre(env)) {
-            status = apiRefreshDTO.getPre();
+            status = apiDefinitionDTO.getPre();
         } else if (EnvConstants.isProd(env)) {
-            status = apiRefreshDTO.getProd();
+            status = apiDefinitionDTO.getProd();
         }
         ApiStatusEnum apiStatusEnum = ApiStatusEnum.valueOf(status);
         if (Objects.equals(apiStatusEnum, ApiStatusEnum.OFFLINE)) {

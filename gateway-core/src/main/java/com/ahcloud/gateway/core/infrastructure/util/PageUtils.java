@@ -1,7 +1,6 @@
 package com.ahcloud.gateway.core.infrastructure.util;
 
 import com.ahcloud.common.result.page.PageResult;
-import com.ahcloud.common.result.page.RpcPageResult;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.github.pagehelper.PageInfo;
 
@@ -30,26 +29,6 @@ public class PageUtils {
         pageResult.setPageSize(pageInfo.getPageSize());
         pageResult.setTotal(pageInfo.getTotal());
         pageResult.setRows(data);
-        return pageResult;
-    }
-
-    /**
-     * PageResult 转为 RpcPageResult
-     * @param pageInfo
-     * @param data
-     * @return
-     * @param <T>
-     * @param <C>
-     */
-    public static  <T, C> RpcPageResult<T> convertToRpcPageResult(PageResult<C> pageInfo, List<T> data) {
-        RpcPageResult<T> pageResult = new RpcPageResult<>();
-        pageResult.setPageNum(pageInfo.getPageNum());
-        pageResult.setPages(pageInfo.getPages());
-        pageResult.setPageSize(pageInfo.getPageSize());
-        pageResult.setTotal(pageInfo.getTotal());
-        pageResult.setRows(data);
-        pageResult.setSuccess(true);
-        pageResult.setErrorCode(GatewayRetCodeEnum.SUCCESS);
         return pageResult;
     }
 }

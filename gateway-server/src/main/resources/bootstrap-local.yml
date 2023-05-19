@@ -1,7 +1,7 @@
 spring:
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8850
+      server-addr: 127.0.0.1:18848
       config:
         namespace: gateway
         max-retry: 10
@@ -12,13 +12,13 @@ spring:
         file-extension: yaml
       discovery:
         enabled: true
-        server-addr: 127.0.0.1:8850
+        server-addr: 127.0.0.1:18848
         namespace: 3c6eaeb5-5621-404a-8cdc-5af8b82bd816
         group: local
 
 dubbo:
   registry:
-    address: nacos://127.0.0.1:8850
+    address: nacos://127.0.0.1:18848
     group: local
     username: LTAI5tQYb6LvUrix4x4xKo4X
     password: sXW4bYUwIY9hzL1z4WS5QknY4eBapq
@@ -30,5 +30,8 @@ dubbo:
     group: local
   provider:
     group: local
+  protocol:
+    port: -1
+    name: dubbo
   scan:
     base-packages: com.ahcloud.gateway.server.dubbo

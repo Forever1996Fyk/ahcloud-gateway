@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.gateway.service.impl;
 
 import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.server.infrastructure.gateway.service.GatewayApiCacheService;
 import com.google.common.collect.Maps;
 import org.springframework.web.util.pattern.PathPatternParser;
@@ -21,15 +21,15 @@ public class GatewayApiCacheServiceImpl implements GatewayApiCacheService {
     private final static Map<String, ApiRefreshPatternDTO> API_PATTERN_CACHE = Maps.newConcurrentMap();
 
     @Override
-    public void cacheCurrentApi(ApiRefreshDTO apiRefreshDTO) {
-        API_PATTERN_CACHE.put(apiRefreshDTO.getPath(),
-                new ApiRefreshPatternDTO(DEFAULT_PATH_PARSER.parse(apiRefreshDTO.getPath()), apiRefreshDTO)
+    public void cacheCurrentApi(ApiDefinitionDTO apiDefinitionDTO) {
+        API_PATTERN_CACHE.put(apiDefinitionDTO.getPath(),
+                new ApiRefreshPatternDTO(DEFAULT_PATH_PARSER.parse(apiDefinitionDTO.getPath()), apiDefinitionDTO)
         );
     }
 
     @Override
-    public void removeCurrentApi(ApiRefreshDTO apiRefreshDTO) {
-        API_PATTERN_CACHE.remove(apiRefreshDTO.getPath());
+    public void removeCurrentApi(ApiDefinitionDTO apiDefinitionDTO) {
+        API_PATTERN_CACHE.remove(apiDefinitionDTO.getPath());
     }
 
     @Override

@@ -1,8 +1,7 @@
 package com.ahcloud.gateway.core.application.helper;
 
 import com.ahcloud.common.result.page.PageResult;
-import com.ahcloud.gateway.client.enums.ApiStatusEnum;
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.api.form.ApiAddForm;
 import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.vo.ApiVO;
@@ -78,8 +77,8 @@ public class GatewayApiHelper {
      * @param gatewayApi
      * @return
      */
-    public static ApiRefreshDTO convertToDTO(GatewayApi gatewayApi) {
-        return ApiRefreshDTO.builder()
+    public static ApiDefinitionDTO convertToDTO(GatewayApi gatewayApi) {
+        return ApiDefinitionDTO.builder()
                 .apiCode(gatewayApi.getApiCode())
                 .auth(gatewayApi.getAuth() != null && gatewayApi.getAuth() == 1)
                 .path(gatewayApi.getApiPath())
@@ -96,7 +95,7 @@ public class GatewayApiHelper {
      * @param gatewayApiList
      * @return
      */
-    public static List<ApiRefreshDTO> convertToDTOList(List<GatewayApi> gatewayApiList) {
+    public static List<ApiDefinitionDTO> convertToDTOList(List<GatewayApi> gatewayApiList) {
         return gatewayApiList.stream().map(GatewayApiHelper::convertToDTO).collect(Collectors.toList());
     }
 

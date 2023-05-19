@@ -6,7 +6,7 @@ import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.application.helper.GatewayApiHelper;
 import com.ahcloud.gateway.core.application.service.GatewayApiService;
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.api.form.ApiAddForm;
 import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.query.ApiQuery;
@@ -235,9 +235,9 @@ public class GatewayApiManager {
             throw new BizException(GatewayRetCodeEnum.VERSION_ERROR);
         }
 
-        ApiRefreshDTO apiRefreshDTO = GatewayApiHelper.convertToDTO(existedGatewayApi);
+        ApiDefinitionDTO apiDefinitionDTO = GatewayApiHelper.convertToDTO(existedGatewayApi);
         applicationEventPublisher.publishEvent(
-                new DataChangedEvent(apiRefreshDTO, DataEventTypeEnum.UPDATE, ConfigGroupEnum.API)
+                new DataChangedEvent(apiDefinitionDTO, DataEventTypeEnum.UPDATE, ConfigGroupEnum.API)
         );
     }
 

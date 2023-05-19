@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.gateway.service;
 
 import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 
 import java.util.Collection;
 
@@ -16,16 +16,16 @@ public interface GatewayApiCacheService {
     /**
      * 缓存当前api
      *
-     * @param apiRefreshDTO
+     * @param apiDefinitionDTO
      */
-    void cacheCurrentApi(ApiRefreshDTO apiRefreshDTO);
+    void cacheCurrentApi(ApiDefinitionDTO apiDefinitionDTO);
 
     /**
      * 移除当前api
      *
-     * @param apiRefreshDTO
+     * @param apiDefinitionDTO
      */
-    void removeCurrentApi(ApiRefreshDTO apiRefreshDTO);
+    void removeCurrentApi(ApiDefinitionDTO apiDefinitionDTO);
 
     /**
      * 获取所有缓存value

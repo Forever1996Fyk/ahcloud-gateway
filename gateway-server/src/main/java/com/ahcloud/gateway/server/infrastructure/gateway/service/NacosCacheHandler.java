@@ -2,7 +2,7 @@ package com.ahcloud.gateway.server.infrastructure.gateway.service;
 
 import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.route.dto.RouteDefinitionDTO;
 import com.ahcloud.gateway.core.infrastructure.constant.NacosPathConstants;
 import com.ahcloud.gateway.server.helper.RouteDefinitionHelper;
@@ -12,7 +12,6 @@ import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.core.env.Environment;
 
 import java.util.*;
@@ -68,10 +67,10 @@ public abstract class NacosCacheHandler {
             return;
         }
         Collection<Map<String, Object>> values = apiRefreshMap.values();
-        List<ApiRefreshDTO> apiRefreshDTOList = values.stream().map(
-                value -> JsonUtils.mapToBean(value, ApiRefreshDTO.class)
+        List<ApiDefinitionDTO> apiDefinitionDTOList = values.stream().map(
+                value -> JsonUtils.mapToBean(value, ApiDefinitionDTO.class)
         ).collect(Collectors.toList());
-        GatewayApiCacheFactory.refreshCacheApi(apiRefreshDTOList);
+        GatewayApiCacheFactory.refreshCacheApi(apiDefinitionDTOList);
     }
 
     protected void watcherData(final String dataId, final OnChange oc) {

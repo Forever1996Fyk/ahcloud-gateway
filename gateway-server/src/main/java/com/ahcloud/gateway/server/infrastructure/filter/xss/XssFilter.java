@@ -3,6 +3,7 @@ package com.ahcloud.gateway.server.infrastructure.filter.xss;
 import com.ahcloud.gateway.server.infrastructure.config.XssProperties;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,11 +30,10 @@ public class XssFilter extends OncePerRequestFilter implements Ordered {
     /**
      * 路径匹配器
      */
-    private final PathMatcher pathMatcher;
+    private final PathMatcher pathMatcher = new AntPathMatcher();
 
-    public XssFilter(XssProperties properties, PathMatcher pathMatcher) {
+    public XssFilter(XssProperties properties) {
         this.properties = properties;
-        this.pathMatcher = pathMatcher;
     }
 
     @Override

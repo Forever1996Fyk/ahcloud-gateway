@@ -1,6 +1,5 @@
 package com.ahcloud.gateway.core.domain.api.dto;
 
-import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import lombok.*;
 
 import java.io.Serializable;
@@ -16,7 +15,7 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiRefreshDTO implements Serializable {
+public class ApiDefinitionDTO implements Serializable {
     private static final long serialVersionUID = -2032491110731433753L;
 
     /**

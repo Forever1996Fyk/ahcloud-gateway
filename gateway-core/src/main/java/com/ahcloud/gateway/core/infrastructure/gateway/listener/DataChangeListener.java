@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.core.infrastructure.gateway.listener;
 
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.route.dto.RouteDefinitionDTO;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.DataEventTypeEnum;
 
@@ -26,10 +26,10 @@ public interface DataChangeListener {
 
     /**
      * api接口变更
-     * @param apiRefreshDTOList
+     * @param apiDefinitionDTOList
      * @param eventType
      */
-    default void onApiRefreshChanged(List<ApiRefreshDTO> apiRefreshDTOList, DataEventTypeEnum eventType) {
+    default void onApiRefreshChanged(List<ApiDefinitionDTO> apiDefinitionDTOList, DataEventTypeEnum eventType) {
 
     }
 }

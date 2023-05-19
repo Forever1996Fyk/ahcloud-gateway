@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.core.domain.api.bo;
 
-import com.ahcloud.gateway.core.domain.api.dto.ApiRefreshDTO;
+import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import lombok.Data;
 import org.springframework.web.util.pattern.PathPattern;
 
@@ -21,10 +21,10 @@ public class ApiRefreshPatternDTO {
     /**
      * api刷新实体
      */
-    private final ApiRefreshDTO apiRefreshDTO;
+    private final ApiDefinitionDTO apiDefinitionDTO;
 
-    public ApiRefreshPatternDTO(PathPattern pathPattern, ApiRefreshDTO apiRefreshDTO) {
+    public ApiRefreshPatternDTO(PathPattern pathPattern, ApiDefinitionDTO apiDefinitionDTO) {
         this.pathPattern = pathPattern;
-        this.apiRefreshDTO = apiRefreshDTO;
+        this.apiDefinitionDTO = apiDefinitionDTO;
     }
 }

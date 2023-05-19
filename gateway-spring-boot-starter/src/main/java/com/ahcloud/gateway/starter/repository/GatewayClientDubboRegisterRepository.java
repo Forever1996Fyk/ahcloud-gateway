@@ -25,9 +25,9 @@ import java.util.List;
 @Slf4j
 public class GatewayClientDubboRegisterRepository implements GatewayClientRegisterRepository, InitializingBean {
 
-    @DubboReference(version = "1.0.0", timeout = 6000, mock = "com.ahcloud.gateway.dubbo.api.mock.ApiRegisterDubboMockServiceImpl", check = false)
+    @DubboReference(version = "1.0.0", timeout = 6000, check = false)
     private ApiRegisterDubboService apiRegisterDubboService;
-    @DubboReference(version = "1.0.0", timeout = 6000, mock = "com.ahcloud.gateway.dubbo.route.mock.RouteRefreshDubboMockServiceImpl", check = false)
+    @DubboReference(version = "1.0.0", timeout = 6000, check = false)
     private RouteRefreshDubboService routeRefreshDubboService;
 
     private final PropertiesConfiguration clientConfig;
