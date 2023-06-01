@@ -33,6 +33,7 @@ public enum GatewayRetCodeEnum implements ErrorCode {
     PARAM_ILLEGAL_FIELD(100_1_004,"[%s]参数非法"),
     PARAM_PARSING_FIELD(100_1_005,"参数解析失败"),
     ENV_PARAM_ERROR(100_1_006,"环境参数异常"),
+    APP_INSTANCE_ERROR(100_2_001,"当前【[[%s]][%s]】应用实例异常"),
 
     /**
      * 网关

@@ -1,15 +1,14 @@
 package com.ahcloud.gateway.server.infrastructure.config;
 
-import com.ahcloud.gateway.core.infrastructure.gateway.listener.DataChangeListener;
-import com.ahcloud.gateway.core.infrastructure.gateway.listener.nacos.NacosDataChangeListener;
-import com.ahcloud.gateway.server.infrastructure.gateway.service.GatewayService;
-import com.ahcloud.gateway.server.infrastructure.gateway.service.SyncDataService;
-import com.ahcloud.gateway.server.infrastructure.gateway.service.impl.NacosSyncDataServiceImpl;
+import com.ahcloud.gateway.server.infrastructure.gateway.listener.LocalRouteDataChangeListener;
+import com.ahcloud.gateway.server.infrastructure.gateway.sync.SyncDataService;
+import com.ahcloud.gateway.server.infrastructure.gateway.sync.NacosSyncDataServiceImpl;
+import com.ahcloud.gateway.server.infrastructure.gateway.sync.service.ApiSyncService;
+import com.ahcloud.gateway.server.infrastructure.gateway.sync.service.RouteSyncService;
 import com.alibaba.cloud.nacos.NacosConfigManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -31,13 +30,21 @@ public class NacosSyncDataConfiguration {
      * nacos sync data service
      *
      * @param configManager the config service
-     * @param gatewayService the gateway service
+     * @param routeSyncServices the gateway service
      *
      * @return the sync data service
      */
     @Bean
-    public SyncDataService nacosSyncDataServiceImpl(final ObjectProvider<NacosConfigManager> configManager, final ObjectProvider<GatewayService> gatewayService, final ObjectProvider<Environment> environment) {
+    public SyncDataService nacosSyncDataServiceImpl(final ObjectProvider<NacosConfigManager> configManager,
+                                                    final ObjectProvider<ApiSyncService> apiSyncServices,
+                                                    final ObjectProvider<RouteSyncService> routeSyncServices,
+                                                    final ObjectProvider<Environment> environment) {
         log.info("you use nacos sync gateway data.......");
-        return new NacosSyncDataServiceImpl(Objects.requireNonNull(configManager.getIfAvailable()).getConfigService(), gatewayService.getIfAvailable(), environment.getIfAvailable());
+        return new NacosSyncDataServiceImpl(Objects.requireNonNull(configManager.getIfAvailable()).getConfigService(), apiSyncServices.getIfAvailable(), routeSyncServices.getIfAvailable(), environment.getIfAvailable());
+    }
+
+    @Bean
+    public LocalRouteDataChangeListener localRouteDataChangeListener(RouteSyncService routeSyncService) {
+        return new LocalRouteDataChangeListener(routeSyncService);
     }
 }

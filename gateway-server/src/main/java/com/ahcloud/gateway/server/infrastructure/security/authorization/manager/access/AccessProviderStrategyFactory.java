@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.security.authorization.manager.access;
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
-import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 

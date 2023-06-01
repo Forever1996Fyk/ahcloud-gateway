@@ -3,6 +3,7 @@ package com.ahcloud.gateway.api.handler;
 import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.infrastructure.exception.BizException;
+import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -49,6 +50,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BizException.class)
     public ResponseResult<Void> handleCustomException(BizException e) {
         return ResponseResult.ofFailed(e.getErrorCode().getCode(), e.getErrorMessage());
+    }
+
+    /**
+     * 自定义异常
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(GatewayException.class)
+    public ResponseResult<Void> handleGatewayException(GatewayException e) {
+        return ResponseResult.ofFailed(e.getErrorCode().getCode(), e.getMessage());
     }
 
     /**

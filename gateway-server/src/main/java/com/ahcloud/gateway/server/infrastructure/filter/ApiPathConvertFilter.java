@@ -1,17 +1,16 @@
 package com.ahcloud.gateway.server.infrastructure.filter;
 
-import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.domain.api.bo.ApiRefreshPatternDTO;
 import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
-import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
-import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
+import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
 import com.ahcloud.gateway.core.infrastructure.config.GatewayConfiguration;
-import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
-import com.ahcloud.gateway.server.infrastructure.gateway.factory.GatewayApiCacheFactory;
+import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
+import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.server.infrastructure.gateway.sync.cache.ApiDataCache;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.PathContainer;
@@ -22,7 +21,6 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @program: ahcloud-gateway
@@ -54,16 +52,9 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         }
         GatewayContext gatewayContext = (GatewayContext) o;
         PathContainer pathContainer = gatewayContext.getPathContainer();
-        Set<ApiRefreshPatternDTO> values = GatewayApiCacheFactory.getValues();
-        if (CollectionUtils.isEmpty(values)) {
-            return chain.filter(exchange);
-        }
-        ApiRefreshPatternDTO refreshPatternBO = values.stream().filter(apiRefreshPatternDTO -> apiRefreshPatternDTO.getPathPattern().matches(pathContainer))
-                .findFirst().orElse(null);
-        if (Objects.isNull(refreshPatternBO)) {
-            return chain.filter(exchange);
-        }
-        ApiDefinitionDTO apiDefinitionDTO = refreshPatternBO.getApiDefinitionDTO();
+        // 获取api数据缓存
+        ApiDataCache apiDataCache = ApiDataCache.getInstance();
+        ApiDefinitionDTO apiDefinitionDTO = apiDataCache.obtain(pathContainer);
         if (Objects.isNull(apiDefinitionDTO)) {
             throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_NOT_EXISTED);
         }
@@ -85,6 +76,9 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
 
     private void checkApiStatus(ApiDefinitionDTO apiDefinitionDTO) {
         String env = gatewayConfiguration.getEnv();
+        if (StringUtils.equals(env, "local")) {
+            env = EnvConstants.DEV;
+        }
         Integer status = 0;
         if (EnvConstants.isDev(env)) {
             status = apiDefinitionDTO.getDev();

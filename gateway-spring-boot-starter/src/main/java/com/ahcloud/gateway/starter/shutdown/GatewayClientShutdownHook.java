@@ -1,7 +1,6 @@
 package com.ahcloud.gateway.starter.shutdown;
 
 import com.ahcloud.gateway.starter.repository.GatewayClientRegisterRepository;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;

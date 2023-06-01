@@ -57,4 +57,17 @@ public class ApiDefinitionDTO implements Serializable {
      * 生产环境状态
      */
     private Integer prod;
+
+    public static ApiDefinitionDTO buildDefaultApiDefinitionDTO(String apiCode, String path, boolean auth) {
+        return ApiDefinitionDTO.builder()
+                .apiCode(apiCode)
+                .path(path)
+                .auth(auth)
+                .dev(1)
+                .test(1)
+                .sit(1)
+                .pre(1)
+                .prod(1)
+                .build();
+    }
 }

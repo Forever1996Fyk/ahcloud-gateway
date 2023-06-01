@@ -57,6 +57,10 @@
             <artifactId>gateway-client</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.ahcloud.gateway</groupId>
+            <artifactId>gateway-register-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
@@ -75,10 +79,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ahcloud.kernel</groupId>
-            <artifactId>kernel-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ahcloud.kernel</groupId>

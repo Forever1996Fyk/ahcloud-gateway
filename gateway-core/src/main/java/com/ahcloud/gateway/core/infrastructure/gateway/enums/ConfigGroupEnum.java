@@ -9,9 +9,14 @@ package com.ahcloud.gateway.core.infrastructure.gateway.enums;
 public enum ConfigGroupEnum {
 
     /**
-     * 路由
+     * 远程路由
      */
-    ROUTE,
+    REMOTE_ROUTE,
+
+    /**
+     * 本地路由
+     */
+    LOCAL_ROUTE,
 
     /**
      * api接口

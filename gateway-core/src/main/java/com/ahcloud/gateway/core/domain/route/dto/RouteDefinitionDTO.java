@@ -17,9 +17,8 @@ import java.util.Map;
  * @author: YuKai Fan
  * @create: 2023/2/21 23:20
  **/
-@Getter
+@Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteDefinitionDTO {
@@ -28,6 +27,31 @@ public class RouteDefinitionDTO {
      * 路由id
      */
     private String id;
+
+    /**
+     * 应用名
+     */
+    private String appName;
+
+    /**
+     * 服务id
+     */
+    private String serviceId;
+
+    /**
+     * rpc类型
+     */
+    private String rpcType;
+
+    /**
+     * 上下文路径
+     */
+    private String contextPath;
+
+    /**
+     * 当前环境
+     */
+    private String env;
 
     /**
      * 断言

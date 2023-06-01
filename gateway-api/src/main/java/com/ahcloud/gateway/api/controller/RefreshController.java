@@ -3,7 +3,6 @@ package com.ahcloud.gateway.api.controller;
 import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.gateway.core.application.manager.GatewayApiManager;
 import com.ahcloud.gateway.core.application.manager.GatewayRouteManager;
-import com.ahcloud.gateway.starter.annotation.GatewaySpringCloudClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +17,6 @@ import javax.annotation.Resource;
  **/
 @RestController
 @RequestMapping("/refresh")
-@GatewaySpringCloudClient
 public class RefreshController {
     @Resource
     private GatewayApiManager gatewayApiManager;
@@ -30,7 +28,6 @@ public class RefreshController {
      * @return
      */
     @PostMapping("/refreshRoute")
-    @GatewaySpringCloudClient
     public ResponseResult<Void> refreshRoute() {
         gatewayRouteManager.refreshRoute();
         return ResponseResult.ofSuccess();
@@ -41,7 +38,6 @@ public class RefreshController {
      * @return
      */
     @PostMapping("/refreshApi")
-    @GatewaySpringCloudClient
     public ResponseResult<Void> refreshApi() {
         gatewayApiManager.refreshApi();
         return ResponseResult.ofSuccess();

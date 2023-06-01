@@ -1,6 +1,5 @@
 package com.ahcloud.gateway.core.infrastructure.gateway.listener;
 
-import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.route.dto.RouteDefinitionDTO;
 import com.ahcloud.gateway.core.infrastructure.gateway.listener.event.DataChangedEvent;
 import org.springframework.beans.factory.InitializingBean;
@@ -34,11 +33,14 @@ public class DataChangeEventDispatcher implements ApplicationListener<DataChange
     public void onApplicationEvent(final DataChangedEvent event) {
         for (DataChangeListener listener : listeners) {
             switch (event.getGroupKey()) {
-                case ROUTE:
-                    listener.onRouteDefinitionChanged((List<RouteDefinitionDTO>) event.getSource(), event.getEventType());
+                case REMOTE_ROUTE:
+                    listener.onRemoteRouteDefinitionChanged((List<RouteDefinitionDTO>) event.getSource(), event.getEventType());
+                    break;
+                case LOCAL_ROUTE:
+                    listener.onLocalRouteDefinitionChanged((List<RouteDefinitionDTO>) event.getSource(), event.getEventType());
                     break;
                 case API:
-                    listener.onApiRefreshChanged((List<ApiDefinitionDTO>) event.getSource(), event.getEventType());
+                    listener.onApiRefreshChanged((List<String>) event.getSource(), event.getEventType());
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + event.getGroupKey());

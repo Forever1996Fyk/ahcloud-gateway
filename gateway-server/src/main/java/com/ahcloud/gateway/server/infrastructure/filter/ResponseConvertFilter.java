@@ -3,7 +3,7 @@ package com.ahcloud.gateway.server.infrastructure.filter;
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.domain.response.GatewayResponseResult;
-import com.ahcloud.gateway.server.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

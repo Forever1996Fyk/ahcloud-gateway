@@ -7,7 +7,6 @@ import com.ahcloud.gateway.core.domain.api.form.ApiAddForm;
 import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.query.ApiQuery;
 import com.ahcloud.gateway.core.domain.api.vo.ApiVO;
-import com.ahcloud.gateway.starter.annotation.GatewaySpringCloudClient;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,7 +20,6 @@ import javax.validation.Valid;
  **/
 @RestController
 @RequestMapping("/api")
-@GatewaySpringCloudClient
 public class ApiController {
     @Resource
     private GatewayApiManager gatewayApiManager;
@@ -32,7 +30,6 @@ public class ApiController {
      * @return
      */
     @PostMapping("/add")
-    @GatewaySpringCloudClient
     public ResponseResult<Void> addApi(@RequestBody @Valid ApiAddForm form) {
         gatewayApiManager.createApi(form);
         return ResponseResult.ofSuccess();
@@ -44,7 +41,6 @@ public class ApiController {
      * @return
      */
     @PostMapping("/update")
-    @GatewaySpringCloudClient
     public ResponseResult<Void> updateApi(@RequestBody @Valid ApiUpdateForm form) {
         gatewayApiManager.updateApi(form);
         return ResponseResult.ofSuccess();
@@ -56,7 +52,6 @@ public class ApiController {
      * @return
      */
     @PostMapping("/deleteById/{id}")
-    @GatewaySpringCloudClient
     public ResponseResult<Void> deleteApiById(@PathVariable("id") Long id) {
         gatewayApiManager.deleteApi(id);
         return ResponseResult.ofSuccess();
@@ -68,7 +63,6 @@ public class ApiController {
      * @return
      */
     @GetMapping("/findById/{id}")
-    @GatewaySpringCloudClient
     public ResponseResult<ApiVO> findApiById(@PathVariable("id") Long id) {
         return ResponseResult.ofSuccess(gatewayApiManager.findApiById(id));
     }
@@ -79,7 +73,6 @@ public class ApiController {
      * @return
      */
     @GetMapping("/page")
-    @GatewaySpringCloudClient
     public ResponseResult<PageResult<ApiVO>> pageApiList(ApiQuery query) {
         return ResponseResult.ofSuccess(gatewayApiManager.pageApiList(query));
     }
@@ -90,7 +83,6 @@ public class ApiController {
      * @return
      */
     @PostMapping("/offlineApi/{id}/{env}")
-    @GatewaySpringCloudClient
     public ResponseResult<Void> offlineApi(@PathVariable("id") Long id, @PathVariable("env") String env) {
         gatewayApiManager.offlineApi(id, env);
         return ResponseResult.ofSuccess();
@@ -102,7 +94,6 @@ public class ApiController {
      * @return
      */
     @PostMapping("/onlineApi/{id}/{env}")
-    @GatewaySpringCloudClient
     public ResponseResult<Void> onlineApi(@PathVariable("id") Long id, @PathVariable("env") String env) {
         gatewayApiManager.onlineApi(id, env);
         return ResponseResult.ofSuccess();

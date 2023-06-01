@@ -10,7 +10,6 @@ spring:
 server:
   port: 8081
 
-
 mybatis:
   configuration:
     mapUnderscoreToCamelCase: true

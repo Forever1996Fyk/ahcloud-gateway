@@ -1,14 +1,18 @@
 package com.ahcloud.gateway.starter;
 
-import com.ahcloud.gateway.starter.configuration.PropertiesConfiguration;
-import com.ahcloud.gateway.starter.listener.ApiRegisterEventListener;
-import com.ahcloud.gateway.starter.listener.RouteRegisterEventListener;
+import com.ahcloud.gateway.client.constant.GatewayClientConstants;
+import com.ahcloud.gateway.register.common.config.PropertiesConfiguration;
 import com.ahcloud.gateway.starter.listener.SpringCloudClientEventListener;
-import com.ahcloud.gateway.starter.repository.GatewayClientDubboRegisterRepository;
+import com.ahcloud.gateway.starter.repository.GatewayClientNacosRegisterRepository;
 import com.ahcloud.gateway.starter.repository.GatewayClientRegisterRepository;
+import com.ahcloud.gateway.starter.shutdown.GatewayClientShutdownHook;
+import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+
+import java.util.Properties;
 
 /**
  * @program: ahcloud-gateway
@@ -19,32 +23,29 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class SpringCloudClientConfiguration {
 
+
     @Bean
     public SpringCloudClientEventListener springCloudClientEventListener(
             final PropertiesConfiguration clientConfig,
-            final Environment env) {
-        return new SpringCloudClientEventListener(clientConfig, env);
+            final Environment env,
+            final GatewayClientRegisterRepository gatewayClientRegisterRepository) {
+        return new SpringCloudClientEventListener(clientConfig, env, gatewayClientRegisterRepository);
     }
 
     @Bean
-    public PropertiesConfiguration clientConfig() {
-        return new PropertiesConfiguration();
+    public PropertiesConfiguration propertiesConfiguration(NacosDiscoveryProperties properties) {
+        PropertiesConfiguration configuration = new PropertiesConfiguration();
+        Properties nacosProperties = properties.getNacosProperties();
+        nacosProperties.setProperty(GatewayClientConstants.DISCOVERY_GROUP, properties.getGroup());
+        configuration.setProps(nacosProperties);
+        return configuration;
     }
 
     @Bean
-    public ApiRegisterEventListener apiRegisterEventListener(GatewayClientRegisterRepository gatewayClientRegisterRepository) {
-        return new ApiRegisterEventListener(gatewayClientRegisterRepository);
-    }
-
-    @Bean
-    public RouteRegisterEventListener routeRegisterEventListener(GatewayClientRegisterRepository gatewayClientRegisterRepository) {
-        return new RouteRegisterEventListener(gatewayClientRegisterRepository);
-    }
-
-    @Bean
-    public GatewayClientRegisterRepository gatewayClientRegisterRepository(
-                PropertiesConfiguration clientConfig,
-                Environment env) {
-        return new GatewayClientDubboRegisterRepository(clientConfig, env);
+    public GatewayClientRegisterRepository gatewayClientRegisterRepository(PropertiesConfiguration propertiesConfiguration) {
+        GatewayClientNacosRegisterRepository repository = new GatewayClientNacosRegisterRepository();
+        repository.init(propertiesConfiguration);
+        GatewayClientShutdownHook.set(repository, propertiesConfiguration.getProps());
+        return repository;
     }
 }

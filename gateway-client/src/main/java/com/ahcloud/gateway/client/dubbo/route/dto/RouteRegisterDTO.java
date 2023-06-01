@@ -24,4 +24,9 @@ public class RouteRegisterDTO implements Serializable {
      * 服务id(默认为项目名称spring.application.name)
      */
     private String serviceId;
+
+    /**
+     * 应用名
+     */
+    private String appName;
 }

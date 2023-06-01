@@ -26,10 +26,6 @@
             <groupId>com.ahcloud.gateway</groupId>
             <artifactId>gateway-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.ahcloud.gateway</groupId>
-            <artifactId>gateway-spring-boot-starter</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

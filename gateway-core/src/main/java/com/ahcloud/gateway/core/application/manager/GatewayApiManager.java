@@ -65,7 +65,7 @@ public class GatewayApiManager {
             throw new BizException(GatewayRetCodeEnum.GATEWAY_API_ADD_FAILED);
         }
         applicationEventPublisher.publishEvent(
-                new DataChangedEvent(GatewayApiHelper.convertToDTO(gatewayApi), DataEventTypeEnum.CREATE, ConfigGroupEnum.API)
+                new DataChangedEvent(gatewayApi.getApiCode(), DataEventTypeEnum.CREATE, ConfigGroupEnum.API)
         );
     }
 
@@ -95,7 +95,7 @@ public class GatewayApiManager {
             throw new BizException(GatewayRetCodeEnum.GATEWAY_API_UPDATE_FAILED);
         }
         applicationEventPublisher.publishEvent(
-                new DataChangedEvent(GatewayApiHelper.convertToDTO(gatewayApi), DataEventTypeEnum.UPDATE, ConfigGroupEnum.API)
+                new DataChangedEvent(gatewayApi.getApiCode(), DataEventTypeEnum.UPDATE, ConfigGroupEnum.API)
         );
     }
 
@@ -126,7 +126,7 @@ public class GatewayApiManager {
             throw new BizException(GatewayRetCodeEnum.GATEWAY_API_DELETE_FAILED);
         }
         applicationEventPublisher.publishEvent(
-                new DataChangedEvent(GatewayApiHelper.convertToDTO(gatewayApi), DataEventTypeEnum.DELETE, ConfigGroupEnum.API)
+                new DataChangedEvent(gatewayApi.getApiCode(), DataEventTypeEnum.DELETE, ConfigGroupEnum.API)
         );
     }
 
@@ -235,9 +235,8 @@ public class GatewayApiManager {
             throw new BizException(GatewayRetCodeEnum.VERSION_ERROR);
         }
 
-        ApiDefinitionDTO apiDefinitionDTO = GatewayApiHelper.convertToDTO(existedGatewayApi);
         applicationEventPublisher.publishEvent(
-                new DataChangedEvent(apiDefinitionDTO, DataEventTypeEnum.UPDATE, ConfigGroupEnum.API)
+                new DataChangedEvent(existedGatewayApi.getApiCode(), DataEventTypeEnum.UPDATE, ConfigGroupEnum.API)
         );
     }
 

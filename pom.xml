@@ -9,6 +9,8 @@
         <module>gateway-dubbo</module>
         <module>gateway-api</module>
         <module>gateway-core</module>
+        <module>gateway-disruptor</module>
+        <module>gateway-register-common</module>
     </modules>
     <parent>
         <groupId>com.ahcloud.kernel</groupId>
@@ -28,6 +30,8 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <disrtuptor.version>3.4.0</disrtuptor.version>
 
         <spring-boot-pagehelper.version>1.2.13</spring-boot-pagehelper.version>
         <mybatis.plus.version>3.4.1</mybatis.plus.version>
@@ -49,6 +53,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disrtuptor.version}</version>
+            </dependency>
             <!--  database begin -->
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
@@ -119,6 +128,16 @@
             <dependency>
                 <groupId>com.ahcloud.gateway</groupId>
                 <artifactId>gateway-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ahcloud.gateway</groupId>
+                <artifactId>gateway-disruptor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ahcloud.gateway</groupId>
+                <artifactId>gateway-register-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

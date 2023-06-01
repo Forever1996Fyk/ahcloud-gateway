@@ -1,15 +1,12 @@
 package com.ahcloud.gateway.core.infrastructure.gateway.listener;
 
-import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.route.dto.RouteDefinitionDTO;
+import com.ahcloud.gateway.core.domain.sync.ApiSyncData;
+import com.ahcloud.gateway.core.domain.sync.RouteSyncData;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.DataEventTypeEnum;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @program: ahcloud-gateway
@@ -21,61 +18,24 @@ public abstract class AbstractListDataChangedListener implements DataChangeListe
 
     private final ChangeData changeData;
 
-    private static final Map<String, RouteDefinitionDTO> ROUTE_DEFINITION_MAP = Maps.newConcurrentMap();
-    private static final Map<String, ApiDefinitionDTO> API_REFRESH_MAP = Maps.newConcurrentMap();
-
     protected AbstractListDataChangedListener(ChangeData changeData) {
         this.changeData = changeData;
     }
 
     @Override
-    public void onRouteDefinitionChanged(List<RouteDefinitionDTO> routeDefinitionList, DataEventTypeEnum eventType) {
-        updateRouteDefinitionMap(getConfig(changeData.getRouteDataId()));
-        switch (eventType) {
-            case REFRESH:
-                Set<String> set = Sets.newHashSet(ROUTE_DEFINITION_MAP.keySet());
-                routeDefinitionList.forEach(routeDefinition -> {
-                    set.remove(routeDefinition.getId());
-                    ROUTE_DEFINITION_MAP.put(routeDefinition.getId(), routeDefinition);
-                });
-                ROUTE_DEFINITION_MAP.keySet().removeAll(set);
-                break;
-            case DELETE:
-                routeDefinitionList.forEach(routeDefinition -> ROUTE_DEFINITION_MAP.remove(routeDefinition.getId()));
-                break;
-            default:
-                routeDefinitionList.forEach(routeDefinition -> ROUTE_DEFINITION_MAP.put(routeDefinition.getId(), routeDefinition));
-        }
-        publishConfig(changeData.getRouteDataId(), ROUTE_DEFINITION_MAP);
+    public void onRemoteRouteDefinitionChanged(List<RouteDefinitionDTO> routeDefinitionList, DataEventTypeEnum eventType) {
+        List<RouteSyncData> routeSyncDataList = routeDefinitionList.stream()
+                .map(routeDefinitionDTO -> new RouteSyncData(routeDefinitionDTO.getId(), eventType, routeDefinitionDTO.getEnv())).collect(Collectors.toList());
+        publishConfig(changeData.getRouteDataId(), routeSyncDataList);
     }
 
     @Override
-    public void onApiRefreshChanged(List<ApiDefinitionDTO> apiDefinitionDTOList, DataEventTypeEnum eventType) {
-        updateApiRefreshMap(getConfig(changeData.getApiDataId()));
-        switch (eventType) {
-            case REFRESH:
-                Set<String> set = Sets.newHashSet(API_REFRESH_MAP.keySet());
-                apiDefinitionDTOList.forEach(apiRefreshDTO -> {
-                    set.remove(apiRefreshDTO.getApiCode());
-                    API_REFRESH_MAP.put(apiRefreshDTO.getApiCode(), apiRefreshDTO);
-                });
-                API_REFRESH_MAP.keySet().removeAll(set);
-                break;
-            case DELETE:
-                apiDefinitionDTOList.forEach(apiRefreshDTO -> API_REFRESH_MAP.remove(apiRefreshDTO.getApiCode()));
-                break;
-            default:
-                apiDefinitionDTOList.forEach(apiRefreshDTO -> API_REFRESH_MAP.put(apiRefreshDTO.getApiCode(), apiRefreshDTO));
-        }
-        publishConfig(changeData.getApiDataId(), API_REFRESH_MAP);
+    public void onApiRefreshChanged(List<String> apiCodeList, DataEventTypeEnum eventType) {
+        List<ApiSyncData> apiSyncDataList = apiCodeList.stream()
+                .map(apiCode -> new ApiSyncData(apiCode, eventType))
+                .collect(Collectors.toList());
+        publishConfig(changeData.getApiDataId(), apiSyncDataList);
     }
-
-    /**
-     * 获取配置
-     * @param dataId
-     * @return
-     */
-    protected abstract String getConfig(String dataId);
 
     /**
      * 发布配置
@@ -83,26 +43,6 @@ public abstract class AbstractListDataChangedListener implements DataChangeListe
      * @param data
      */
     protected abstract void publishConfig(String dataId, Object data);
-
-    private void updateRouteDefinitionMap(final String configInfo) {
-        Map<String, Map<String, Object>> map = JsonUtils.stringToMap2(configInfo);
-        Set<String> set = Sets.newHashSet(ROUTE_DEFINITION_MAP.keySet());
-        for (Map.Entry<String, Map<String, Object>> entry : map.entrySet()) {
-            set.remove(entry.getKey());
-            ROUTE_DEFINITION_MAP.put(entry.getKey(), JsonUtils.mapToBean(entry.getValue(), RouteDefinitionDTO.class));
-        }
-        ROUTE_DEFINITION_MAP.keySet().removeAll(set);
-    }
-
-    private void updateApiRefreshMap(final String configInfo) {
-        Map<String, Map<String, Object>> map = JsonUtils.stringToMap2(configInfo);
-        Set<String> set = Sets.newHashSet(API_REFRESH_MAP.keySet());
-        for (Map.Entry<String, Map<String, Object>> entry : map.entrySet()) {
-            set.remove(entry.getKey());
-            API_REFRESH_MAP.put(entry.getKey(), JsonUtils.mapToBean(entry.getValue(), ApiDefinitionDTO.class));
-        }
-        API_REFRESH_MAP.keySet().removeAll(set);
-    }
 
 
     public static class ChangeData {

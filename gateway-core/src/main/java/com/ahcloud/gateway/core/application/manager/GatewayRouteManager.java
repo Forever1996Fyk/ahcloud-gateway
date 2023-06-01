@@ -1,8 +1,7 @@
 package com.ahcloud.gateway.core.application.manager;
 
 import com.ahcloud.gateway.client.common.DeletedEnum;
-import com.ahcloud.gateway.client.enums.ApiStatusEnum;
-import com.ahcloud.gateway.core.application.helper.RouteHelper;
+import com.ahcloud.gateway.core.application.helper.GatewayRouteHelper;
 import com.ahcloud.gateway.core.application.service.GatewayApiService;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.ConfigGroupEnum;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.DataEventTypeEnum;
@@ -41,7 +40,7 @@ public class GatewayRouteManager {
                         .eq(GatewayApi::getDeleted, DeletedEnum.NO.value)
         );
         applicationEventPublisher.publishEvent(
-                new DataChangedEvent(RouteHelper.buildRoutes(gatewayApiList), DataEventTypeEnum.REFRESH, ConfigGroupEnum.ROUTE)
+                new DataChangedEvent(GatewayRouteHelper.buildRoutes(gatewayApiList), DataEventTypeEnum.REFRESH, ConfigGroupEnum.REMOTE_ROUTE)
         );
     }
 }

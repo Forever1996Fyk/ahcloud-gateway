@@ -25,7 +25,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"gateway_route", "gateway_route_predicate", "gateway_route_filter", "gateway_api", "gateway_api_register"};
+        String[] tables = new String[]{"gateway_route_definition", "gateway_api_meta_data"};
 
 
         //代码生成器
@@ -34,7 +34,7 @@ public class CodeGeneratorUtil {
         //全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        String srcPath = projectPath + "/gateway-server/src/main/java";
+        String srcPath = projectPath + "/gateway-core/src/main/java";
         gc.setOutputDir(srcPath);
         gc.setAuthor("auto_generation");
         gc.setFileOverride(true);
@@ -69,16 +69,16 @@ public class CodeGeneratorUtil {
         PackageConfig pc = new PackageConfig();
         // 需要去除parent, 否则包名前还会添加默认包路径 com.baomidou
         pc.setParent("");
-        pc.setEntity("com.ahcloud.gateway.server.infrastructure.repository.bean")
-                .setMapper("com.ahcloud.gateway.server.infrastructure.repository.mapper")
-                .setService("com.ahcloud.gateway.server.application.service")
-                .setServiceImpl("com.ahcloud.gateway.server.application.service.impl")
+        pc.setEntity("com.ahcloud.gateway.core.infrastructure.repository.bean")
+                .setMapper("com.ahcloud.gateway.core.infrastructure.repository.mapper")
+                .setService("com.ahcloud.gateway.core.application.service")
+                .setServiceImpl("com.ahcloud.gateway.core.application.service.impl")
         ;
         Map<String, String> packageInfo = new HashMap<>();
-        packageInfo.put(ConstVal.ENTITY, "com.ahcloud.gateway.server.infrastructure.repository.bean");
-        packageInfo.put(ConstVal.MAPPER, "com.ahcloud.gateway.server.infrastructure.repository.mapper");
-        packageInfo.put(ConstVal.SERVICE, "com.ahcloud.gateway.server.application.service");
-        packageInfo.put(ConstVal.SERVICE_IMPL, "com.ahcloud.gateway.server.application.service.impl")
+        packageInfo.put(ConstVal.ENTITY, "com.ahcloud.gateway.core.infrastructure.repository.bean");
+        packageInfo.put(ConstVal.MAPPER, "com.ahcloud.gateway.core.infrastructure.repository.mapper");
+        packageInfo.put(ConstVal.SERVICE, "com.ahcloud.gateway.core.application.service");
+        packageInfo.put(ConstVal.SERVICE_IMPL, "com.ahcloud.gateway.core.application.service.impl")
         ;
 
         /*

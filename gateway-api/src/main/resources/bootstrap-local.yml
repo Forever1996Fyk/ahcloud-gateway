@@ -1,9 +1,9 @@
 spring:
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8850
+      server-addr: 127.0.0.1:18848
       config:
-        namespace: gateway
+        namespace: 3e171a82-b1f5-4c58-b236-6afe8028160c
         max-retry: 10
         refresh-enabled: true
         username: LTAI5tQYb6LvUrix4x4xKo4X
@@ -12,13 +12,13 @@ spring:
         file-extension: yaml
       discovery:
         enabled: true
-        server-addr: 127.0.0.1:8850
-        namespace: 3c6eaeb5-5621-404a-8cdc-5af8b82bd816
+        server-addr: 127.0.0.1:18848
+        namespace: 3e171a82-b1f5-4c58-b236-6afe8028160c
         group: local
 
 dubbo:
   registry:
-    address: nacos://127.0.0.1:8850
+    address: nacos://127.0.0.1:18848
     group: local
     username: LTAI5tQYb6LvUrix4x4xKo4X
     password: sXW4bYUwIY9hzL1z4WS5QknY4eBapq
@@ -31,5 +31,5 @@ dubbo:
   provider:
     group: local
   protocol:
-    port: 20881
+    port: -1
     name: dubbo
