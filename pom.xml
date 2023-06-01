@@ -39,7 +39,7 @@
 
         <!-- template engine -->
         <freemarker.version>2.3.28</freemarker.version>
-        <sharding.version>4.1.1</sharding.version>
+        <sharding.version>4.1.1-ahcloud-SNAPSHOT</sharding.version>
         <mysql.version>8.0.13</mysql.version>
         <druid.version>1.2.8</druid.version>
         <nacos.version>0.2.9</nacos.version>
