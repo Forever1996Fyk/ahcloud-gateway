@@ -1,13 +1,12 @@
 package com.ahcloud.gateway.starter;
 
-import com.ahcloud.gateway.client.constant.GatewayClientConstants;
+import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.register.common.config.PropertiesConfiguration;
 import com.ahcloud.gateway.starter.listener.SpringCloudClientEventListener;
 import com.ahcloud.gateway.starter.repository.GatewayClientNacosRegisterRepository;
 import com.ahcloud.gateway.starter.repository.GatewayClientRegisterRepository;
 import com.ahcloud.gateway.starter.shutdown.GatewayClientShutdownHook;
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -36,7 +35,7 @@ public class SpringCloudClientConfiguration {
     public PropertiesConfiguration propertiesConfiguration(NacosDiscoveryProperties properties) {
         PropertiesConfiguration configuration = new PropertiesConfiguration();
         Properties nacosProperties = properties.getNacosProperties();
-        nacosProperties.setProperty(GatewayClientConstants.DISCOVERY_GROUP, properties.getGroup());
+        nacosProperties.setProperty(GatewayConstants.DISCOVERY_GROUP, properties.getGroup());
         configuration.setProps(nacosProperties);
         return configuration;
     }

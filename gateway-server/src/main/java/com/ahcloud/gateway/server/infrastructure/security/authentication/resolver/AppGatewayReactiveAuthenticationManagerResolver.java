@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @author: YuKai Fan
  * @create: 2023/1/18 10:50
  **/
-@Component
+@Component("appGatewayReactiveAuthenticationManagerResolver")
 public class AppGatewayReactiveAuthenticationManagerResolver implements GatewayReactiveAuthenticationManagerResolver {
     @Resource
     private AppReactiveAuthenticationManager authenticationManager;

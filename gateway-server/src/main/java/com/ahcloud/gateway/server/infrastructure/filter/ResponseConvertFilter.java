@@ -7,6 +7,8 @@ import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.apache.skywalking.apm.toolkit.webflux.WebFluxSkyWalkingOperators;
 import org.reactivestreams.Publisher;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -46,6 +48,8 @@ public class ResponseConvertFilter implements WebFilter, Ordered {
         assert exchange != null;
         ServerHttpResponse originalResponse = exchange.getResponse();
         DataBufferFactory bufferFactory = originalResponse.bufferFactory();
+        // 最新获取 traceId方案 todo 待验证
+        String traceId = WebFluxSkyWalkingOperators.continueTracing(exchange, TraceContext::traceId);
         ServerHttpResponseDecorator decorator = new ServerHttpResponseDecorator(originalResponse) {
             @Override
             public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {

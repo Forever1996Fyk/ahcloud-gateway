@@ -6,7 +6,7 @@ package com.ahcloud.gateway.client.constant;
  * @author: YuKai Fan
  * @create: 2023/2/3 14:41
  **/
-public class GatewayClientConstants {
+public class GatewayConstants {
 
     /**
      * the constant of APP_NAME.
@@ -53,4 +53,9 @@ public class GatewayClientConstants {
      * media type all value.
      */
     public static final String MEDIA_TYPE_ALL_VALUE = "*/*";
+
+    /**
+     * 256 MB
+     */
+    public static final int THE_256_MB = 256 * 1024 * 1024;
 }

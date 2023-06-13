@@ -1,7 +1,7 @@
 package com.ahcloud.gateway.starter.listener;
 
 import com.ahcloud.common.utils.CollectionUtils;
-import com.ahcloud.gateway.client.constant.GatewayClientConstants;
+import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.client.enums.ApiHttpMethodEnum;
 import com.ahcloud.gateway.client.enums.RpcTypeEnum;
 import com.ahcloud.gateway.client.util.IpUtils;
@@ -117,8 +117,8 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
             }
         }
         RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
-        String produce = requestMapping.produces().length == 0 ? GatewayClientConstants.MEDIA_TYPE_ALL_VALUE : String.join(",", requestMapping.produces());
-        String consume = requestMapping.consumes().length == 0 ? GatewayClientConstants.MEDIA_TYPE_ALL_VALUE : String.join(",", requestMapping.consumes());
+        String produce = requestMapping.produces().length == 0 ? GatewayConstants.MEDIA_TYPE_ALL_VALUE : String.join(",", requestMapping.produces());
+        String consume = requestMapping.consumes().length == 0 ? GatewayConstants.MEDIA_TYPE_ALL_VALUE : String.join(",", requestMapping.consumes());
         RequestMethod[] requestMethods = requestMapping.method();
         ApiHttpMethodEnum apiHttpMethodEnum = ApiHttpMethodEnum.valueOf(requestMethods[0].name());
         if (CollectionUtils.isNotEmpty(pathMarkSet)) {

@@ -16,13 +16,13 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.ahcloud.common</groupId>-->
-<!--            <artifactId>common-utils</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.ahcloud.common</groupId>
             <artifactId>common-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
         </dependency>
     </dependencies>
 

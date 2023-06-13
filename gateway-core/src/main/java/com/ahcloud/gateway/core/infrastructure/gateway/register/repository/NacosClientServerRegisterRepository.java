@@ -2,7 +2,7 @@ package com.ahcloud.gateway.core.infrastructure.gateway.register.repository;
 
 import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.client.constant.GatewayClientConstants;
+import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.client.constant.NacosPathConstants;
 import com.ahcloud.gateway.client.constant.RegisterPathConstants;
 import com.ahcloud.gateway.client.enums.RpcTypeEnum;
@@ -73,7 +73,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
     private void doInit(GatewayClientServerRegisterPublisher publisher, PropertiesConfiguration configuration) {
         this.publisher = publisher;
         Properties nacosProperties = configuration.getProps();
-        String discoveryGroup = nacosProperties.getProperty(GatewayClientConstants.DISCOVERY_GROUP);
+        String discoveryGroup = nacosProperties.getProperty(GatewayConstants.DISCOVERY_GROUP);
         this.group = StringUtils.defaultIfBlank(discoveryGroup, this.group);
 //        Properties nacosProperties = new Properties();
 //        nacosProperties.put(PropertyKeyConst.SERVER_ADDR, properties.getProperty(PropertyKeyConst.SERVER_ADDR));
@@ -120,8 +120,8 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
         try {
             List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
             healthyInstances.forEach(healthyInstance -> {
-                String contextPath = healthyInstance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH);
-                String routeMetadata = healthyInstance.getMetadata().get(GatewayClientConstants.ROUTE_META_DATA);
+                String contextPath = healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
+                String routeMetadata = healthyInstance.getMetadata().get(GatewayConstants.ROUTE_META_DATA);
                 RouteRegisterDTO routeRegisterDTO = JsonUtils.stringToBean(routeMetadata, RouteRegisterDTO.class);
                 if (!services.containsKey(contextPath)) {
                     services.put(contextPath, routeRegisterDTO);
@@ -136,7 +136,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
                 if (event instanceof NamingEvent) {
                     List<Instance> instances = ((NamingEvent) event).getInstances();
                     instances.forEach(instance -> {
-                        String contextPath = instance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH);
+                        String contextPath = instance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
                         routeServiceCache.computeIfAbsent(serviceName, k -> new ConcurrentSkipListSet<>()).add(contextPath);
                     });
                     refreshRouteService(rpcType, serviceName);
@@ -156,8 +156,8 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
         try {
             List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
             healthyInstances.forEach(healthyInstance -> {
-                if (StringUtils.equals(contextPath, healthyInstance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH))) {
-                    String routeMetadata = healthyInstance.getMetadata().get(GatewayClientConstants.ROUTE_META_DATA);
+                if (StringUtils.equals(contextPath, healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH))) {
+                    String routeMetadata = healthyInstance.getMetadata().get(GatewayConstants.ROUTE_META_DATA);
                     RouteRegisterDTO routeRegisterDTO = JsonUtils.stringToBean(routeMetadata, RouteRegisterDTO.class);
                     if (!services.containsKey(contextPath)) {
                         services.put(contextPath, routeRegisterDTO);
@@ -170,7 +170,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
                         .contextPath(contextPath)
                         .serviceId(contextPath)
                         .rpcType(rpcType.getName())
-                        .env(this.environment.getProperty(GatewayClientConstants.ENV))
+                        .env(this.environment.getProperty(GatewayConstants.ENV))
                         .build();
                 services.put(contextPath, routeRegisterDTO);
             }
@@ -188,7 +188,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
         try {
             List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
             healthyInstances.forEach(healthyInstance -> {
-                String contextPath = healthyInstance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH);
+                String contextPath = healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
                 String serviceConfigName = RegisterPathConstants.buildServiceConfigPath(rpcType.getName(), contextPath);
                 subscribeMetaData(serviceConfigName);
                 metadataConfigCache.add(serviceConfigName);
@@ -199,7 +199,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
                 if (event instanceof NamingEvent) {
                     List<Instance> instances = ((NamingEvent) event).getInstances();
                     instances.forEach(instance -> {
-                        String contextPath = instance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH);
+                        String contextPath = instance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
                         metaServiceCache.computeIfAbsent(serviceName, k -> new ConcurrentSkipListSet<>()).add(contextPath);
                     });
                     refreshMetadataService(rpcType, serviceName);
@@ -216,11 +216,11 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
             Map<String, RouteRegisterDTO> services = Maps.newHashMap();
             List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
             healthyInstances.forEach(healthyInstance -> {
-                String contextPath = healthyInstance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH);
+                String contextPath = healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
                 String serviceConfigName = RegisterPathConstants.buildServiceConfigPath(rpcType.getName(), contextPath);
                 subscribeMetaData(serviceConfigName);
                 metadataConfigCache.add(serviceConfigName);
-                String routeMetadata = healthyInstance.getMetadata().get(GatewayClientConstants.ROUTE_META_DATA);
+                String routeMetadata = healthyInstance.getMetadata().get(GatewayConstants.ROUTE_META_DATA);
                 RouteRegisterDTO routeRegisterDTO = JsonUtils.stringToBean(routeMetadata, RouteRegisterDTO.class);
                 if (!services.containsKey(contextPath)) {
                     services.put(contextPath, routeRegisterDTO);
@@ -236,7 +236,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
                 if (event instanceof NamingEvent) {
                     List<Instance> instances = ((NamingEvent) event).getInstances();
                     instances.forEach(instance -> {
-                        String contextPath = instance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH);
+                        String contextPath = instance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
                         metaServiceCache.computeIfAbsent(serviceName, k -> new ConcurrentSkipListSet<>()).add(contextPath);
                     });
                     refreshMetadataService(rpcType, serviceName);
@@ -291,7 +291,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
         try {
             List<Instance> healthyInstances = namingService.selectInstances(serviceName,  this.group, true);
             healthyInstances.forEach(healthyInstance -> {
-                if (contextPath.equals(healthyInstance.getMetadata().get(GatewayClientConstants.CONTEXT_PATH))) {
+                if (contextPath.equals(healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH))) {
                     String serviceConfigName = RegisterPathConstants.buildServiceConfigPath(rpcType.getName(), contextPath);
                     if (!metadataConfigCache.contains(serviceConfigName)) {
                         subscribeMetaData(serviceConfigName);

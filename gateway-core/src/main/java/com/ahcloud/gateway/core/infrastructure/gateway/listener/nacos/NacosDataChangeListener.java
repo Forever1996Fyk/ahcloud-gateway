@@ -62,7 +62,7 @@ public class NacosDataChangeListener extends AbstractListDataChangedListener {
      * @return
      */
     private String getEnv() {
-//        return this.environment.getProperty(GatewayClientConstants.ENV);
+//        return this.environment.getProperty(GatewayConstants.ENV);
         return NacosPathConstants.GROUP;
     }
 }

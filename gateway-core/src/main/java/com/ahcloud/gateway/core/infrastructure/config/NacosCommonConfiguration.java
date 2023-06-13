@@ -1,8 +1,7 @@
 package com.ahcloud.gateway.core.infrastructure.config;
 
-import com.ahcloud.gateway.client.constant.GatewayClientConstants;
+import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.register.common.config.PropertiesConfiguration;
-import com.alibaba.cloud.nacos.NacosConfigProperties;
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.alibaba.cloud.nacos.NacosServiceManager;
 import com.alibaba.nacos.api.naming.NamingService;
@@ -35,7 +34,7 @@ public class NacosCommonConfiguration {
     public PropertiesConfiguration propertiesConfiguration(NacosDiscoveryProperties properties) {
         PropertiesConfiguration configuration = new PropertiesConfiguration();
         Properties nacosProperties = properties.getNacosProperties();
-        nacosProperties.setProperty(GatewayClientConstants.DISCOVERY_GROUP, properties.getGroup());
+        nacosProperties.setProperty(GatewayConstants.DISCOVERY_GROUP, properties.getGroup());
         configuration.setProps(nacosProperties);
         return configuration;
     }

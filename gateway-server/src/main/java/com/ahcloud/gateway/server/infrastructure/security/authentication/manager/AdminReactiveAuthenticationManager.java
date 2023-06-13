@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Primary
-@Component
+@Component("adminReactiveAuthenticationManager")
 public class AdminReactiveAuthenticationManager extends AbstractReactiveAuthenticationManager {
 
     private final TokenEndpointService<AdminUserReactiveAuthenticationBO> tokenEndpointService;

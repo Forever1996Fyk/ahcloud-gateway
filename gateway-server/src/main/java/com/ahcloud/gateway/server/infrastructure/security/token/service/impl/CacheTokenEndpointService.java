@@ -53,6 +53,7 @@ public abstract class CacheTokenEndpointService<T extends UserReactiveAuthentica
      *
      * @param token
      * @return
+     *
      */
     protected abstract T createUserReactiveAuthentication(String token);
 

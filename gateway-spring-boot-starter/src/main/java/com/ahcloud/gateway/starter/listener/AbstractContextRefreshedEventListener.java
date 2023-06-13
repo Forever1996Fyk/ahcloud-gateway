@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.starter.listener;
 
-import com.ahcloud.gateway.client.constant.GatewayClientConstants;
+import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.client.exception.GatewayClientIllegalArgumentException;
 import com.ahcloud.gateway.client.util.UriUtils;
 import com.ahcloud.gateway.register.common.config.PropertiesConfiguration;
@@ -64,11 +64,11 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
                                                  final GatewayClientRegisterRepository repository) {
         Properties props = clientProps.getProps();
         this.env = env;
-        this.appName = env.getProperty(GatewayClientConstants.APP_NAME);
-        this.serviceId = StringUtils.defaultIfBlank(env.getProperty(GatewayClientConstants.SERVICE_ID), this.appName);
-        this.host = env.getProperty(GatewayClientConstants.HOST);
-        this.port = env.getProperty(GatewayClientConstants.PORT);
-        this.contextPath = Optional.ofNullable(env.getProperty(GatewayClientConstants.CONTEXT_PATH)).map(UriUtils::repairData).orElse("");
+        this.appName = env.getProperty(GatewayConstants.APP_NAME);
+        this.serviceId = StringUtils.defaultIfBlank(env.getProperty(GatewayConstants.SERVICE_ID), this.appName);
+        this.host = env.getProperty(GatewayConstants.HOST);
+        this.port = env.getProperty(GatewayConstants.PORT);
+        this.contextPath = Optional.ofNullable(env.getProperty(GatewayConstants.CONTEXT_PATH)).map(UriUtils::repairData).orElse("");
         if (StringUtils.isBlank(getAppName())) {
             String errorMsg = "client register param must config the appName or contextPath";
             log.error(errorMsg);

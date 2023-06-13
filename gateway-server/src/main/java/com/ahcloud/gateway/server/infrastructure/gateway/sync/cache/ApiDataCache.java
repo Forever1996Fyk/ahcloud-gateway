@@ -1,5 +1,7 @@
 package com.ahcloud.gateway.server.infrastructure.gateway.sync.cache;
 
+import com.ahcloud.gateway.client.common.cache.MemorySafeWindowTinyLFUMap;
+import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.core.domain.api.bo.ApiDefinitionPatternDTO;
 import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.google.common.collect.Maps;
@@ -46,7 +48,7 @@ public class ApiDataCache {
      * 例如： apiPath为spring/**, 此时的请求为 spring/A, spring/B
      * 那么就会存入缓存  key: spring/**, value: [spring/A, spring/B]
      */
-    private static final ConcurrentMap<String, Set<String>> MAPPING = Maps.newConcurrentMap();
+    private static final MemorySafeWindowTinyLFUMap<String, Set<String>> MAPPING = new MemorySafeWindowTinyLFUMap(GatewayConstants.THE_256_MB, 1 << 16);
 
     private ApiDataCache() {
     }

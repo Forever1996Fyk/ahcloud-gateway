@@ -1,14 +1,13 @@
 package com.ahcloud.gateway.starter.repository;
 
 import com.ahcloud.common.utils.JsonUtils;
-import com.ahcloud.gateway.client.constant.GatewayClientConstants;
+import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.client.constant.NacosPathConstants;
 import com.ahcloud.gateway.client.constant.RegisterPathConstants;
 import com.ahcloud.gateway.client.util.ContextPathUtils;
 import com.ahcloud.gateway.register.common.config.PropertiesConfiguration;
 import com.ahcloud.gateway.register.common.dto.MetaDataRegisterDTO;
 import com.ahcloud.gateway.register.common.dto.RouteRegisterDTO;
-import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.ConfigType;
@@ -18,7 +17,6 @@ import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 
 import java.util.Map;
 import java.util.Properties;
@@ -43,7 +41,7 @@ public class GatewayClientNacosRegisterRepository implements GatewayClientRegist
     @Override
     public void init(PropertiesConfiguration config) {
         Properties nacosProperties = config.getProps();
-        this.group = nacosProperties.getProperty(GatewayClientConstants.DISCOVERY_GROUP);
+        this.group = nacosProperties.getProperty(GatewayConstants.DISCOVERY_GROUP);
 //        Properties nacosProperties = new Properties();
 //        nacosProperties.put(PropertyKeyConst.SERVER_ADDR, properties.getProperty(PropertyKeyConst.SERVER_ADDR));
 //        nacosProperties.put(PropertyKeyConst.NAMESPACE, properties.getProperty(PropertyKeyConst.NAMESPACE));
@@ -92,8 +90,8 @@ public class GatewayClientNacosRegisterRepository implements GatewayClientRegist
         instance.setIp(host);
         instance.setPort(port);
         Map<String, String> metadataMap = Maps.newHashMap();
-        metadataMap.put(GatewayClientConstants.CONTEXT_PATH, contextPath);
-        metadataMap.put(GatewayClientConstants.ROUTE_META_DATA, JsonUtils.toJsonString(registerDTO));
+        metadataMap.put(GatewayConstants.CONTEXT_PATH, contextPath);
+        metadataMap.put(GatewayConstants.ROUTE_META_DATA, JsonUtils.toJsonString(registerDTO));
         instance.setMetadata(metadataMap);
         String serviceName = RegisterPathConstants.buildServiceInstancePath(rpcType);
         try {
