@@ -50,7 +50,6 @@ public class HeaderConvertFilter implements GlobalFilter, Ordered {
                 if (Objects.nonNull(userInfoDTO)) {
                     httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoDTO.getUserId()));
                     httpHeaders.set(Constant.CTX_KEY_USER_NAME.toString(), NullUtils.of(userInfoDTO.getUserName()));
-                    httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoDTO.getUserId()));
                     httpHeaders.set(Constant.CTX_KEY_TOKEN.toString(), NullUtils.of(userInfoDTO.getToken()));
                     Long tenantId = userInfoDTO.getTenantId();
                     if (tenantId != null) {

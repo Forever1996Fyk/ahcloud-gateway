@@ -5,7 +5,7 @@ import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.domain.app.AppAccessTokenBO;
 import com.ahcloud.gateway.server.domain.app.AppUserAuthenticationBO;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
-import com.ahcloud.gateway.server.infrastructure.rpc.AppUserRpcService;
+import com.ahcloud.gateway.server.infrastructure.rpc.AppUaaRpcService;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AccessTokenBO;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AppUserReactiveAuthenticationBO;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +24,13 @@ import java.util.Objects;
 @Service(value = "appTokenEndpointService")
 public class AppTokenEndpointServiceImpl extends CacheTokenEndpointService<AppUserReactiveAuthenticationBO> {
     @Resource
-    private AppUserRpcService appUserRpcService;
+    private AppUaaRpcService appUaaRpcService;
 
     private final static String LOG_MARK = "AppTokenEndpointServiceImpl";
 
     @Override
     protected AppUserReactiveAuthenticationBO createUserReactiveAuthentication(String token) {
-        AppUserAuthenticationBO authentication = appUserRpcService.getAppUserAuthenticationByToken(token);
+        AppUserAuthenticationBO authentication = appUaaRpcService.getAppUserAuthenticationByToken(token);
         AppAccessTokenBO accessTokenBO = authentication.getAccessTokenBO();
         if (Objects.isNull(accessTokenBO)) {
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);

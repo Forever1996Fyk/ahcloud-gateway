@@ -3,7 +3,7 @@ package com.ahcloud.gateway.api.controller;
 import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.gateway.core.application.manager.GatewayApiMetadataManager;
 import com.ahcloud.gateway.core.domain.api.vo.ApiMetadataVO;
-import com.ahcloud.gateway.core.domain.api.vo.AppNameSelectVO;
+import com.ahcloud.gateway.core.domain.api.vo.ServiceIdSelectVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +28,8 @@ public class GatewayApiMetaDataController {
      * @param name
      * @return
      */
-    @GetMapping("/selectAppNameList")
-    public ResponseResult<List<AppNameSelectVO>> selectServiceIdList(String name) {
+    @GetMapping("/selectServiceIdList")
+    public ResponseResult<List<ServiceIdSelectVO>> selectServiceIdList(String name) {
         return ResponseResult.ofSuccess(gatewayApiMetadataManager.listServiceIdByName(name));
     }
 

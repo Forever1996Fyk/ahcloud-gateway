@@ -1,12 +1,12 @@
 package com.ahcloud.gateway.core.application.manager;
 
 import com.ahcloud.common.result.page.PageResult;
+import com.ahcloud.common.utils.CollectionUtils;
 import com.ahcloud.gateway.client.common.DeletedEnum;
 import com.ahcloud.gateway.client.enums.ApiStatusEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.application.helper.GatewayApiHelper;
 import com.ahcloud.gateway.core.application.service.GatewayApiService;
-import com.ahcloud.gateway.core.domain.api.dto.ApiDefinitionDTO;
 import com.ahcloud.gateway.core.domain.api.form.ApiAddForm;
 import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.query.ApiQuery;
@@ -59,6 +59,7 @@ public class GatewayApiManager {
         if (Objects.nonNull(existedGatewayApi)) {
             throw new BizException(GatewayRetCodeEnum.GATEWAY_API_CODE_EXITED);
         }
+        // 判断应用实例是否健康
         GatewayApi gatewayApi = GatewayApiHelper.convert(form);
         boolean result = gatewayApiService.save(gatewayApi);
         if (!result) {
@@ -188,8 +189,11 @@ public class GatewayApiManager {
                 new QueryWrapper<GatewayApi>().lambda()
                         .eq(GatewayApi::getDeleted, DeletedEnum.NO.value)
         );
+        if (CollectionUtils.isNotEmpty(gatewayApiList)) {
+            return;
+        }
         applicationEventPublisher.publishEvent(
-                new DataChangedEvent(GatewayApiHelper.convertToDTOList(gatewayApiList), DataEventTypeEnum.REFRESH, ConfigGroupEnum.API)
+                new DataChangedEvent(gatewayApiList.get(0).getApiCode(), DataEventTypeEnum.REFRESH, ConfigGroupEnum.API)
         );
     }
 

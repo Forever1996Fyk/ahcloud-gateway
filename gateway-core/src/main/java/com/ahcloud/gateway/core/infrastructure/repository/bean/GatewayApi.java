@@ -59,6 +59,11 @@ public class GatewayApi implements Serializable {
     private String methodName;
 
     /**
+     * http方式
+     */
+    private String httpMethod;
+
+    /**
      * 接口类型
      */
     private Integer apiType;

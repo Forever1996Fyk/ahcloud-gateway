@@ -4,12 +4,10 @@ import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.application.helper.GatewayApiMetadataHelper;
 import com.ahcloud.gateway.core.application.service.GatewayApiMetaDataService;
 import com.ahcloud.gateway.core.domain.api.vo.ApiMetadataVO;
-import com.ahcloud.gateway.core.domain.api.vo.ApiRegisterVO;
-import com.ahcloud.gateway.core.domain.api.vo.AppNameSelectVO;
+import com.ahcloud.gateway.core.domain.api.vo.ServiceIdSelectVO;
 import com.ahcloud.gateway.core.infrastructure.exception.BizException;
-import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.core.infrastructure.gateway.register.instance.GatewayClientServerInstanceService;
 import com.ahcloud.gateway.core.infrastructure.repository.bean.GatewayApiMetaData;
-import com.ahcloud.gateway.core.infrastructure.repository.bean.GatewayApiRegister;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
@@ -31,9 +29,9 @@ import java.util.stream.Collectors;
 @Component
 public class GatewayApiMetadataManager {
     @Resource
-    private NamingService namingService;
-    @Resource
     private GatewayApiMetaDataService gatewayApiMetaDataService;
+    @Resource
+    private GatewayClientServerInstanceService gatewayClientServerInstanceService;
 
     /**
      * 根据serviceId分组获取serviceId集合
@@ -41,7 +39,7 @@ public class GatewayApiMetadataManager {
      * @param name
      * @return
      */
-    public List<AppNameSelectVO> listServiceIdByName(String name) {
+    public List<ServiceIdSelectVO> listServiceIdByName(String name) {
         List<GatewayApiMetaData> list = gatewayApiMetaDataService.list(
                 new QueryWrapper<GatewayApiMetaData>().lambda()
                         .select(GatewayApiMetaData::getAppName, GatewayApiMetaData::getEnv)
@@ -96,12 +94,7 @@ public class GatewayApiMetadataManager {
     }
 
     private boolean hasNoHealthInstance(String appName, String env) {
-        try {
-            Instance instance = namingService.selectOneHealthyInstance(appName, env);
-            return Objects.isNull(instance);
-        } catch (NacosException e) {
-            return true;
-        }
+        return gatewayClientServerInstanceService.checkHealthInstance(appName, env);
     }
 
 }

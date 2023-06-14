@@ -36,10 +36,6 @@
             <artifactId>gateway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ahcloud.gateway</groupId>
-            <artifactId>gateway-dubbo</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.ahcloud.admin</groupId>
             <artifactId>admin-dubbo</artifactId>
         </dependency>

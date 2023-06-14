@@ -44,5 +44,5 @@ public class ApiUpdateForm {
     /**
      * 是否认证
      */
-    private Integer isAuth;
+    private Integer auth;
 }

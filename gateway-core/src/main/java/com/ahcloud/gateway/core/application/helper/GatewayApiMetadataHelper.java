@@ -1,6 +1,6 @@
 package com.ahcloud.gateway.core.application.helper;
 
-import com.ahcloud.gateway.core.domain.api.vo.AppNameSelectVO;
+import com.ahcloud.gateway.core.domain.api.vo.ServiceIdSelectVO;
 import com.ahcloud.gateway.core.infrastructure.repository.bean.GatewayApiMetaData;
 import com.ahcloud.gateway.register.common.dto.MetaDataRegisterDTO;
 import org.mapstruct.Mapper;
@@ -31,10 +31,10 @@ public class GatewayApiMetadataHelper {
         return gatewayApiMetaData;
     }
 
-    public static List<AppNameSelectVO> convertToSelectVOList(List<GatewayApiMetaData> list) {
+    public static List<ServiceIdSelectVO> convertToSelectVOList(List<GatewayApiMetaData> list) {
         return list.stream().map(gatewayApiMetaData ->
-                    AppNameSelectVO.builder()
-                            .appName(gatewayApiMetaData.getAppName())
+                    ServiceIdSelectVO.builder()
+                            .serviceId(gatewayApiMetaData.getAppName())
                             .env(gatewayApiMetaData.getEnv())
                             .build()
                 ).collect(Collectors.toList());

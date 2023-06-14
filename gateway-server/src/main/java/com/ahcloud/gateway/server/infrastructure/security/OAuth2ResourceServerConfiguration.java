@@ -32,7 +32,6 @@ public class OAuth2ResourceServerConfiguration {
     @Resource
     private List<GatewayReactiveAuthenticationManagerResolver> authenticationManagerList;
 
-
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         GatewayServerAccessDeniedHandler accessDeniedHandler = new GatewayServerAccessDeniedHandler();

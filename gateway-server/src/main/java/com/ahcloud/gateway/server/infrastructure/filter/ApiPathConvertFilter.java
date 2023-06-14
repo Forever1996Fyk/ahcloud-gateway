@@ -63,12 +63,12 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         ApiGatewayDTO apiGatewayDTO = ApiGatewayDTO.builder()
                 .path(apiDefinitionDTO.getPath())
                 .apiCode(apiDefinitionDTO.getApiCode())
+                .auth(apiDefinitionDTO.getAuth())
                 .dev(apiDefinitionDTO.getDev())
                 .test(apiDefinitionDTO.getTest())
                 .sit(apiDefinitionDTO.getSit())
                 .pre(apiDefinitionDTO.getPre())
                 .prod(apiDefinitionDTO.getProd())
-                .auth(apiDefinitionDTO.getAuth())
                 .build();
         gatewayContext.setApiGatewayDTO(apiGatewayDTO);
         return chain.filter(exchange);

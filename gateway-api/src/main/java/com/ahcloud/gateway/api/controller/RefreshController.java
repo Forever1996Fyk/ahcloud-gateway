@@ -2,7 +2,6 @@ package com.ahcloud.gateway.api.controller;
 
 import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.gateway.core.application.manager.GatewayApiManager;
-import com.ahcloud.gateway.core.application.manager.GatewayRouteManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,18 +19,6 @@ import javax.annotation.Resource;
 public class RefreshController {
     @Resource
     private GatewayApiManager gatewayApiManager;
-    @Resource
-    private GatewayRouteManager gatewayRouteManager;
-
-    /**
-     * 刷新路由
-     * @return
-     */
-    @PostMapping("/refreshRoute")
-    public ResponseResult<Void> refreshRoute() {
-        gatewayRouteManager.refreshRoute();
-        return ResponseResult.ofSuccess();
-    }
 
     /**
      * 刷新接口

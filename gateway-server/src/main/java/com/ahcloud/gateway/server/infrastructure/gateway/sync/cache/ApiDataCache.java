@@ -63,7 +63,7 @@ public class ApiDataCache {
      * @param apiDefinitionDTO
      */
     public void cache(final ApiDefinitionDTO apiDefinitionDTO) {
-        // 清楚旧路径
+        // 清除旧路径
         if (API_DATA_MAP.containsKey(apiDefinitionDTO.getApiCode())) {
             // 这里必须要执行一次清楚，因为不知道是create还是update
             clean(API_DATA_MAP.get(apiDefinitionDTO.getApiCode()).getPath());

@@ -51,6 +51,11 @@ public class ApiAddForm {
     private String methodName;
 
     /**
+     * http方式
+     */
+    private String httpMethod;
+
+    /**
      * 接口类型
      */
     @EnumValid(enumClass = ApiTypeEnum.class, enumMethod = "isValid")

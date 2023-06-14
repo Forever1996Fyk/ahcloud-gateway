@@ -7,7 +7,12 @@ import com.ahcloud.gateway.core.domain.api.form.ApiAddForm;
 import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.query.ApiQuery;
 import com.ahcloud.gateway.core.domain.api.vo.ApiVO;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -23,6 +28,7 @@ import javax.validation.Valid;
 public class ApiController {
     @Resource
     private GatewayApiManager gatewayApiManager;
+
 
     /**
      * 添加api接口

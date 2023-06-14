@@ -35,7 +35,6 @@ import java.nio.charset.StandardCharsets;
  **/
 @Slf4j
 @Deprecated
-//@Component
 public class ResponseConvertFilter implements WebFilter, Ordered {
     @Override
     public int getOrder() {

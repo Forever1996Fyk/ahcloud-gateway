@@ -14,10 +14,19 @@ import java.util.List;
 public enum AppPlatformEnum {
 
     /**
-     * app平台类型
+     * 后台
      */
-    ADMIN("admin", "系统后台"),
-    APP("app", "app"),
+    BACK_STAGE("back_stage", "后台"),
+
+    /**
+     * web端
+     */
+    WEB("web", "web端"),
+
+    /**
+     * app应用
+     */
+    APP("app", "app应用"),
     ;
 
     private final String value;

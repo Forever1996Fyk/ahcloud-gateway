@@ -6,11 +6,11 @@
         <module>gateway-server</module>
         <module>gateway-client</module>
         <module>gateway-spring-boot-starter</module>
-        <module>gateway-dubbo</module>
         <module>gateway-api</module>
         <module>gateway-core</module>
         <module>gateway-disruptor</module>
         <module>gateway-register-common</module>
+        <module>gateway-sentinel-common</module>
     </modules>
     <parent>
         <groupId>com.ahcloud.kernel</groupId>
@@ -34,6 +34,7 @@
         <disrtuptor.version>3.4.0</disrtuptor.version>
         <caffeine.version>2.9.3</caffeine.version>
         <skywalking.webflux.version>8.14.0</skywalking.webflux.version>
+        <sentinel.gateway.version>1.8.1</sentinel.gateway.version>
 
         <spring-boot-pagehelper.version>1.2.13</spring-boot-pagehelper.version>
         <mybatis.plus.version>3.4.1</mybatis.plus.version>
@@ -55,6 +56,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
+                <version>${sentinel.gateway.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
@@ -130,11 +136,6 @@
             <dependency>
                 <groupId>com.ahcloud.gateway</groupId>
                 <artifactId>gateway-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ahcloud.gateway</groupId>
-                <artifactId>gateway-dubbo</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
