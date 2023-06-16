@@ -12,7 +12,7 @@ import com.ahcloud.gateway.core.domain.api.form.ApiUpdateForm;
 import com.ahcloud.gateway.core.domain.api.query.ApiQuery;
 import com.ahcloud.gateway.core.domain.api.vo.ApiVO;
 import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
-import com.ahcloud.gateway.core.infrastructure.exception.BizException;
+import com.ahcloud.gateway.client.exception.BizException;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.ConfigGroupEnum;
 import com.ahcloud.gateway.core.infrastructure.gateway.enums.DataEventTypeEnum;
 import com.ahcloud.gateway.core.infrastructure.gateway.listener.event.DataChangedEvent;

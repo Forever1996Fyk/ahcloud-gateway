@@ -5,19 +5,15 @@ import com.ahcloud.gateway.core.application.helper.GatewayApiMetadataHelper;
 import com.ahcloud.gateway.core.application.service.GatewayApiMetaDataService;
 import com.ahcloud.gateway.core.domain.api.vo.ApiMetadataVO;
 import com.ahcloud.gateway.core.domain.api.vo.ServiceIdSelectVO;
-import com.ahcloud.gateway.core.infrastructure.exception.BizException;
+import com.ahcloud.gateway.client.exception.BizException;
 import com.ahcloud.gateway.core.infrastructure.gateway.register.instance.GatewayClientServerInstanceService;
 import com.ahcloud.gateway.core.infrastructure.repository.bean.GatewayApiMetaData;
-import com.alibaba.nacos.api.exception.NacosException;
-import com.alibaba.nacos.api.naming.NamingService;
-import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

@@ -25,15 +25,20 @@ public enum GatewayRetCodeEnum implements ErrorCode {
     /**
      * 公共响应码
      */
-    SYSTEM_ERROR(1_0_100_1001, "系统异常"),
-    VERSION_ERROR(1_0_100_1005, "数据版本异常"),
+    SYSTEM_ERROR(1_10_100_1001, "系统异常"),
 
 //    PARAM_MISS(100_1_001,"缺少必要参数[%s]"),
-    PARAM_ILLEGAL(100_1_002,"参数非法"),
-    PARAM_ILLEGAL_FIELD(100_1_004,"[%s]参数非法"),
-    PARAM_PARSING_FIELD(100_1_005,"参数解析失败"),
-    ENV_PARAM_ERROR(100_1_006,"环境参数异常"),
+    PARAM_ILLEGAL(1_10_100_1002,"参数非法"),
+    PARAM_ILLEGAL_FIELD(1_10_100_1003,"[%s]参数非法"),
+    PARAM_PARSING_FIELD(1_10_100_1004,"参数解析失败"),
+    VERSION_ERROR(1_10_100_1005, "数据版本异常"),
+    ENV_PARAM_ERROR(1_10_100_1006,"环境参数异常"),
     APP_INSTANCE_ERROR(100_2_001,"当前【[[%s]][%s]】应用实例异常"),
+
+    /**
+     * 限流
+     */
+    SERVER_BUSY(1_20_100_1001, "服务器忙，请稍后再试!"),
 
     /**
      * 网关

@@ -7,7 +7,6 @@ import com.ahcloud.gateway.core.infrastructure.gateway.enums.DataEventTypeEnum;
 import com.ahcloud.gateway.core.infrastructure.repository.bean.GatewayApi;
 import com.ahcloud.gateway.server.infrastructure.gateway.sync.subscriber.ApiSubscriber;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ import java.util.Objects;
  * @create: 2023/5/30 00:48
  **/
 @Component
-public class ApiSyncService implements InitializingBean {
+public class ApiSyncService {
 
     private final ApiSubscriber apiSubscriber;
 
@@ -59,17 +58,6 @@ public class ApiSyncService implements InitializingBean {
             if (DataEventTypeEnum.DELETE == eventType) {
                 apiSubscriber.unSubscribe(gatewayApi);
             }
-        }
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        List<GatewayApi> gatewayApiList = gatewayApiService.list(
-                new QueryWrapper<GatewayApi>().lambda()
-                        .eq(GatewayApi::getDeleted, DeletedEnum.NO.value)
-        );
-        for (GatewayApi gatewayApi : gatewayApiList) {
-            apiSubscriber.onSubscribe(gatewayApi);
         }
     }
 }

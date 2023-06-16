@@ -2,8 +2,8 @@ package com.ahcloud.gateway.server.infrastructure.rpc;
 
 import com.ahcloud.common.result.RpcResult;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.infrastructure.exception.BizException;
-import com.ahcloud.gateway.core.infrastructure.exception.TokenExpiredException;
+import com.ahcloud.gateway.client.exception.BizException;
+import com.ahcloud.gateway.client.exception.TokenExpiredException;
 import com.ahcloud.gateway.server.helper.AppUserAuthenticationHelper;
 import com.ahcloud.gateway.server.domain.app.AppUserAuthenticationBO;
 import com.ahcloud.uaa.client.domain.dubbo.token.AppUserAuthenticationDTO;

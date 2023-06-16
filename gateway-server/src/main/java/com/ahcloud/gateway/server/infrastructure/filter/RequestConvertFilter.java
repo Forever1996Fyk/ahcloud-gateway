@@ -3,8 +3,10 @@ package com.ahcloud.gateway.server.infrastructure.filter;
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
-import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.client.exception.GatewayException;
 import com.ahcloud.gateway.core.infrastructure.util.ServerWebExchangeUtils;
+import com.ahcloud.gateway.scg.common.exception.GatewayBlackException;
+import com.ahcloud.gateway.server.infrastructure.exception.handler.GatewayErrorWebExceptionHandler;
 import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,12 @@ import java.util.Objects;
 @Component
 public class RequestConvertFilter implements WebFilter, Ordered {
 
+    private final GatewayErrorWebExceptionHandler errorWebExceptionHandler;
+
+    public RequestConvertFilter(GatewayErrorWebExceptionHandler errorWebExceptionHandler) {
+        this.errorWebExceptionHandler = errorWebExceptionHandler;
+    }
+
     @Override
     public int getOrder() {
         return HIGHEST_PRECEDENCE;
@@ -39,14 +47,14 @@ public class RequestConvertFilter implements WebFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         AppPlatformEnum appPlatformEnum = ServerWebExchangeUtils.getAppPlatformByRequest(exchange);
         if (Objects.isNull(appPlatformEnum)) {
-            throw new GatewayException(GatewayRetCodeEnum.SYSTEM_ERROR);
+            return errorWebExceptionHandler.handle(exchange, new GatewayBlackException(exchange, GatewayRetCodeEnum.GATEWAY_PARAM_MISS));
         }
         HttpHeaders headers = request.getHeaders();
         String tenantId = "";
         if (appPlatformEnum.needTenant()) {
             tenantId = headers.getFirst(Constant.CTX_KEY_TENANT_ID.toString());
             if (StringUtils.isBlank(tenantId)) {
-                throw new GatewayException(GatewayRetCodeEnum.GATEWAY_PARAM_MISS);
+                return errorWebExceptionHandler.handle(exchange, new GatewayBlackException(exchange, GatewayRetCodeEnum.GATEWAY_PARAM_MISS));
             }
         }
         GatewayContext context = GatewayContext.builder()

@@ -1,4 +1,4 @@
-package com.ahcloud.gateway.core.infrastructure.exception;
+package com.ahcloud.gateway.client.exception;
 
 import com.ahcloud.common.enums.ErrorCode;
 
@@ -12,8 +12,7 @@ public class GatewayException extends RuntimeException {
 
     private static final long serialVersionUID = -7413290821971758672L;
     private ErrorCode errorCode;
-
-    private String message;
+    private final String message;
 
     public GatewayException(String message) {
         super(message);

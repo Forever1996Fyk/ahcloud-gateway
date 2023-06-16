@@ -17,6 +17,26 @@ import org.springframework.web.server.ServerWebExchange;
 public class ServerWebExchangeUtils {
 
     /**
+     * 获取请求路径
+     * @param exchange
+     * @return
+     */
+    public static String getRequestPath(ServerWebExchange exchange) {
+        ServerHttpRequest request = exchange.getRequest();
+        return request.getPath().value();
+    }
+
+    /**
+     * 获取客户端真实ip
+     * @param exchange
+     * @return
+     */
+    public static String getClientIp(ServerWebExchange exchange) {
+        ServerHttpRequest request = exchange.getRequest();
+        return IpUtils.getIP(request);
+    }
+
+    /**
      * 从请求头获取原始 认证Token
      * @param exchange
      * @return

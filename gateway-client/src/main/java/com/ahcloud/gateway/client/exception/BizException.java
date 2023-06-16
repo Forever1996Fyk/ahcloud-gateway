@@ -1,4 +1,4 @@
-package com.ahcloud.gateway.core.infrastructure.exception;
+package com.ahcloud.gateway.client.exception;
 
 import com.ahcloud.common.enums.ErrorCode;
 import com.ahcloud.common.exception.BaseException;

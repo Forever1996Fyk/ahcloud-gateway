@@ -2,14 +2,13 @@ package com.ahcloud.gateway.core.infrastructure.gateway.listener.nacos;
 
 import com.ahcloud.common.utils.JsonUtils;
 import com.ahcloud.gateway.client.constant.NacosPathConstants;
-import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.client.exception.GatewayException;
 import com.ahcloud.gateway.core.infrastructure.gateway.listener.AbstractListDataChangedListener;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.ConfigType;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 
 /**

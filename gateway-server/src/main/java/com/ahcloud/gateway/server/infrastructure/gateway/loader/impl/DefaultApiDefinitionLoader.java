@@ -40,7 +40,6 @@ public class DefaultApiDefinitionLoader implements ApiDefinitionLoader, Initiali
         log.info("项目启动默认加载api信息");
         List<GatewayApi> gatewayApiList = gatewayApiService.list(
                 new QueryWrapper<GatewayApi>().lambda()
-                        .eq(GatewayApi::getApiType, ApiTypeEnum.WEB_SYSTEM.getType())
                         .eq(GatewayApi::getDeleted, DeletedEnum.NO.value)
         );
         gatewayApiList.forEach(this::loader);

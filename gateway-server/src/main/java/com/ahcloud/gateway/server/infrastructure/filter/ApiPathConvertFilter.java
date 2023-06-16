@@ -7,7 +7,8 @@ import com.ahcloud.gateway.core.domain.context.GatewayContext;
 import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
 import com.ahcloud.gateway.core.infrastructure.config.GatewayConfiguration;
 import com.ahcloud.gateway.core.infrastructure.constant.EnvConstants;
-import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.client.exception.GatewayException;
+import com.ahcloud.gateway.server.infrastructure.exception.handler.GatewayErrorWebExceptionHandler;
 import com.ahcloud.gateway.server.infrastructure.gateway.sync.cache.ApiDataCache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -33,10 +34,12 @@ import java.util.Objects;
 public class ApiPathConvertFilter implements WebFilter, Ordered {
 
     private final GatewayConfiguration gatewayConfiguration;
+    private final GatewayErrorWebExceptionHandler exceptionHandler;
 
     @Autowired
-    public ApiPathConvertFilter(GatewayConfiguration gatewayConfiguration) {
+    public ApiPathConvertFilter(GatewayConfiguration gatewayConfiguration, GatewayErrorWebExceptionHandler errorWebExceptionHandler) {
         this.gatewayConfiguration = gatewayConfiguration;
+        this.exceptionHandler = errorWebExceptionHandler;
     }
 
     @Override
@@ -56,10 +59,16 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         ApiDataCache apiDataCache = ApiDataCache.getInstance();
         ApiDefinitionDTO apiDefinitionDTO = apiDataCache.obtain(pathContainer);
         if (Objects.isNull(apiDefinitionDTO)) {
-            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_NOT_EXISTED);
+            return exceptionHandler.handle(exchange, new GatewayException(GatewayRetCodeEnum.GATEWAY_API_NOT_EXISTED));
         }
         // 校验api状态
-        checkApiStatus(apiDefinitionDTO);
+        ApiStatusEnum apiStatusEnum = checkApiStatus(apiDefinitionDTO);
+        if (Objects.equals(apiStatusEnum, ApiStatusEnum.OFFLINE)) {
+            return exceptionHandler.handle(exchange, new GatewayException(GatewayRetCodeEnum.GATEWAY_API_OFFLINE));
+        }
+        if (Objects.equals(apiStatusEnum, ApiStatusEnum.DISABLED)) {
+            return exceptionHandler.handle(exchange, new GatewayException(GatewayRetCodeEnum.GATEWAY_API_DISABLED));
+        }
         ApiGatewayDTO apiGatewayDTO = ApiGatewayDTO.builder()
                 .path(apiDefinitionDTO.getPath())
                 .apiCode(apiDefinitionDTO.getApiCode())
@@ -74,7 +83,7 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         return chain.filter(exchange);
     }
 
-    private void checkApiStatus(ApiDefinitionDTO apiDefinitionDTO) {
+    private ApiStatusEnum checkApiStatus(ApiDefinitionDTO apiDefinitionDTO) {
         String env = gatewayConfiguration.getEnv();
         if (StringUtils.equals(env, "local")) {
             env = EnvConstants.DEV;
@@ -91,12 +100,6 @@ public class ApiPathConvertFilter implements WebFilter, Ordered {
         } else if (EnvConstants.isProd(env)) {
             status = apiDefinitionDTO.getProd();
         }
-        ApiStatusEnum apiStatusEnum = ApiStatusEnum.valueOf(status);
-        if (Objects.equals(apiStatusEnum, ApiStatusEnum.OFFLINE)) {
-            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_OFFLINE);
-        }
-        if (Objects.equals(apiStatusEnum, ApiStatusEnum.DISABLED)) {
-            throw new GatewayException(GatewayRetCodeEnum.GATEWAY_API_DISABLED);
-        }
+        return ApiStatusEnum.valueOf(status);
     }
 }

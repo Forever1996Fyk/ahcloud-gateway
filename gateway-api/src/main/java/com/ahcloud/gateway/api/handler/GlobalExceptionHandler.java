@@ -2,8 +2,8 @@ package com.ahcloud.gateway.api.handler;
 
 import com.ahcloud.common.result.ResponseResult;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.infrastructure.exception.BizException;
-import com.ahcloud.gateway.core.infrastructure.exception.GatewayException;
+import com.ahcloud.gateway.client.exception.BizException;
+import com.ahcloud.gateway.client.exception.GatewayException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
