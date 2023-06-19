@@ -2,10 +2,10 @@ package com.ahcloud.gateway.server.infrastructure.security.authentication.conver
 
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
-import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
-import com.ahcloud.gateway.core.domain.context.GatewayContext;
-import com.ahcloud.gateway.core.infrastructure.constant.GatewayConstants;
 import com.ahcloud.gateway.client.exception.GatewayException;
+import com.ahcloud.gateway.core.domain.context.GatewayContext;
+import com.ahcloud.gateway.core.domain.dto.ApiGatewayDTO;
+import com.ahcloud.gateway.core.infrastructure.constant.GatewayConstants;
 import com.ahcloud.gateway.core.infrastructure.util.ServerWebExchangeUtils;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
 import com.ahcloud.gateway.server.infrastructure.security.token.RedisTokenAuthenticationToken;

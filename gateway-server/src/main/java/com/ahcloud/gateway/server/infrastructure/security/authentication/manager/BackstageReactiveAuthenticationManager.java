@@ -49,26 +49,26 @@ public class BackstageReactiveAuthenticationManager extends AbstractReactiveAuth
 
     @Override
     protected Triple<OAuth2AuthenticatedPrincipal, OAuth2AccessToken, Collection<? extends GrantedAuthority>> checkToken(Pair<String, String> tokenMark) {
-        BackstageUserReactiveAuthenticationBO adminUserAuthenticationBO = tokenEndpointService.authenticationByToken(tokenMark.getLeft(), tokenMark.getRight());
+        BackstageUserReactiveAuthenticationBO backstageUserReactiveAuthenticationBO = tokenEndpointService.authenticationByToken(tokenMark.getLeft(), tokenMark.getRight());
         Map<String, Object> attributes = Maps.newHashMap();
         attributes.put("token", tokenMark.getLeft());
         OAuth2User user = BackstageOAuth2User.builder()
-                .userId(adminUserAuthenticationBO.getUserId())
-                .tenantId(adminUserAuthenticationBO.getTenantId())
-                .username(adminUserAuthenticationBO.getAccount())
-                .authorities(convert(adminUserAuthenticationBO.getAuthorities()))
+                .userId(backstageUserReactiveAuthenticationBO.getUserId())
+                .tenantId(backstageUserReactiveAuthenticationBO.getTenantId())
+                .username(backstageUserReactiveAuthenticationBO.getAccount())
+                .authorities(convert(backstageUserReactiveAuthenticationBO.getAuthorities()))
                 .attributes(attributes)
-                .name(adminUserAuthenticationBO.getUserName())
-                .nickName(adminUserAuthenticationBO.getNickName())
+                .name(backstageUserReactiveAuthenticationBO.getUserName())
+                .nickName(backstageUserReactiveAuthenticationBO.getNickName())
                 .build();
 
-        AccessTokenBO accessTokenBO = adminUserAuthenticationBO.getAccessTokenBO();
+        AccessTokenBO accessTokenBO = backstageUserReactiveAuthenticationBO.getAccessTokenBO();
         OAuth2AccessToken accessToken = new OAuth2AccessToken(
                 OAuth2AccessToken.TokenType.BEARER
                 , accessTokenBO.getToken()
                 , accessTokenBO.getIssuedAt()
                 , accessTokenBO.getExpireAt()
-                , adminUserAuthenticationBO.getScopes()
+                , backstageUserReactiveAuthenticationBO.getScopes()
         );
         return Triple.of(user, accessToken, user.getAuthorities());
     }
