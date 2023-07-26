@@ -1,11 +1,8 @@
 package com.ahcloud.gateway.starter.repository;
 
-import com.ahcloud.gateway.register.common.dto.MetaDataRegisterDTO;
 import com.ahcloud.gateway.register.common.config.PropertiesConfiguration;
-import com.ahcloud.gateway.client.dubbo.api.dto.ApiRegisterDTO;
+import com.ahcloud.gateway.register.common.dto.MetaDataRegisterDTO;
 import com.ahcloud.gateway.register.common.dto.RouteRegisterDTO;
-
-import java.util.List;
 
 /**
  * @program: ahcloud-gateway
