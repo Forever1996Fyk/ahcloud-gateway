@@ -120,7 +120,10 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
         String produce = requestMapping.produces().length == 0 ? GatewayConstants.MEDIA_TYPE_ALL_VALUE : String.join(",", requestMapping.produces());
         String consume = requestMapping.consumes().length == 0 ? GatewayConstants.MEDIA_TYPE_ALL_VALUE : String.join(",", requestMapping.consumes());
         RequestMethod[] requestMethods = requestMapping.method();
-        ApiHttpMethodEnum apiHttpMethodEnum = ApiHttpMethodEnum.valueOf(requestMethods[0].name());
+        ApiHttpMethodEnum apiHttpMethodEnum = ApiHttpMethodEnum.OPTIONS;
+        if (ArrayUtils.isNotEmpty(requestMethods)) {
+            apiHttpMethodEnum = ApiHttpMethodEnum.valueOf(requestMethods[0].name());
+        }
         if (CollectionUtils.isNotEmpty(pathMarkSet)) {
             for (String pathMark : pathMarkSet) {
                 pathJoin = StringUtils.replace(pathJoin, pathMark, "**");
