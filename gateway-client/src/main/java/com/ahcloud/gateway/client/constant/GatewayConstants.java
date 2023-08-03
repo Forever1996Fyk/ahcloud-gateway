@@ -58,4 +58,9 @@ public class GatewayConstants {
      * 256 MB
      */
     public static final int THE_256_MB = 256 * 1024 * 1024;
+
+    /**
+     * The constant CLIENT_RESPONSE_ATTR.
+     */
+    public static final String CLIENT_RESPONSE_ATTR = "webHandlerClientResponse";
 }

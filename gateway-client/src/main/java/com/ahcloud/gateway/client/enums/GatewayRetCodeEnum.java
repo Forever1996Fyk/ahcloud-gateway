@@ -34,6 +34,7 @@ public enum GatewayRetCodeEnum implements ErrorCode {
     VERSION_ERROR(1_10_100_1005, "数据版本异常"),
     ENV_PARAM_ERROR(1_10_100_1006,"环境参数异常"),
     APP_INSTANCE_ERROR(100_2_001,"当前【[[%s]][%s]】应用实例异常"),
+    PAYLOAD_TOO_LARGE(100_2_002,"Payload too large!"),
 
     /**
      * 限流
@@ -79,6 +80,7 @@ public enum GatewayRetCodeEnum implements ErrorCode {
     GATEWAY_API_ADD_FAILED(5_0_100_1003, "接口新增失败"),
     GATEWAY_API_UPDATE_FAILED(5_0_100_1004, "接口更新失败"),
     GATEWAY_API_DELETE_FAILED(5_0_100_1005, "接口删除失败"),
+
 
     ;
 
