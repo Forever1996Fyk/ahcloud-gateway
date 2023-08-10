@@ -49,6 +49,7 @@
         <servlet.api.version>4.0.1</servlet.api.version>
 
         <ahcloud.common.version>1.0.0-SNAPSHOT</ahcloud.common.version>
+        <beanutils.version>1.0.0-SNAPSHOT</beanutils.version>
         <ahcloud.uaa.version>1.0.0-SNAPSHOT</ahcloud.uaa.version>
         <ahcloud.admin.version>1.0.0-SNAPSHOT</ahcloud.admin.version>
         <ahcloud.uaa.version>1.0.0-SNAPSHOT</ahcloud.uaa.version>
@@ -172,6 +173,11 @@
                 <groupId>com.ahcloud.common</groupId>
                 <artifactId>common-core</artifactId>
                 <version>${ahcloud.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ahcloud.starter</groupId>
+                <artifactId>beanutils-spring-boot-starter</artifactId>
+                <version>${beanutils.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ahcloud.admin</groupId>

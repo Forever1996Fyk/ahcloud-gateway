@@ -3,12 +3,15 @@ package com.ahcloud.gateway.scg.common.util;
 import com.ahcloud.gateway.client.constant.GatewayConstants;
 import com.ahcloud.gateway.scg.common.support.BodyInserterContext;
 import com.ahcloud.gateway.scg.common.support.CachedBodyOutputMessage;
+import com.ahcloud.springboot.starter.beanutils.util.SpringUtils;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ReactiveHttpOutputMessage;
+import org.springframework.http.codec.HttpMessageReader;
+import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -17,6 +20,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -118,5 +122,13 @@ public class ResponseUtils {
     private static void fixHeaders(final HttpHeaders httpHeaders) {
         httpHeaders.remove(HttpHeaders.CONTENT_LENGTH);
         httpHeaders.set(HttpHeaders.TRANSFER_ENCODING, CHUNKED);
+    }
+
+    /**
+     * Gets reads from ServerCodecConfigurer with custom the codec.
+     * @return ServerCodecConfigurer readers
+     */
+    private static List<HttpMessageReader<?>> getReaders() {
+        return SpringUtils.getInstance().getBean(ServerCodecConfigurer.class).getReaders();
     }
 }
