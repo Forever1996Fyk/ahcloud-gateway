@@ -15,20 +15,32 @@ public class ApiSyncData implements BaseSyncData {
      */
     private final String apiCode;
 
+    /**
+     * 版本
+     */
+    private final Integer version;
+
+
     private final DataEventTypeEnum eventType;
 
-    public ApiSyncData(String apiCode, DataEventTypeEnum eventType) {
+    public ApiSyncData(String apiCode, Integer version, DataEventTypeEnum eventType) {
         this.apiCode = apiCode;
+        this.version = version;
         this.eventType = eventType;
     }
 
     public ApiSyncData() {
         this.apiCode = "";
+        this.version = 0;
         this.eventType = DataEventTypeEnum.REFRESH;
     }
 
     public String getApiCode() {
         return apiCode;
+    }
+
+    public Integer getVersion() {
+        return version;
     }
 
     @Override

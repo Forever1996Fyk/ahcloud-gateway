@@ -61,6 +61,10 @@ public enum DeletedEnum {
                 return e;
             }
         }
-        return null;
+        return NO;
+    }
+
+    public boolean isDeleted() {
+        return this != NO;
     }
 }

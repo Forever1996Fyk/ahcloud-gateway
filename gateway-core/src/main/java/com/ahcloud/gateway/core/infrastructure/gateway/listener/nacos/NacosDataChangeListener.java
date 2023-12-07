@@ -29,18 +29,6 @@ public class NacosDataChangeListener extends AbstractListDataChangedListener {
         this.environment = environment;
     }
 
-//    @Override
-//    protected String getConfig(String dataId) {
-//        String config;
-//        try {
-//            config = configService.getConfig(dataId, getEnv(), NacosPathConstants.DEFAULT_TIME_OUT);
-//            return StringUtils.isNotBlank(config) ? config : NacosPathConstants.EMPTY_CONFIG_DEFAULT_VALUE;
-//        } catch (NacosException e) {
-//            log.error("Gate data from nacos error, reason is {}", Throwables.getStackTraceAsString(e));
-//            throw new GatewayException(e.getMessage());
-//        }
-//    }
-
     @Override
     protected void publishConfig(String dataId, Object data) {
         try {

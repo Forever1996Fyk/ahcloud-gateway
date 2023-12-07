@@ -6,7 +6,6 @@
         <module>gateway-server</module>
         <module>gateway-client</module>
         <module>gateway-spring-boot-starter</module>
-        <module>gateway-api</module>
         <module>gateway-core</module>
         <module>gateway-disruptor</module>
         <module>gateway-register-common</module>

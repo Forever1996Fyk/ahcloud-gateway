@@ -1,8 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.gateway.sync;
 
 import com.ahcloud.gateway.client.constant.NacosPathConstants;
-import com.ahcloud.gateway.server.infrastructure.gateway.sync.NacosCacheHandler;
-import com.ahcloud.gateway.server.infrastructure.gateway.sync.SyncDataService;
 import com.ahcloud.gateway.server.infrastructure.gateway.sync.service.ApiSyncService;
 import com.ahcloud.gateway.server.infrastructure.gateway.sync.service.RouteSyncService;
 import com.alibaba.nacos.api.config.ConfigService;

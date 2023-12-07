@@ -51,8 +51,11 @@ public abstract class NacosCacheHandler {
     }
 
     protected void updateRouteList(final String configInfo) {
-        log.info("configInfo: {}", configInfo);
+        log.info("route configInfo: {}", configInfo);
         if (StringUtils.isBlank(configInfo)) {
+            return;
+        }
+        if (StringUtils.equals("{}", configInfo)) {
             return;
         }
         List<RouteSyncData> routeSyncDataList = JsonUtils.jsonToList(configInfo, RouteSyncData.class);
@@ -63,8 +66,11 @@ public abstract class NacosCacheHandler {
     }
 
     protected void updateApiList(final String configInfo) {
-        log.info("configInfo: {}", configInfo);
+        log.info("api configInfo: {}", configInfo);
         if (StringUtils.isBlank(configInfo)) {
+            return;
+        }
+        if (StringUtils.equals("{}", configInfo)) {
             return;
         }
         List<ApiSyncData> apiSyncDataList = JsonUtils.jsonToList(configInfo, ApiSyncData.class);

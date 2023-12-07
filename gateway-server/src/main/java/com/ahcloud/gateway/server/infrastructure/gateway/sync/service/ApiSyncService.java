@@ -51,13 +51,19 @@ public class ApiSyncService {
             if (Objects.isNull(gatewayApi)) {
                 return;
             }
-            if ((DataEventTypeEnum.CREATE == eventType) || (DataEventTypeEnum.UPDATE == eventType)) {
+            Long deleted = gatewayApi.getDeleted();
+            DeletedEnum deletedEnum = DeletedEnum.valueOf(deleted);
+            if (isUpdateApi(eventType, deletedEnum)) {
                 apiSubscriber.onSubscribe(gatewayApi);
                 continue;
             }
-            if (DataEventTypeEnum.DELETE == eventType) {
+            if ((DataEventTypeEnum.DELETE == eventType) && deletedEnum.isDeleted()) {
                 apiSubscriber.unSubscribe(gatewayApi);
             }
         }
+    }
+
+    private boolean isUpdateApi(DataEventTypeEnum eventType, DeletedEnum deletedEnum) {
+        return (DataEventTypeEnum.CREATE == eventType) || (DataEventTypeEnum.UPDATE == eventType) && !deletedEnum.isDeleted();
     }
 }

@@ -32,7 +32,7 @@ public abstract class AbstractListDataChangedListener implements DataChangeListe
     @Override
     public void onApiRefreshChanged(List<String> apiCodeList, DataEventTypeEnum eventType) {
         List<ApiSyncData> apiSyncDataList = apiCodeList.stream()
-                .map(apiCode -> new ApiSyncData(apiCode, eventType))
+                .map(apiCode -> new ApiSyncData(apiCode, 0, eventType))
                 .collect(Collectors.toList());
         publishConfig(changeData.getApiDataId(), apiSyncDataList);
     }

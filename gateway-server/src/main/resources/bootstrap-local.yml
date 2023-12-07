@@ -1,29 +1,31 @@
 spring:
   cloud:
     nacos:
-      server-addr: 127.0.0.1:18848
+      server-addr: 127.0.0.1:8848
       config:
-        namespace: 3e171a82-b1f5-4c58-b236-6afe8028160c
+        namespace: ddd56e16-f935-4987-9539-6b51ac509a4e
         max-retry: 10
+        config-long-poll-timeout: 5
+        config-retry-time: 5
         refresh-enabled: true
-        username: LTAI5tQYb6LvUrix4x4xKo4X
-        password: sXW4bYUwIY9hzL1z4WS5QknY4eBapq
+        username: nacos
+        password: nacos
         group: com.ahcloud.gateway.server
         file-extension: yaml
       discovery:
         enabled: true
-        server-addr: 127.0.0.1:18848
-        namespace: 3e171a82-b1f5-4c58-b236-6afe8028160c
+        server-addr: 127.0.0.1:8848
+        namespace: ddd56e16-f935-4987-9539-6b51ac509a4e
         group: local
 
 dubbo:
   registry:
-    address: nacos://127.0.0.1:18848
+    address: nacos://127.0.0.1:8848
     group: local
-    username: LTAI5tQYb6LvUrix4x4xKo4X
-    password: sXW4bYUwIY9hzL1z4WS5QknY4eBapq
+    username: nacos
+    password: nacos
   config-center:
-    namespace: 3c6eaeb5-5621-404a-8cdc-5af8b82bd816
+    namespace: ddd56e16-f935-4987-9539-6b51ac509a4e
   metadata-report:
     group: local
   consumer:
