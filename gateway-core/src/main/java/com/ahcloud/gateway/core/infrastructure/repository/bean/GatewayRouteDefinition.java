@@ -31,6 +31,11 @@ public class GatewayRouteDefinition implements Serializable {
     private Long id;
 
     /**
+     * appId
+     */
+    private Long appId;
+
+    /**
      * app名称
      */
     private String appName;

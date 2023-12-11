@@ -29,6 +29,11 @@ public class RouteDefinitionDTO {
     private String id;
 
     /**
+     * appId
+     */
+    private Long appId;
+
+    /**
      * 应用名
      */
     private String appName;

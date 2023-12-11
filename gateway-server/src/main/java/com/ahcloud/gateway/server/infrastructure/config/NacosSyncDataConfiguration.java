@@ -1,5 +1,6 @@
 package com.ahcloud.gateway.server.infrastructure.config;
 
+import com.ahcloud.gateway.server.infrastructure.gateway.listener.LocalRouteDataChangeListener;
 import com.ahcloud.gateway.server.infrastructure.gateway.sync.NacosSyncDataServiceImpl;
 import com.ahcloud.gateway.server.infrastructure.gateway.sync.SyncDataService;
 import com.ahcloud.gateway.server.infrastructure.gateway.sync.service.ApiSyncService;
@@ -41,5 +42,10 @@ public class NacosSyncDataConfiguration {
                                                     final ObjectProvider<Environment> environment) {
         log.info("you use nacos sync gateway data.......");
         return new NacosSyncDataServiceImpl(Objects.requireNonNull(configManager.getIfAvailable()).getConfigService(), apiSyncServices.getIfAvailable(), routeSyncServices.getIfAvailable(), environment.getIfAvailable());
+    }
+
+    @Bean
+    public LocalRouteDataChangeListener localRouteDataChangeListener(RouteSyncService routeSyncService) {
+        return new LocalRouteDataChangeListener(routeSyncService);
     }
 }

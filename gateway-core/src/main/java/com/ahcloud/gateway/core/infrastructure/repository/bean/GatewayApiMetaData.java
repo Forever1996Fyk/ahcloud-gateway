@@ -31,6 +31,11 @@ public class GatewayApiMetaData implements Serializable {
     private Long id;
 
     /**
+     * 应用id
+     */
+    private Long appId;
+
+    /**
      * app名称
      */
     private String appName;

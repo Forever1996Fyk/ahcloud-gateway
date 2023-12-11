@@ -35,7 +35,7 @@ public class RegisterCenterConfiguration {
         RegisterClientServerDisruptorPublisher publisher = RegisterClientServerDisruptorPublisher.getInstance();
         Map<String, GatewayClientRegisterService> registerServiceMap = CollectionUtils.convertMap(gatewayClientRegisterServices, GatewayClientRegisterService::rpcType);
         publisher.start(registerServiceMap);
-        repository.initJustRoute(publisher, propertiesConfiguration);
+        repository.init(publisher, propertiesConfiguration);
         return repository;
     }
 }

@@ -13,9 +13,12 @@ public class RouteSyncData implements BaseSyncData{
     /**
      * 路由id
      */
-    private final String routeId;
+    private String routeId;
 
-    private final DataEventTypeEnum eventType;
+    private DataEventTypeEnum eventType;
+
+    public RouteSyncData() {
+    }
 
     /**
      * 当前环境

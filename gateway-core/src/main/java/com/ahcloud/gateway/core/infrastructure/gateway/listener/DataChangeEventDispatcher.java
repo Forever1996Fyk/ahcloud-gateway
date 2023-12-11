@@ -36,6 +36,9 @@ public class DataChangeEventDispatcher implements ApplicationListener<DataChange
                 case REMOTE_ROUTE:
                     listener.onRemoteRouteDefinitionChanged((List<RouteDefinitionDTO>) event.getSource(), event.getEventType());
                     break;
+                case LOCAL_ROUTE:
+                    listener.onLocalRouteDefinitionChanged((List<RouteDefinitionDTO>) event.getSource(), event.getEventType());
+                    break;
                 case API:
                     listener.onApiRefreshChanged((List<String>) event.getSource(), event.getEventType());
                     break;

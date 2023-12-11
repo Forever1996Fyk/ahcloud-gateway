@@ -47,6 +47,7 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
 
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
+    private final Long appId;
     private final String appName;
 
     private final String serviceId;
@@ -64,11 +65,17 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
                                                  final GatewayClientRegisterRepository repository) {
         Properties props = clientProps.getProps();
         this.env = env;
+        this.appId = env.getProperty(GatewayConstants.APPID, Long.class);
         this.appName = env.getProperty(GatewayConstants.APP_NAME);
         this.serviceId = StringUtils.defaultIfBlank(env.getProperty(GatewayConstants.SERVICE_ID), this.appName);
         this.host = env.getProperty(GatewayConstants.HOST);
         this.port = env.getProperty(GatewayConstants.PORT);
         this.contextPath = Optional.ofNullable(env.getProperty(GatewayConstants.CONTEXT_PATH)).map(UriUtils::repairData).orElse("");
+        if (getAppId() == null) {
+            String errorMsg = "client register param must config the appId or contextPath";
+            log.error(errorMsg);
+            throw new GatewayClientIllegalArgumentException(errorMsg);
+        }
         if (StringUtils.isBlank(getAppName())) {
             String errorMsg = "client register param must config the appName or contextPath";
             log.error(errorMsg);
@@ -198,6 +205,10 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
 
     public String getAppName() {
         return appName;
+    }
+
+    public Long getAppId() {
+        return appId;
     }
 
     public String getServiceId() {

@@ -14,6 +14,8 @@ import com.ahcloud.gateway.core.infrastructure.repository.bean.GatewayApiMetaDat
 import com.ahcloud.gateway.core.infrastructure.repository.bean.GatewayRouteDefinition;
 import com.ahcloud.gateway.register.common.dto.MetaDataRegisterDTO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.base.Throwables;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ import java.util.Objects;
  * @author: YuKai Fan
  * @create: 2023/5/29 10:39
  **/
+@Slf4j
 @Service("springCloud")
 public class GatewayClientRegisterSpringCloudServiceImpl extends AbstractGatewayClientRegisterService {
     @Resource
@@ -44,8 +47,14 @@ public class GatewayClientRegisterSpringCloudServiceImpl extends AbstractGateway
 
     @Override
     protected void doRegisterRoute(RouteDefinitionDTO routeDefinitionDTO) {
+        Long appId = routeDefinitionDTO.getAppId();
+        if (Objects.isNull(appId)) {
+            log.warn("appId为空的路由不处理");
+            return;
+        }
         GatewayRouteDefinition existedGateRouteDefinition = gatewayRouteDefinitionService.getOne(
                 new QueryWrapper<GatewayRouteDefinition>().lambda()
+                        .eq(GatewayRouteDefinition::getAppId, routeDefinitionDTO.getAppId())
                         .eq(GatewayRouteDefinition::getRouteId, routeDefinitionDTO.getId())
                         .eq(GatewayRouteDefinition::getDeleted, DeletedEnum.NO.value)
         );
@@ -73,9 +82,9 @@ public class GatewayClientRegisterSpringCloudServiceImpl extends AbstractGateway
         GatewayApiMetaData existedGatewayApiMetaData = gatewayApiMetaDataService.getOne(
                 new QueryWrapper<GatewayApiMetaData>().lambda()
                         .eq(GatewayApiMetaData::getEnv, metaDataRegisterDTO.getEnv())
-                        .eq(GatewayApiMetaData::getAppName, metaDataRegisterDTO.getAppName())
-                        .eq(GatewayApiMetaData::getApiPath, metaDataRegisterDTO.getApiPath())
+                        .eq(GatewayApiMetaData::getAppId, metaDataRegisterDTO.getAppId())
                         .eq(GatewayApiMetaData::getServiceId, metaDataRegisterDTO.getServiceId())
+                        .eq(GatewayApiMetaData::getApiPath, metaDataRegisterDTO.getApiPath())
                         .eq(GatewayApiMetaData::getDeleted, DeletedEnum.NO.value)
         );
         GatewayApiMetaData gatewayApiMetaData = GatewayApiMetadataHelper.convert(metaDataRegisterDTO);
@@ -84,6 +93,7 @@ public class GatewayClientRegisterSpringCloudServiceImpl extends AbstractGateway
                 gatewayApiMetaDataService.save(gatewayApiMetaData);
             } catch (DuplicateKeyException e) {
                 // 可能存在并发问题，目前可以忽略不处理
+                log.error("接口元数据异常, 原因为:{}", Throwables.getStackTraceAsString(e));
             }
         } else {
             gatewayApiMetaData.setId(existedGatewayApiMetaData.getId());

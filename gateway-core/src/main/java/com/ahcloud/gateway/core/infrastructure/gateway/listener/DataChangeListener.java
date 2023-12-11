@@ -24,6 +24,17 @@ public interface DataChangeListener {
     }
 
     /**
+     * 本地路由变更
+     *
+     * @param routeDefinitionList
+     * @param eventType
+     */
+    default void onLocalRouteDefinitionChanged(List<RouteDefinitionDTO> routeDefinitionList, DataEventTypeEnum eventType) {
+
+    }
+
+
+    /**
      * api接口变更
      * @param apiCodeList
      * @param eventType

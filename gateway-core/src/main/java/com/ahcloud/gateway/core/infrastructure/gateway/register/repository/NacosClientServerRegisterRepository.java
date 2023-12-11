@@ -24,8 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,6 +116,88 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
         subscribeRpcTypeService(RpcTypeEnum.SPRING_CLOUD);
     }
 
+    private void subscribeRpcTypeService(final RpcTypeEnum rpcType) {
+        final String serviceName = RegisterPathConstants.buildServiceInstancePath(rpcType.getName());
+        try {
+            Map<String, RouteRegisterDTO> services = Maps.newHashMap();
+            List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
+            healthyInstances.forEach(healthyInstance -> {
+                String contextPath = healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
+                String serviceConfigName = RegisterPathConstants.buildServiceConfigPath(rpcType.getName(), contextPath);
+                subscribeMetaData(serviceConfigName);
+                metadataConfigCache.add(serviceConfigName);
+                String routeMetadata = healthyInstance.getMetadata().get(GatewayConstants.ROUTE_META_DATA);
+                RouteRegisterDTO routeRegisterDTO = JsonUtils.stringToBean(routeMetadata, RouteRegisterDTO.class);
+                routeRegisterDTO.setContextPath(contextPath);
+                if (!services.containsKey(contextPath)) {
+                    services.put(contextPath, routeRegisterDTO);
+                }
+                routeServiceCache.computeIfAbsent(serviceName, k -> new ConcurrentSkipListSet<>()).add(contextPath);
+            });
+            if (RpcTypeEnum.acquireSupportRoutes().contains(rpcType)) {
+                services.values().forEach(this::publishRegisterRoute);
+            }
+            log.info("subscribe route : {}", serviceName);
+            // 刷新元数据/路由
+            namingService.subscribe(serviceName, this.group, event -> {
+                if (event instanceof NamingEvent) {
+                    List<Instance> instances = ((NamingEvent) event).getInstances();
+                    if (CollectionUtils.isEmpty(instances)) {
+                        return;
+                    }
+                    for (Instance instance : instances) {
+                        String contextPath = instance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
+                        routeServiceCache.computeIfAbsent(serviceName, k -> new ConcurrentSkipListSet<>()).add(contextPath);
+                    }
+                    refreshRouteService(rpcType, serviceName);
+                }
+            });
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void refreshRouteService(final RpcTypeEnum rpcType, final String serviceName) {
+        Optional.ofNullable(routeServiceCache.get(serviceName)).ifPresent(services -> services.forEach(contextPath -> refreshRoute(contextPath, rpcType, serviceName)));
+    }
+
+    private void refreshRoute(final String contextPath, final RpcTypeEnum rpcType, final String serviceName) {
+        try {
+            List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
+            if (CollectionUtils.isEmpty(healthyInstances)) {
+                return;
+            }
+            RouteRegisterDTO routeRegisterDTO = null;
+            for (Instance healthyInstance : healthyInstances) {
+                if (StringUtils.equals(contextPath, healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH))) {
+                    String routeMetadata = healthyInstance.getMetadata().get(GatewayConstants.ROUTE_META_DATA);
+                    routeRegisterDTO = JsonUtils.stringToBean(routeMetadata, RouteRegisterDTO.class);
+                    String serviceConfigName = RegisterPathConstants.buildServiceConfigPath(rpcType.getName(), contextPath);
+                    if (!metadataConfigCache.contains(serviceConfigName)) {
+                        subscribeMetaData(serviceConfigName);
+                        metadataConfigCache.add(serviceConfigName);
+                    }
+                }
+            }
+            if (!RpcTypeEnum.acquireSupportRoutes().contains(rpcType)) {
+                return;
+            }
+            if (Objects.isNull(routeRegisterDTO)) {
+                routeRegisterDTO = RouteRegisterDTO.builder()
+                        .appName(contextPath)
+                        .contextPath(contextPath)
+                        .serviceId(contextPath)
+                        .rpcType(rpcType.getName())
+                        .env(this.environment.getProperty(GatewayConstants.ENV))
+                        .build();
+            }
+            publishRegisterRoute(routeRegisterDTO);
+            log.info("subscribe route : {}", serviceName);
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void subscribeRpcTypeRouteService(final RpcTypeEnum rpcType) {
         final String serviceName = RegisterPathConstants.buildServiceInstancePath(rpcType.getName());
         Map<String, RouteRegisterDTO> services = Maps.newHashMap();
@@ -147,42 +231,6 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
         }
     }
 
-    private void refreshRouteService(final RpcTypeEnum rpcType, final String serviceName) {
-        Optional.ofNullable(routeServiceCache.get(serviceName)).ifPresent(services -> services.forEach(contextPath -> refreshRoute(contextPath, rpcType, serviceName)));
-    }
-
-    private void refreshRoute(final String contextPath, final RpcTypeEnum rpcType, final String serviceName) {
-        Map<String, RouteRegisterDTO> services = Maps.newHashMap();
-        try {
-            List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
-            healthyInstances.forEach(healthyInstance -> {
-                if (StringUtils.equals(contextPath, healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH))) {
-                    String routeMetadata = healthyInstance.getMetadata().get(GatewayConstants.ROUTE_META_DATA);
-                    RouteRegisterDTO routeRegisterDTO = JsonUtils.stringToBean(routeMetadata, RouteRegisterDTO.class);
-                    if (!services.containsKey(contextPath)) {
-                        services.put(contextPath, routeRegisterDTO);
-                    }
-                }
-            });
-            if (CollectionUtils.isEmpty(services)) {
-                RouteRegisterDTO routeRegisterDTO = RouteRegisterDTO.builder()
-                        .appName(contextPath)
-                        .contextPath(contextPath)
-                        .serviceId(contextPath)
-                        .rpcType(rpcType.getName())
-                        .env(this.environment.getProperty(GatewayConstants.ENV))
-                        .build();
-                services.put(contextPath, routeRegisterDTO);
-            }
-            log.info("subscribe route : {}", serviceName);
-            if (RpcTypeEnum.acquireSupportRoutes().contains(rpcType)) {
-                services.values().forEach(this::publishRegisterRoute);
-            }
-        } catch (NacosException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private void subscribeRpcTypeMetadataService(final RpcTypeEnum rpcType) {
         final String serviceName = RegisterPathConstants.buildServiceInstancePath(rpcType.getName());
         try {
@@ -210,42 +258,7 @@ public class NacosClientServerRegisterRepository implements GatewayClientServerR
         }
     }
 
-    private void subscribeRpcTypeService(final RpcTypeEnum rpcType) {
-        final String serviceName = RegisterPathConstants.buildServiceInstancePath(rpcType.getName());
-        try {
-            Map<String, RouteRegisterDTO> services = Maps.newHashMap();
-            List<Instance> healthyInstances = namingService.selectInstances(serviceName, this.group,true);
-            healthyInstances.forEach(healthyInstance -> {
-                String contextPath = healthyInstance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
-                String serviceConfigName = RegisterPathConstants.buildServiceConfigPath(rpcType.getName(), contextPath);
-                subscribeMetaData(serviceConfigName);
-                metadataConfigCache.add(serviceConfigName);
-                String routeMetadata = healthyInstance.getMetadata().get(GatewayConstants.ROUTE_META_DATA);
-                RouteRegisterDTO routeRegisterDTO = JsonUtils.stringToBean(routeMetadata, RouteRegisterDTO.class);
-                if (!services.containsKey(contextPath)) {
-                    services.put(contextPath, routeRegisterDTO);
-                }
-                metaServiceCache.computeIfAbsent(serviceName, k -> new ConcurrentSkipListSet<>()).add(contextPath);
-            });
-            if (RpcTypeEnum.acquireSupportRoutes().contains(rpcType)) {
-                services.values().forEach(this::publishRegisterRoute);
-            }
-            log.info("subscribe route : {}", serviceName);
-            // 刷新元数据
-            namingService.subscribe(serviceName, this.group, event -> {
-                if (event instanceof NamingEvent) {
-                    List<Instance> instances = ((NamingEvent) event).getInstances();
-                    instances.forEach(instance -> {
-                        String contextPath = instance.getMetadata().get(GatewayConstants.CONTEXT_PATH);
-                        metaServiceCache.computeIfAbsent(serviceName, k -> new ConcurrentSkipListSet<>()).add(contextPath);
-                    });
-                    refreshMetadataService(rpcType, serviceName);
-                }
-            });
-        } catch (NacosException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     private void subscribeMetaData(final String serviceConfigName) {
         String content = readData(serviceConfigName);

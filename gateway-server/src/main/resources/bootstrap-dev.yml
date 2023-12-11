@@ -1,37 +1,37 @@
+# 敏感信息 使用启动参数隐藏起来，--nacos_url=127.0.0.1 --nacos_port=8848
 spring:
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8848
+      server-addr: ${nacos_url}:${nacos_port}
       config:
-        namespace: e0bbdac3-c6e2-45d0-a6f3-d1131c68fa3d
+        namespace: ${namespace}
         max-retry: 10
         config-long-poll-timeout: 5
         config-retry-time: 5
         refresh-enabled: true
-        username: nacos
-        password: nacos
+        username: ${username}
+        password: ${password}
         group: com.ahcloud.gateway.server
         file-extension: yaml
       discovery:
         enabled: true
-        server-addr: 127.0.0.1:8848
-        namespace: e0bbdac3-c6e2-45d0-a6f3-d1131c68fa3d
-        group: local
+        namespace: ${namespace}
+        group: dev
 
 dubbo:
   registry:
-    address: nacos://127.0.0.1:8848
-    group: local
-    username: nacos
-    password: nacos
+    address: nacos://${nacos_url}:${nacos_port}
+    group: dev
+    username: ${username}na
+    password: ${password}
   config-center:
-    namespace: e0bbdac3-c6e2-45d0-a6f3-d1131c68fa3d
+    namespace: ${namespace}
   metadata-report:
-    group: local
+    group: dev
   consumer:
-    group: local
+    group: dev
   provider:
-    group: local
+    group: dev
   protocol:
     port: -1
     name: dubbo

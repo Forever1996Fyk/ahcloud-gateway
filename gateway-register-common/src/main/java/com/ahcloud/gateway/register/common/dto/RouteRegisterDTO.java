@@ -23,6 +23,11 @@ import java.io.Serializable;
 public class RouteRegisterDTO implements DataTypeParent {
 
     /**
+     * 当前应用id
+     */
+    private Long appId;
+
+    /**
      * 服务id(默认为项目名称spring.application.name)
      */
     private String serviceId;

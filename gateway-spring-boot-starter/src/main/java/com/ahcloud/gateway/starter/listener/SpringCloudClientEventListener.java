@@ -89,6 +89,7 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
         return RouteRegisterDTO.builder()
                 .host(IpUtils.isCompleteHost(host) ? host : IpUtils.getHost(host))
                 .port(mergedPort)
+                .appId(getAppId())
                 .serviceId(getServiceId())
                 .appName(getAppName())
                 .contextPath(StringUtils.defaultIfBlank(getContextPath(), this.servletContextPath))
@@ -102,7 +103,7 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Set<String> pathMarkSet = Sets.newHashSet();
         for (Annotation[] parameter : parameterAnnotations) {
-            if (parameter.length == 0) {
+            if (ArrayUtils.isEmpty(parameter)) {
                 continue;
             }
             for (Annotation parameterAnnotation : parameter) {
@@ -130,6 +131,7 @@ public class SpringCloudClientEventListener extends AbstractContextRefreshedEven
             }
         }
         return MetaDataRegisterDTO.builder()
+                .appId(getAppId())
                 .appName(getAppName())
                 .serviceId(getServiceId())
                 .contextPath(StringUtils.defaultIfBlank(getContextPath(), this.servletContextPath))

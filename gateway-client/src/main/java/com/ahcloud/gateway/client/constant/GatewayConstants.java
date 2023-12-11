@@ -8,6 +8,12 @@ package com.ahcloud.gateway.client.constant;
  **/
 public class GatewayConstants {
 
+
+    /**
+     * appId
+     */
+    public static final String APPID = "appId";
+
     /**
      * the constant of APP_NAME.
      */

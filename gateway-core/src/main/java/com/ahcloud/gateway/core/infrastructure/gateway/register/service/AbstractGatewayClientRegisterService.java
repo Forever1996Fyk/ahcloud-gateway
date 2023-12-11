@@ -79,6 +79,7 @@ public abstract class AbstractGatewayClientRegisterService implements GatewayCli
             throw new RuntimeException(e);
         }
         return RouteDefinitionDTO.builder()
+                .appId(registerDTO.getAppId())
                 .id(registerDTO.getServiceId())
                 .rpcType(registerDTO.getRpcType())
                 .env(registerDTO.getEnv())

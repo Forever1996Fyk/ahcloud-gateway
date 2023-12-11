@@ -20,6 +20,11 @@ import lombok.*;
 public class MetaDataRegisterDTO implements DataTypeParent {
 
     /**
+     * 应用id
+     */
+    private Long appId;
+
+    /**
      * 应用名
      */
     private String appName;
