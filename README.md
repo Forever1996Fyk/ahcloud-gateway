@@ -11,7 +11,7 @@
 
 > ✨如果该项目对您有帮助，您的star是我不断优化的动力！！！
 >
-> - [github点击前往](https://github.com/MyMonsterCat/RapidOcr-Java)
+> - [github点击前往](https://github.com/Forever1996Fyk/ahcloud-gateway)
 > - [gitee点击前往](https://gitee.com/MichaelFan/ahcloud-gateway)
 
 ## 👏 项目特点
