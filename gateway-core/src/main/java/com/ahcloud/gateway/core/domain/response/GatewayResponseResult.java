@@ -2,7 +2,6 @@ package com.ahcloud.gateway.core.domain.response;
 
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.common.enums.ErrorCode;
-import com.ahcloud.kernel.core.common.Constant;
 import lombok.*;
 
 /**

@@ -7,6 +7,18 @@
         <groupId>com.ahcloud.gateway</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gateway-core</artifactId>
@@ -49,16 +61,16 @@
             <artifactId>freemarker</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-dubbo</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.ahcloud.gateway</groupId>
             <artifactId>gateway-client</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ahcloud.gateway</groupId>
             <artifactId>gateway-register-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -79,10 +91,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ahcloud.kernel</groupId>
-            <artifactId>kernel-logback</artifactId>
         </dependency>
         <!-- 引入Actuator监控依赖 -->
         <dependency>

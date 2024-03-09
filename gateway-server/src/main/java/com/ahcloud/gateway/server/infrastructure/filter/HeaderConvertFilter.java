@@ -1,9 +1,9 @@
 package com.ahcloud.gateway.server.infrastructure.filter;
 
+import com.ahcloud.common.constant.Constant;
 import com.ahcloud.common.utils.NullUtils;
 import com.ahcloud.gateway.core.domain.dto.UserInfoDTO;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
-import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -42,23 +42,28 @@ public class HeaderConvertFilter implements GlobalFilter, Ordered {
         // 处理参数
         MediaType contentType = headers.getContentType();
         ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(exchange.getRequest()) {
+            /**
+             * 这里重写请求头，目的是传入下游服务参数，例如：用户信息，请求来源，客户端ip等等。也可以自定义
+             * @return
+             */
             @Override
             public HttpHeaders getHeaders() {
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.putAll(super.getHeaders());
 
                 if (Objects.nonNull(userInfoDTO)) {
-                    httpHeaders.set(Constant.CTX_KEY_USER_ID.toString(), NullUtils.of(userInfoDTO.getUserId()));
-                    httpHeaders.set(Constant.CTX_KEY_USER_NAME.toString(), NullUtils.of(userInfoDTO.getUserName()));
-                    httpHeaders.set(Constant.CTX_KEY_TOKEN.toString(), NullUtils.of(userInfoDTO.getToken()));
-                    Long tenantId = userInfoDTO.getTenantId();
-                    if (tenantId != null) {
-                        httpHeaders.set(Constant.CTX_KEY_TENANT_ID.toString(), String.valueOf(NullUtils.of(tenantId)));
-                    }
+                    httpHeaders.set(Constant.CTX_KEY_USER_ID, NullUtils.of(userInfoDTO.getUserId()));
+                    httpHeaders.set(Constant.CTX_KEY_USER_NAME, NullUtils.of(userInfoDTO.getUserName()));
+                    httpHeaders.set(Constant.CTX_KEY_TOKEN, NullUtils.of(userInfoDTO.getToken()));
+                    // 有租户的话可以添加租户id
+//                    Long tenantId = userInfoDTO.getTenantId();
+//                    if (tenantId != null) {
+//                        httpHeaders.set(Constant.CTX_KEY_TENANT_ID.toString(), String.valueOf(NullUtils.of(tenantId)));
+//                    }
                 }
-                httpHeaders.set(Constant.CTX_KEY_ORIGIN.toString(), NullUtils.of(gatewayContext.getOrigin()));
-                httpHeaders.set(Constant.CTX_KEY_CLIENT_IP.toString(), NullUtils.of(gatewayContext.getIpAddress()));
-                httpHeaders.set(Constant.CTX_KEY_GW_APP_PLATFORM.toString(), NullUtils.of(gatewayContext.getAppPlatformEnum().getValue()));
+                httpHeaders.set(Constant.CTX_KEY_ORIGIN, NullUtils.of(gatewayContext.getOrigin()));
+                httpHeaders.set(Constant.CTX_KEY_CLIENT_IP, NullUtils.of(gatewayContext.getIpAddress()));
+                httpHeaders.set(Constant.CTX_KEY_GW_APP_PLATFORM, NullUtils.of(gatewayContext.getAppPlatformEnum().getValue()));
                 return httpHeaders;
             }
         };

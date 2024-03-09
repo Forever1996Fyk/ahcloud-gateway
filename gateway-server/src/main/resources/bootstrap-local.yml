@@ -18,20 +18,20 @@ spring:
         namespace: ddd56e16-f935-4987-9539-6b51ac509a4e
         group: local
 
-dubbo:
-  registry:
-    address: nacos://127.0.0.1:8848
-    group: local
-    username: nacos
-    password: nacos
-  config-center:
-    namespace: ddd56e16-f935-4987-9539-6b51ac509a4e
-  metadata-report:
-    group: local
-  consumer:
-    group: local
-  provider:
-    group: local
-  protocol:
-    port: -1
-    name: dubbo
+#dubbo:
+#  registry:
+#    address: nacos://127.0.0.1:8848
+#    group: local
+#    username: nacos
+#    password: nacos
+#  config-center:
+#    namespace: ddd56e16-f935-4987-9539-6b51ac509a4e
+#  metadata-report:
+#    group: local
+#  consumer:
+#    group: local
+#  provider:
+#    group: local
+#  protocol:
+#    port: -1
+#    name: dubbo

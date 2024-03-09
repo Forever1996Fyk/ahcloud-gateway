@@ -1,6 +1,5 @@
 package com.ahcloud.gateway.server.infrastructure.security.token.service.impl;
 
-import com.ahcloud.common.model.KeyValue;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.infrastructure.util.CacheUtils;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
@@ -8,6 +7,7 @@ import com.ahcloud.gateway.server.infrastructure.security.token.authentication.U
 import com.ahcloud.gateway.server.infrastructure.security.token.service.TokenEndpointService;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
@@ -26,9 +26,9 @@ public abstract class CacheTokenEndpointService<T extends UserReactiveAuthentica
      * 本地缓存
      */
     private final LoadingCache<String, T> AUTHENTICATION_CACHE = CacheUtils.buildAsyncReloadingCache(Duration.ofMinutes(1),
-            new CacheLoader<>() {
+            new CacheLoader<String, T>() {
                 @Override
-                public T load(String token) throws Exception {
+                public T load(@NonNull String token) throws Exception {
                     return createUserReactiveAuthentication(token);
                 }
             }

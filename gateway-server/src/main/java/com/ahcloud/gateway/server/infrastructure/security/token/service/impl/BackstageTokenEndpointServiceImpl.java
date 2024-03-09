@@ -5,7 +5,7 @@ import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.server.domain.admin.bo.BackstageAccessTokenBO;
 import com.ahcloud.gateway.server.domain.admin.bo.BackstageUserAuthenticationBO;
 import com.ahcloud.gateway.server.infrastructure.exception.GatewayAuthenticationException;
-import com.ahcloud.gateway.server.infrastructure.rpc.BackstageRpcService;
+import com.ahcloud.gateway.server.infrastructure.rpc.RpcOrHttpRemoteService;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.AccessTokenBO;
 import com.ahcloud.gateway.server.infrastructure.security.token.authentication.bo.BackstageUserReactiveAuthenticationBO;
 import lombok.extern.slf4j.Slf4j;
@@ -16,21 +16,27 @@ import java.util.Objects;
 
 /**
  * @program: ahcloud-gateway
- * @description:
+ * @description: 后台token认证接口
  * @author: YuKai Fan
  * @create: 2023/1/31 17:32
  **/
 @Slf4j
 @Service(value = "backstageTokenEndpointService")
 public class BackstageTokenEndpointServiceImpl extends CacheTokenEndpointService<BackstageUserReactiveAuthenticationBO> {
-    @Resource
-    private BackstageRpcService backstageRpcService;
+
+
+    private final RpcOrHttpRemoteService rpcOrHttpRemoteService;
 
     private final static String LOG_MARK = "BackstageTokenEndpointServiceImpl";
 
+
+    public BackstageTokenEndpointServiceImpl(RpcOrHttpRemoteService rpcOrHttpRemoteService) {
+        this.rpcOrHttpRemoteService = rpcOrHttpRemoteService;
+    }
+
     @Override
     protected BackstageUserReactiveAuthenticationBO createUserReactiveAuthentication(String token) {
-        BackstageUserAuthenticationBO authentication = backstageRpcService.getAdminUserAuthenticationByToken(token);
+        BackstageUserAuthenticationBO authentication = rpcOrHttpRemoteService.getAdminUserAuthenticationByToken(token);
         BackstageAccessTokenBO accessTokenBO = authentication.getAccessTokenBO();
         if (Objects.isNull(accessTokenBO)) {
             throw new GatewayAuthenticationException(GatewayRetCodeEnum.CERTIFICATE_EXCEPTION_ERROR);

@@ -19,7 +19,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ahcloud.common</groupId>
+            <groupId>com.ahcloud.gateway</groupId>
             <artifactId>common-core</artifactId>
         </dependency>
         <dependency>

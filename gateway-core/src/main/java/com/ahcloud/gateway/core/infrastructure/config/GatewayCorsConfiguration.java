@@ -16,8 +16,12 @@ import org.springframework.web.util.pattern.PathPatternParser;
 @Configuration
 public class GatewayCorsConfiguration {
 
+    /**
+     * 后续开发计划会将其优化为动态过滤
+     * @return CorsWebFilter
+     */
     @Bean
-    public CorsWebFilter corsFilter() {
+    public CorsWebFilter corsWebFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedMethod("*");
         configuration.addAllowedOrigin("*");

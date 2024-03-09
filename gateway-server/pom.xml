@@ -28,10 +28,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-dubbo</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-resource-server</artifactId>
         </dependency>
@@ -46,14 +42,6 @@
         <dependency>
             <groupId>com.ahcloud.gateway</groupId>
             <artifactId>gateway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ahcloud.admin</groupId>
-            <artifactId>admin-dubbo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ahcloud.uaa</groupId>
-            <artifactId>uaa-dubbo</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ahcloud.gateway</groupId>
@@ -90,6 +78,14 @@
                 <configuration>
                     <!-- deploy 时忽略此model -->
                     <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>

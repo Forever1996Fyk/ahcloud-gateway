@@ -11,13 +11,8 @@
         <module>gateway-register-common</module>
         <module>gateway-sentinel-common</module>
         <module>gateway-scg-common</module>
+        <module>gateway-common-tools</module>
     </modules>
-    <parent>
-        <groupId>com.ahcloud.kernel</groupId>
-        <artifactId>kernel-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath/>
-    </parent>
 
     <groupId>com.ahcloud.gateway</groupId>
     <artifactId>gateway</artifactId>
@@ -30,32 +25,102 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <springboot.version>2.3.12.RELEASE</springboot.version>
+        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
+        <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>
+
+        <jackson.version>2.13.1</jackson.version>
+        <logback.version>1.2.9</logback.version>
+        <guava.version>31.0.1-jre</guava.version>
 
         <disrtuptor.version>3.4.0</disrtuptor.version>
         <caffeine.version>2.9.3</caffeine.version>
+        <skywalking.version>8.4.0</skywalking.version>
         <skywalking.webflux.version>8.14.0</skywalking.webflux.version>
+        <commons.collections4.version>4.4</commons.collections4.version>
 
         <spring-boot-pagehelper.version>1.2.13</spring-boot-pagehelper.version>
         <mybatis.plus.version>3.4.1</mybatis.plus.version>
         <mybatis.plus.generator.version>3.4.1</mybatis.plus.generator.version>
+        <hibernate.validation.version>6.2.0.Final</hibernate.validation.version>
+        <hutool.version>5.8.10</hutool.version>
 
         <!-- template engine -->
         <freemarker.version>2.3.28</freemarker.version>
-        <sharding.version>4.1.1-ahcloud-SNAPSHOT</sharding.version>
+        <sharding.version>4.1.1</sharding.version>
         <mysql.version>8.0.13</mysql.version>
         <druid.version>1.2.8</druid.version>
         <nacos.version>0.2.9</nacos.version>
         <servlet.api.version>4.0.1</servlet.api.version>
+        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+        <lombok.mapstruce.bind.version>0.2.0</lombok.mapstruce.bind.version>
 
-        <ahcloud.common.version>1.0.0-SNAPSHOT</ahcloud.common.version>
-        <beanutils.version>1.0.0-SNAPSHOT</beanutils.version>
-        <ahcloud.uaa.version>1.0.0-SNAPSHOT</ahcloud.uaa.version>
-        <ahcloud.admin.version>1.0.0-SNAPSHOT</ahcloud.admin.version>
-        <ahcloud.uaa.version>1.0.0-SNAPSHOT</ahcloud.uaa.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!--最后引入SPRINGBOOT POM包以便可以覆盖依赖，参见 https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#using.import-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${springboot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback.contrib</groupId>
+                <artifactId>logback-json-classic</artifactId>
+                <version>0.1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback.contrib</groupId>
+                <artifactId>logback-jackson</artifactId>
+                <version>0.1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons.collections4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${skywalking.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
@@ -127,6 +192,35 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet.api.version}</version>
             </dependency>
+            <!-- mapstruct工具对实体（Bean）进行深度拷贝 -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-mapstruct-binding</artifactId>
+                <version>${lombok.mapstruce.bind.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate.validation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+
             <!-- database end -->
             <dependency>
                 <groupId>com.ahcloud.gateway</groupId>
@@ -160,62 +254,14 @@
             </dependency>
             <dependency>
                 <groupId>com.ahcloud.gateway</groupId>
-                <artifactId>gateway-spring-boot-starter</artifactId>
+                <artifactId>common-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ahcloud.common</groupId>
-                <artifactId>common-utils</artifactId>
-                <version>${ahcloud.common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ahcloud.common</groupId>
-                <artifactId>common-core</artifactId>
-                <version>${ahcloud.common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ahcloud.starter</groupId>
-                <artifactId>beanutils-spring-boot-starter</artifactId>
-                <version>${beanutils.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ahcloud.admin</groupId>
-                <artifactId>admin-dubbo</artifactId>
-                <version>${ahcloud.admin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ahcloud.uaa</groupId>
-                <artifactId>uaa-dubbo</artifactId>
-                <version>${ahcloud.uaa.version}</version>
+                <groupId>com.ahcloud.gateway</groupId>
+                <artifactId>gateway-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-<!--    <distributionManagement>-->
-<!--        <repository>-->
-<!--            <id>releases</id>-->
-<!--            <name>Releases</name>-->
-<!--            <url>http://localhost:8081/repository/maven-releases/</url>-->
-<!--            <uniqueVersion>true</uniqueVersion>-->
-<!--        </repository>-->
-<!--        <snapshotRepository>-->
-<!--            <id>snapshots</id>-->
-<!--            <name>Snapshots</name>-->
-<!--            <url>http://localhost:8081/repository/maven-snapshots/</url>-->
-<!--        </snapshotRepository>-->
-<!--    </distributionManagement>-->
-
-    <distributionManagement>
-        <repository>
-            <id>rdc-releases</id>
-            <name>Releases</name>
-            <url>https://packages.aliyun.com/maven/repository/2282959-release-FSRTjT</url>
-            <uniqueVersion>true</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>rdc-snapshots</id>
-            <name>Snapshots</name>
-            <url>https://packages.aliyun.com/maven/repository/2282959-snapshot-bgSgRk</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>

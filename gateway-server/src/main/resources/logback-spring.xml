@@ -18,8 +18,9 @@
 
     <!-- 写本地文件 -->
     <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="BIZ_LOG">
-        <!-- 自定义encoder以输出为JSON格式 -->
-        <encoder class="com.ahcloud.kernel.logback.KernelJsonLayoutEncoder"/>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
         <file>${PATH}/gateway-server.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>${PATH}/gateway-server_%i.log</fileNamePattern>

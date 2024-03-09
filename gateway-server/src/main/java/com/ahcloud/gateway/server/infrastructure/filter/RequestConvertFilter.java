@@ -1,13 +1,12 @@
 package com.ahcloud.gateway.server.infrastructure.filter;
 
+import com.ahcloud.common.constant.Constant;
 import com.ahcloud.gateway.client.enums.AppPlatformEnum;
 import com.ahcloud.gateway.client.enums.GatewayRetCodeEnum;
 import com.ahcloud.gateway.core.domain.context.GatewayContext;
-import com.ahcloud.gateway.client.exception.GatewayException;
 import com.ahcloud.gateway.core.infrastructure.util.ServerWebExchangeUtils;
 import com.ahcloud.gateway.scg.common.exception.GatewayBlackException;
 import com.ahcloud.gateway.server.infrastructure.exception.handler.GatewayErrorWebExceptionHandler;
-import com.ahcloud.kernel.core.common.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.Ordered;
